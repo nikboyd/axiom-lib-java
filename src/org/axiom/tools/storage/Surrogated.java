@@ -1,17 +1,18 @@
-// Copyright 2013 Nikolas Boyd.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+/**
+ * Copyright 2013 Nikolas Boyd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.axiom.tools.storage;
 
 import javax.persistence.*;
@@ -20,9 +21,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * An item that can be saved persistently and uniquely identified 
- * with a surrogate key (which key is automatically generated).
- * @param <ItemType> a kind of persistent item
+ * A persistent item with a surrogate key.
+ * @param <ItemType> a kind of derived persistent item
+ * 
+ * <h4>Surrogated Responsibilities:</h4>
+ * <ul>
+ * <li>knows a surrogate key (ID)</li>
+ * <li>saves this item persistently</li>
+ * <li>reloads this item from its backing store</li>
+ * <li>removes this item from its backing store</li>
+ * </ul>
+ *
+ * <h4>Client Responsibilities:</h4>
+ * <ul>
+ * <li>derived classes extend this item with domain model data</li>
+ * </ul>
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")
@@ -52,6 +65,9 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 		return Id;
 	}
 	
+	/**
+	 * Indicates whether this item was previously saved.
+	 */
 	public boolean isSaved() {
 		return getKey() > 0;
 	}

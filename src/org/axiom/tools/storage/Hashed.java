@@ -1,12 +1,38 @@
+/**
+ * Copyright 2013 Nikolas Boyd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.axiom.tools.storage;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 /**
- * An item that can be saved persistently and uniquely identified 
- * with using a hash of the item contents.
- * @param <ItemType> a kind of persistent item
+ * An item that can be saved persistently and uniquely 
+ * identified using a hash of its contents.
+ * @param <ItemType> a kind of derived persistent item
+ * 
+ * <h4>Hashed Responsibilities:</h4>
+ * <ul>
+ * <li>knows a surrogate key (ID)</li>
+ * <li>knows a hash key (HASH_KEY)</li>
+ * </ul>
+ *
+ * <h4>Client Responsibilities:</h4>
+ * <ul>
+ * <li>derived classes must override hashCode()</li>
+ * </ul>
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")

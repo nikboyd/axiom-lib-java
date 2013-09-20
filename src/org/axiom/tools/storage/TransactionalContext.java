@@ -1,17 +1,18 @@
-// Copyright 2013 Nikolas Boyd.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+/**
+ * Copyright 2013 Nikolas Boyd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.axiom.tools.storage;
 
 import java.util.HashSet;
@@ -33,7 +34,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * A context within which persistence transactions are performed.
+ * A transaction context for persistence operations.
+ * 
+ * <h4>TransactionalContext Responsibilities:</h4>
+ * <ul>
+ * <li>provides a persistent entity manager for use</li>
+ * <li>performs various persistence operations for specific kinds of items</li>
+ * </ul>
+ *
+ * <h4>Client Responsibilities:</h4>
+ * <ul>
+ * <li>properly configure an Hibernate backing stores</li>
+ * </ul>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class TransactionalContext {
@@ -275,6 +287,13 @@ public class TransactionalContext {
 		}
 	}
 	
+	/**
+	 * Counts the mapped elements of a composite item.
+	 * @param item a composite item
+	 * @param mapIndex a map index
+	 * @return a count of the selected components
+	 * @throws Exception if raised while counting components
+	 */
 	private <ItemType extends SurrogatedComposite> 
 	int countMapElements(ItemType item, int mapIndex) throws Exception {
 		if (item == null) return 0;
@@ -288,6 +307,14 @@ public class TransactionalContext {
 		}
 	}
 	
+	/**
+	 * Returns a mapped component item from a composite.
+	 * @param item a composite item
+	 * @param mapIndex a map index
+	 * @param key a map key
+	 * @return a mapped component
+	 * @throws Exception if raised during this operation
+	 */
 	private <ItemType extends SurrogatedComposite, ResultType extends SurrogatedItem> 
 	ResultType getMapElement(ItemType item, int mapIndex, Object key) throws Exception {
 		if (item == null) return null;

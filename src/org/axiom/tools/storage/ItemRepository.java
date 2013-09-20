@@ -1,21 +1,35 @@
-// Copyright 2013 Nikolas Boyd.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+/**
+ * Copyright 2013 Nikolas Boyd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.axiom.tools.storage;
 
 /**
- * An item repository, which manages item persistence through a transactional context.
+ * An item repository, which provides a transaction context for item persistence operations.
+ * 
+ * <h4>ItemRepository Responsibilities:</h4>
+ * <ul>
+ * <li>provides a transaction context for item persistence</li>
+ * <li>counts items that have been saved</li>
+ * <li>saves items in a configured backing store</li>
+ * <li>removes items from a backing store</li>
+ * </ul>
+ *
+ * <h4>Client Responsibilities:</h4>
+ * <ul>
+ * <li>configure an appropriate backing store</li>
+ * </ul>
  */
 public class ItemRepository {
 	
