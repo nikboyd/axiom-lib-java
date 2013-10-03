@@ -3,16 +3,18 @@ axiom-lib-java
 
 A library of utility classes and tools for Java.
 
-The storage package includes classes that codify idiomatic JPA usage.
-
 <table cellpadding="0" cellspacing="0" width="750">
 	 <tr>
+	 <td valign="TOP" colspan="2">
+	 	The storage package includes classes that codify idiomatic JPA usage.
+	 </td>
+	 </tr><tr>
 	 <td valign="TOP" width="30%">SurrogatedItem</td>
 	 <td align="LEFT">
 		a standard interface for items with surrogate keys
 	 </td>
 	 </tr><tr>
-	 <td valign="TOP" width="30%">Surrogated&lt;ItemType &gt;</td>
+	 <td valign="TOP" width="30%">Surrogated&lt;ItemType&gt;</td>
 	 <td align="LEFT">
 		a base class that implements SurrogatedItem
 	 </td>
@@ -47,12 +49,11 @@ The storage package includes classes that codify idiomatic JPA usage.
 		a base class that implements HashedItem
 	 </td>
 	 </tr>
-</table>
-
-The domain package includes example classes that demonstrate idiomatic usage of the storage classes.
-
-<table cellpadding="0" cellspacing="0" width="750">
 	 <tr>
+	 <td valign="TOP" colspan="2">
+		The domain package includes example classes that demonstrate idiomatic usage of the storage classes.
+	 </td>
+	 </tr><tr>
 	 <td valign="TOP" width="30%">StreetAddress</td>
 	 <td align="LEFT">
  		a typical USA street address
