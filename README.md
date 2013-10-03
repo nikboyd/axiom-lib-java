@@ -5,14 +5,14 @@ A library of utility classes and tools for Java.
 
 The storage package includes classes that codify idiomatic JPA usage.
 
-<table cellpadding="0" cellspacing="0" width="700">
+<table cellpadding="0" cellspacing="0" width="800">
 	 <tr>
 	 <td valign="TOP" width="25%">SurrogatedItem</td>
 	 <td align="LEFT">
 		a standard interface for items with surrogate keys
 	 </td>
 	 </tr><tr>
-	 <td valign="TOP" width="25%">Surrogated&lt;ItemType&#gt;</td>
+	 <td valign="TOP" width="25%">Surrogated&lt;ItemType &gt;</td>
 	 <td align="LEFT">
 		a base class that implements SurrogatedItem
 	 </td>
@@ -27,7 +27,7 @@ The storage package includes classes that codify idiomatic JPA usage.
 		a standard interface for surrogated items which hash their contents
 	 </td>
 	 </tr><tr>
-	 <td valign="TOP" width="25%">Hashed&#lt;ItemType&#gt;</td>
+	 <td valign="TOP" width="25%">Hashed&lt;ItemType&gt;</td>
 	 <td align="LEFT">
 		a base class that implements HashedItem
 	 </td>
@@ -42,20 +42,36 @@ The storage package includes classes that codify idiomatic JPA usage.
 		a utility class for idiomatic JPA transaction usage
 	 </td>
 	 </tr><tr>
-	 <td valign="TOP" width="25%">Hashed&#lt;ItemType&#gt;</td>
+	 <td valign="TOP" width="25%">Hashed&lt;ItemType&gt;</td>
 	 <td align="LEFT">
 		a base class that implements HashedItem
 	 </td>
 	 </tr>
 </table>
 
-The domain package includes example classes that demonstrate usage of the storage classes.
+The domain package includes example classes that demonstrate idiomatic usage of the storage classes.
 
-StreetAddress - a typical USA street address
-
-EmailAddress - an email address
-
-PhoneNumber - a typical USA phone number
-
-Contact - a composite of the foregoing contact types
+<table cellpadding="0" cellspacing="0" width="800">
+	 <tr>
+	 <td valign="TOP" width="25%">StreetAddress</td>
+	 <td align="LEFT">
+ 		a typical USA street address
+	 </td>
+	 </tr><tr>
+	 <td valign="TOP" width="25%">EmailAddress</td>
+	 <td align="LEFT">
+		an email address
+	 </td>
+	 </tr><tr>
+	 <td valign="TOP" width="25%">PhoneNumber</td>
+	 <td align="LEFT">
+		a typical USA phone number
+	 </td>
+	 </tr><tr>
+	 <td valign="TOP" width="25%">Contact</td>
+	 <td align="LEFT">
+ 		a composite of the foregoing contact types
+	 </td>
+	 </tr>
+</table>
 
