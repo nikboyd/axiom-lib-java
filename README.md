@@ -5,7 +5,11 @@ A library of utility classes and tools for Java.
 
 The storage package includes classes that codify idiomatic JPA usage.
 
-SurrogatedItem - a standard interface for items with surrogate keys
+<ul>
+<li>html item</li>
+</ul>
+
+SurrogatedItem = a standard interface for items with surrogate keys
 
 Surrogated<ItemType> - a base class that implements SurrogatedItem
 
