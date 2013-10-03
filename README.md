@@ -5,7 +5,7 @@ A library of utility classes and tools for Java.
 
 The storage package includes classes that codify idiomatic JPA usage.
 
-<table cellpadding="0" cellspacing="0" width="800">
+<table cellpadding="0" cellspacing="0" width="750">
 	 <tr>
 	 <td valign="TOP" width="25%">SurrogatedItem</td>
 	 <td align="LEFT">
@@ -19,7 +19,7 @@ The storage package includes classes that codify idiomatic JPA usage.
 	 </tr><tr>
 	 <td valign="TOP" width="25%">SurrogatedComposite</td>
 	 <td align="LEFT">
-		a standard interface for surrogated composite items with surrogated components
+		a standard interface for composite items with surrogated components
 	 </td>
 	 </tr><tr>
 	 <td valign="TOP" width="25%">HashedItem</td>
@@ -51,7 +51,7 @@ The storage package includes classes that codify idiomatic JPA usage.
 
 The domain package includes example classes that demonstrate idiomatic usage of the storage classes.
 
-<table cellpadding="0" cellspacing="0" width="800">
+<table cellpadding="0" cellspacing="0" width="750">
 	 <tr>
 	 <td valign="TOP" width="25%">StreetAddress</td>
 	 <td align="LEFT">
