@@ -5,4 +5,10 @@
 *.war
 *.ear
 
+filter.properties
+version.properties
+**/pom.xml
+
+.settings/
 target/
+product.builds/

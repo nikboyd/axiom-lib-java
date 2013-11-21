@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build-checks" basedir=".">
+
+    <property name="default.build.target" value="dev"/>
+    <property name="valid.build.targets" value="${default.build.target},demo,build,test,stage,prod"/>
+    <property name="test.build.targets" value="dev,build,test"/>
+    <property name="bees.build.targets" value="build,test"/>
+
+    <property name="last.build.url" value="lastSuccessfulBuild/api/xml?xpath=//lastBuiltRevision/SHA1"/>
+	
+	<target name="define.target.if.missing" unless="build.target">
+	    <property name="build.target" value="${default.build.target}"/>
+	</target>
+	
+	<target name="validate.target" depends="define.target.if.missing">
+		<condition property="target.valid">
+			<contains string="${valid.build.targets}" substring="${build.target}" />
+		</condition>
+		
+		<fail unless="target.valid" 
+			message="valid build.target must be defined, found ${build.target}" />
+
+		<property name="filters.dir" value="${target.filters.dir}/${build.target}"/>
+
+		<condition property="test.target.valid">
+			<contains string="${test.build.targets}" substring="${build.target}" />
+		</condition>
+
+		<condition property="bees.target.valid">
+			<contains string="${bees.build.targets}" substring="${build.target}" />
+		</condition>
+	</target>
+	
+	<target name="check.target.resources" depends="validate.target">
+		<filelist id="required.files" dir="${filters.dir}" files="${required.resources}" />
+		<restrict id="missing.files">
+			<filelist refid="required.files" />
+			<not><exists/></not>
+		</restrict>
+
+		<property name="missing.file.paths" value="${toString:missing.files} "/>
+		<condition property="target.resources.valid">
+			<length string="${missing.file.paths}" trim="true" length="0" />
+		</condition>
+		
+		<loadresource property="absent.files">
+			<propertyresource name="missing.file.paths" />
+			<filterchain>
+				<tokenfilter>
+					<replacestring from=";" to="${line.separator}" />
+				</tokenfilter>
+			</filterchain>
+		</loadresource>
+		
+		<fail unless="target.resources.valid" 
+			message="a valid ${build.target} folder must be defined, files are missing: ${line.separator}${absent.files}" />
+
+    	<property name="version.dir" value="${maven.project.folder}/src/main/resources" />
+	</target>
+	
+	<target name="configure.bees" 
+		depends="check.target.resources,define.bees.url" />
+	
+	<target name="define.bees.url" if="bees.target.valid">
+    	<property file="${filters.dir}/bees.properties" />
+		<property name="build.base.url" value="https://${bees.account.name}.ci.cloudbees.com/job"/>
+	</target>
+	
+	<target name="define.resource.filters.if.missing" unless="resource.filters">
+	    <property name="resource.filters" value="${filter.files}"/>
+	</target>
+	
+	<target name="define.resource.dir.if.missing" unless="resource.dir">
+	    <property name="resource.dir" value="${cfg.dir}"/>
+	</target>
+	
+	<target name="define.copy.dir.if.missing" unless="copy.dir">
+	    <property name="copy.dir" value="${src.dir}"/>
+	</target>
+
+    <target name="maven.batch" if="${maven.on.windows}">
+        <property name="maven.command" value="mvn.bat" />
+    </target>
+
+    <target name="maven.shell" unless="${maven.on.windows}">
+        <property name="maven.command" value="mvn" />
+    </target>
+
+    <target name="detect.maven">
+        <condition property="maven.on.windows">
+        	<os family="windows"/>
+        </condition>        
+    </target>
+	
+	<target name="select.maven" depends="detect.maven,maven.batch,maven.shell" />
+
+    <target name="git.last.build" depends="configure.bees">
+    	<get ignoreerrors="true" dest="last.build.txt" 
+    		src="${build.base.url}/${product.name}/${last.build.url}"
+    		username="${build.username}" password="${build.password}"
+    	/>
+
+    	<loadfile property="last.build.git.revision" srcfile="last.build.txt">
+    		<filterchain>
+    			<tokenfilter>
+    				<replaceregex pattern="&lt;SHA1>" replace="" flags="gi" />
+    				<replaceregex pattern="&lt;/SHA1>" replace="" flags="gi" />
+    			</tokenfilter>
+    		</filterchain>
+    	</loadfile>
+    	
+    	<echo message="changes since last build ${last.build.git.revision}" />
+    </target>
+
+    <target name="git.check.win"  if="${maven.on.windows}">
+    	<exec executable="git" output="git-log.txt">
+    		<env key="TERM" value="cygwin"/>
+    		<arg value="log" />
+    		<arg value="--name-only" />
+    		<arg value="${last.build.git.revision}..HEAD" />
+    		<arg value="--" />
+    	</exec>
+    	
+    	<loadfile property="git.log" srcfile="git-log.txt" />
+    	<echo message="${git.log}" />
+    </target>
+
+    <target name="git.check.unx" unless="${maven.on.windows}">
+    	<exec executable="git" output="git-log.txt">
+    		<arg value="log" />
+    		<arg value="--name-only" />
+    		<arg value="${last.build.git.revision}..HEAD" />
+    		<arg value="--" />
+    	</exec>
+    	
+    	<loadfile property="git.log" srcfile="git-log.txt" />
+    	<echo message="${git.log}" />
+    </target>
+
+    <target name="git.prep">
+        <property name="product.name" value="${ant.project.name}" />
+    </target>
+
+    <target name="git.check" depends=
+    	"detect.maven,git.last.build,git.check.unx,git.check.win">
+        <condition property="product.changed" value="true" else="false">
+        	<or>
+            	<contains string="${git.log}" substring="${product.name}/"/>
+            	<contains string="${git.log}" substring="build/"/>
+            	<contains string="${git.log}" substring="targets/"/>
+        	</or>
+        </condition>
+    	<echo message="${product.name} product.changed = ${product.changed}" />
+    </target>
+
+</project>

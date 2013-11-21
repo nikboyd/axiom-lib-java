@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="services.build" basedir=".">
+	
+	<property file="build.properties" />
+	<import file="${common-targets}" as="common"/>
+	<property name="resource.files" value="jdbc.properties"/>
+	<property name="module.command" value="install"/>
+	<property name="target" value="dev"/>
+	
+	<target name="clean">
+	    <ant target="clean" dir="../axiom-storage/build" inheritall="false" />
+	    <ant target="clean" dir="../axiom-domain/build" inheritall="false" />
+	</target>
+	
+	<target name="configure" depends="clean">
+	    <ant target="configure" dir="../axiom-storage/build" inheritall="false">
+	    	<property name="build.target" value="${target}"/>
+	    </ant>
+	    <ant target="configure" dir="../axiom-domain/build" inheritall="false">
+	    	<property name="build.target" value="${target}"/>
+	    </ant>
+<!--
+		<antcall target="configure.maven.project">
+	    	<param name="maven.project.folder" value=".."/>
+		</antcall>
+-->
+	</target>
+	
+	<target name="maven">
+	    <ant target="build" dir="../axiom-storage/build" inheritall="false">
+	    	<property name="build.target" value="${target}"/>
+	    </ant>
+		<ant target="build" dir="../axiom-domain/build" inheritall="false">
+	    	<property name="build.target" value="${target}"/>
+	    </ant>
+
+		<!--
+
+	    <ant target="build.maven.module" dir="." inheritall="false">
+	    	<property name="module.path" value="../axiom-domain"/>
+	    	<property name="build.target" value="${build.target}"/>
+	    </ant>
+		<ant target="run.maven" dir="." inheritall="false">
+	    	<property name="product.changed" value="true"/>
+	    	<property name="product.folder" value="."/>
+	    	<property name="build.target" value="${build.target}"/>
+	    </ant>
+-->
+	</target>
+
+	<target name="deploy.parent.pom">
+		<copy tofile="axiom-contacts-1.1.pom" overwrite="true">
+			<fileset dir="." includes="pom.xml" />
+		</copy>
+		<antcall target="deploy.maven.artifact">
+            <param name="source.dir" value="."/>
+            <param name="group.name" value="axiom"/>
+            <param name="artifact.name" value="axiom-contacts"/>
+            <param name="artifact.version" value="1.1"/>
+            <param name="artifact.type" value="pom"/>
+            <param name="artifact.file" value="axiom-contacts-1.1.pom"/>
+            <param name="repo.name" value="cloud-build.releases"/>
+            <param name="repo.url" value="dav:https://repository-axiom.forge.cloudbees.com/release/"/>
+		</antcall>
+	</target>
+
+</project>

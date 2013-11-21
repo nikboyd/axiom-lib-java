@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://maven.apache.org/POM/4.0.0 
+		http://maven.apache.org/xsd/maven-4.0.0.xsd
+		">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.axiom-tools</groupId>
+	<artifactId>axiom-storage</artifactId>
+	<version>@product.version.number@</version>
+	<packaging>jar</packaging>
+  
+  <dependencies>
+<!--   
+	<dependency>
+	 <groupId>org.apache.cxf</groupId>
+	 <artifactId>cxf-rt-frontend-jaxws</artifactId>
+	 <version>@apache.cxf.version@</version>
+	</dependency>
+	<dependency>
+	 <groupId>org.apache.cxf</groupId>
+	 <artifactId>cxf-rt-transports-http</artifactId>
+	 <version>@apache.cxf.version@</version>
+	</dependency>
+	<dependency>
+	 <groupId>org.apache.cxf</groupId>
+	 <artifactId>cxf-rt-transports-http-jetty</artifactId>
+	 <version>@apache.cxf.version@</version>
+	</dependency>
+ -->
+	<dependency>
+	 <groupId>org.springframework</groupId>
+	 <artifactId>spring-web</artifactId>
+	 <version>@springframework.version@</version>
+	</dependency>
+	<dependency>
+	 <groupId>org.springframework</groupId>
+	 <artifactId>spring-context</artifactId>
+	 <version>@springframework.version@</version>
+	</dependency>
+	<dependency>
+	 <groupId>org.springframework</groupId>
+	 <artifactId>spring-orm</artifactId>
+	 <version>@springframework.version@</version>
+	</dependency>
+	<dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+	 <version>@hibernate.version@</version>
+	</dependency>
+	<dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+	 <version>@hibernate.version@</version>
+    </dependency>
+	<dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>@commons.logging.version@</version>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>@log4j.version@</version>
+	</dependency>
+<!-- 
+	<dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>@junit.version@</version>
+      <scope>test</scope>
+    </dependency>
+-->
+	<dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>@mysql.version@</version>
+    </dependency>
+<!-- 
+  	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>@postgresql.version@</version>
+	</dependency>
+-->
+<!-- 
+	<dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>@java.mail.version@</version>
+    </dependency>	
+	<dependency>
+      <groupId>javax.jws</groupId>
+      <artifactId>jsr181-api</artifactId>
+      <version>@java.jws.version@</version>
+    </dependency>
+ -->
+  </dependencies>
+  
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+			</plugin>
+		
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>
