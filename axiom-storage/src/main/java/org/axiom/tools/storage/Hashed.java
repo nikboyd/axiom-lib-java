@@ -17,6 +17,7 @@ package org.axiom.tools.storage;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * An item that can be saved persistently and uniquely 
@@ -76,6 +77,7 @@ public abstract class Hashed<ItemType>
 	 * The hash of the item contents.
 	 */
 	@Override
+	@XmlTransient
 	public int getHashKey() {
 		prepareHash();
 		return this.hashKey;

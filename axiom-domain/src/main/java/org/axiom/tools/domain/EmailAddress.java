@@ -16,6 +16,8 @@
 package org.axiom.tools.domain;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.mail.internet.InternetAddress;
 
 import org.hibernate.annotations.Index;
@@ -27,7 +29,8 @@ import org.axiom.tools.storage.Hashed;
  * Contains an email address.
  */
 @Entity
-@Table(name = "EMAIL")
+@Table(name = "EMAIL_ADDRESS")
+@XmlRootElement(name = "EmailAddress", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class EmailAddress extends Hashed<EmailAddress> {
 
@@ -75,12 +78,28 @@ public class EmailAddress extends Hashed<EmailAddress> {
 
 
 	@Column(name = "ACCOUNT", nullable = false, length = 30)
-	private String account = "";
+	private String account = Empty;
 
-	@Index(name = "IX_EMAIL_HASH", columnNames = { "HASH_KEY" })
 	@Column(name = "HOST", nullable = false, length = 30)
-	private String hostName = "";
+	private String hostName = Empty;
+
+
+	/**
+	 * A formatted email address.
+	 */
+	@XmlAttribute(name = "value")
+	public String getFormattedAddress() {
+		return formatAddress();
+	}
 	
+	/**
+	 * A formatted email address.
+	 */
+	protected void setFormattedAddress(String emailAddress) {
+		String[] parts = emailAddress.split(AT);
+		this.account  = parts[0];
+		this.hostName = parts[1];
+	}
 
 	/**
 	 * Formats this email address.
@@ -91,6 +110,7 @@ public class EmailAddress extends Hashed<EmailAddress> {
 	}
 	
 	@Override
+	@Index(name = "IX_EMAIL_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
 		String hashSource = formatAddress();
 		return hashSource.hashCode();

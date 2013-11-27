@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,8 +31,11 @@ import org.axiom.tools.storage.SurrogatedComposite;
  */
 @Entity
 @Table(name = "CONTACT")
+@XmlRootElement(name = "Contact", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class Contact extends Surrogated<Contact> implements SurrogatedComposite {
+
+	private static final Log Logger = LogFactory.getLog(Contact.class);
 
 	/**
 	 * A kind of contact.
@@ -79,10 +83,21 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 		
 	} // Type
 
-	private static final Log Logger = LogFactory.getLog(Contact.class);
+	// component map indices for this composite
 	private static final int AddressIndex = 0;
 	private static final int EmailIndex = 1;
 	private static final int PhoneIndex = 2;
+	
+	/**
+	 * Any components that are managed as maps.
+	 * @return the component maps associated with this Contact
+	 */
+	@Override
+	@XmlTransient
+	public Object[] getComponentMaps() {
+		Object[] results = { this.addresses, this.emails, this.phones };
+		return results;
+	}
 	
 	/**
 	 * Any street addresses associated with this contact.
@@ -91,8 +106,8 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 		fetch = FetchType.EAGER,
 		cascade = CascadeType.ALL)
 	@MapKeyClass(Contact.Type.class)
-	private Map<Contact.Type, StreetAddress> 
-		addresses = new HashMap<Contact.Type, StreetAddress>();
+	private Map<Contact.Type, MailAddress> 
+		addresses = new HashMap<Contact.Type, MailAddress>();
 	
 	/**
 	 * Any phone numbers associated with this contact.
@@ -125,26 +140,6 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	}
 
 	/**
-	 * Any components that are manager as sets.
-	 * @return the sets of the components associated with this Contact
-	 */
-	@Override
-	public Object[] getComponentSets() {
-		Object[] results = { };
-		return results;
-	}
-	
-	/**
-	 * Any components that are managed as maps.
-	 * @return the maps of the components associated with this Contact
-	 */
-	@Override
-	public Object[] getComponentMaps() {
-		Object[] results = { this.addresses, this.emails, this.phones };
-		return results;
-	}
-
-	/**
 	 * A count of the mail addresses associated with this contact.
 	 */
 	public int countAddresses() {
@@ -166,19 +161,11 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	}
 	
 	/**
-	 * Saves this item.
-	 */
-	@Override
-	public Contact save() {
-		return Repository.save((SurrogatedComposite)this).asItem();
-	}
-	
-	/**
 	 * Returns an address of a given kind.
 	 * @param kind a kind of address
 	 * @return a StreetAddress, or null
 	 */
-	public StreetAddress getAddress(final Contact.Type kind) {
+	public MailAddress getAddress(Contact.Type kind) {
 		return Repository.getMapElement(this, AddressIndex, kind);
 	}
 	
@@ -188,7 +175,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	 * @param address a StreetAddress
 	 * @return this contact
 	 */
-	public Contact addAddress(final Contact.Type kind, final StreetAddress address) {
+	public Contact withAddress(Contact.Type kind, MailAddress address) {
 		if (address == null) return this;
 		updateAddress(kind, address);
 		return this;
@@ -209,7 +196,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	 * @param kind a kind of phone
 	 * @return a PhoneNumber, or null
 	 */
-	public PhoneNumber getPhone(final Contact.Type kind) {
+	public PhoneNumber getPhone(Contact.Type kind) {
 		return Repository.getMapElement(this, PhoneIndex, kind);
 	}
 	
@@ -219,7 +206,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	 * @param phone a phone
 	 * @return this contact
 	 */
-	public Contact addPhone(final Contact.Type kind, final PhoneNumber phone) {
+	public Contact withPhone(Contact.Type kind, PhoneNumber phone) {
 		if (phone == null) return this;
 		updatePhone(kind, phone);
 		return this;
@@ -230,7 +217,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	 * @param kind a kind of phone
 	 * @return this contact
 	 */
-	public Contact removePhone(final Contact.Type kind) {
+	public Contact removePhone(Contact.Type kind) {
 		updatePhone(kind, null);
 		return this;
 	}
@@ -240,7 +227,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	 * @param kind a kind of email address
 	 * @return an EmailAddress, or null
 	 */
-	public EmailAddress getEmail(final Contact.Type kind) {
+	public EmailAddress getEmail(Contact.Type kind) {
 		return Repository.getMapElement(this, EmailIndex, kind);
 	}
 	
@@ -250,7 +237,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 	 * @param email an email address
 	 * @return this contact
 	 */
-	public Contact addEmail(final Contact.Type kind, final EmailAddress email) {
+	public Contact withEmail(Contact.Type kind, EmailAddress email) {
 		if (email == null) return this;
 		updateEmail(kind, email);
 		return this;
@@ -293,7 +280,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite 
 		return Contact.Logger;
 	}
 	
-	private void updateAddress(Contact.Type kind, StreetAddress address) {
+	private void updateAddress(Contact.Type kind, MailAddress address) {
 		if (address == null) {
 			this.addresses.remove(kind);
 		}

@@ -16,7 +16,10 @@
 package org.axiom.tools.storage;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,6 +45,17 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Surrogated<ItemType> implements SurrogatedItem {
 
 	private static final Log Logger = LogFactory.getLog(Surrogated.class);
+	protected static final String Empty = "";
+	protected static final String Blank = " ";
+	protected static final String Comma = ",";
+	private static final String AND = "&&";
+
+	protected static final String PosixSymbols = "\\p{S}";
+	protected static final String PosixPunctuators = "\\p{P}";
+	protected static final String AllowedSymbols = "/#";
+	protected static final String ExcludedSymbols = "[^" + AllowedSymbols + "]";
+	protected static final String PunctuationFilter = "["+ PosixSymbols + PosixPunctuators + AND + ExcludedSymbols + "]";
+	protected static final String MultipleSpaceFilter = " +";
 
 	/**
 	 * A repository shared by instances of this kind.
@@ -61,6 +75,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * A surrogate key.
 	 */
 	@Override
+	@XmlTransient
 	public long getKey() {
 		return Id;
 	}
@@ -68,6 +83,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	/**
 	 * Indicates whether this item was previously saved.
 	 */
+	@XmlTransient
 	public boolean isSaved() {
 		return getKey() > 0;
 	}
@@ -87,6 +103,52 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 */
 	public ItemType save() {
 		return Repository.save(this).asItem();
+	}
+
+	/**
+	 * A default implementation for a SurrogatedComposite.
+	 * Derived classes that implement SurrogatedComposite 
+	 * override this method if needed.
+	 * @return empty
+	 */
+	@XmlTransient
+	public Object[] getComponentMaps() {
+		Object[] results = { };
+		return results;
+	}
+
+	/**
+	 * A default implementation for a SurrogatedComposite.
+	 * Derived classes that implement SurrogatedComposite 
+	 * override this method if needed.
+	 * @return empty
+	 */
+	@XmlTransient
+	public Object[] getComponentSets() {
+		Object[] results = { };
+		return results;
+	}
+
+	/**
+	 * A default implementation for a SurrogatedComposite.
+	 * Derived classes that implement SurrogatedComposite 
+	 * override this method if needed.
+	 * @return empty
+	 */
+	@XmlTransient
+	public SurrogatedItem[] getComponents() {
+		SurrogatedItem[] results = { };
+		return results;
+	}
+
+	/**
+	 * A default implementation for a SurrogatedComposite.
+	 * Derived classes that implement SurrogatedComposite 
+	 * override this method if needed.
+	 * @param components saved components
+	 */
+	public void setComponents(SurrogatedItem[] components) {
+		// override this if needed
 	}
 
 	/**
@@ -127,6 +189,25 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 */
 	public void describe() {
 		getLogger().info("key = " + getKey());
+	}
+
+	/**
+	 * Normalizes text with full capitalization, without punctuation, and without extraneous whitespace.
+	 * @param text some text
+	 * @return normalized text
+	 */
+	public static String normalizeWords(String text) {
+		return WordUtils.capitalizeFully(StringUtils.defaultString(text).trim())
+				.replaceAll(PunctuationFilter, Empty).replaceAll(MultipleSpaceFilter, Blank);
+	}
+
+	/**
+	 * Normalizes code as upper case.
+	 * @param codeText code text
+	 * @return a normalized code
+	 */
+	public static String normalizeCode(String codeText) {
+		return StringUtils.defaultString(codeText).trim().toUpperCase();
 	}
 
 } // Surrogated<ItemType>

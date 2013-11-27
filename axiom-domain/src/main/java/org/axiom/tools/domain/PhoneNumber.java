@@ -15,7 +15,11 @@
  */
 package org.axiom.tools.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Index;
 import org.apache.commons.logging.Log;
@@ -27,9 +31,11 @@ import org.axiom.tools.storage.Hashed;
  */
 @Entity
 @Table(name = "PHONE")
+@XmlRootElement(name = "PhoneNumber", namespace = "##default")
 @SuppressWarnings("unchecked")
-public class PhoneNumber extends Hashed<PhoneNumber> {
+public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 
+	private static final long serialVersionUID = 1001001L;
 	private static final Log Logger = LogFactory.getLog(PhoneNumber.class);
 
 	@Override
@@ -61,10 +67,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> {
 		}
 
 		PhoneNumber result = new PhoneNumber();
-		String[] parts = phoneNumber.split(DASH);
-		result.areaCode = parts[0];
-		result.prefix   = parts[1];
-		result.suffix   = parts[2];		
+		result.setFormattedNumber(phoneNumber);
 		return result;
 	}
 	
@@ -80,10 +83,26 @@ public class PhoneNumber extends Hashed<PhoneNumber> {
 	@Column(name = "PREFIX", nullable = false, length = 3)
 	private String prefix = "";
 
-	@Index(name = "IX_PHONE_HASH", columnNames = { "HASH_KEY" })
 	@Column(name = "SUFFIX", nullable = false, length = 4)
 	private String suffix = "";
+
+	/**
+	 * A formatted phone number.
+	 */
+	@XmlAttribute(name = "value")
+	public String getFormattedNumber() {
+		return formatNumber();
+	}
 	
+	/**
+	 * A formatted phone number.
+	 */
+	protected void setFormattedNumber(String phoneNumber) {
+		String[] parts = phoneNumber.split(DASH);
+		this.areaCode = parts[0];
+		this.prefix   = parts[1];
+		this.suffix   = parts[2];		
+	}
 
 	/**
 	 * Formats this phone number.
@@ -94,6 +113,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> {
 	}
 	
 	@Override
+	@Index(name = "IX_PHONE_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
 		String hashSource = formatNumber();
 		return hashSource.hashCode();

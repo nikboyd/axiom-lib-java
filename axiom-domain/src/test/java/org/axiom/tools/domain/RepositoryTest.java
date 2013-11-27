@@ -15,6 +15,9 @@
  */
 package org.axiom.tools.domain;
 
+import org.apache.log4j.Logger;
+import org.axiom.tools.codecs.EntityCodec;
+import org.axiom.tools.storage.TransactionalContext;
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -24,12 +27,61 @@ import static org.junit.Assert.*;
  * respective repositories.
  */
 public class RepositoryTest {
+
+	private static final Logger Log = Logger.getLogger(RepositoryTest.class);
+	
+	@BeforeClass
+	public static void initialize() {
+		TransactionalContext context = new TransactionalContext();
+		assertFalse(context == null);
+	}
+	
+	@Test
+	public void fullContact() {
+		Person sample = 
+			Person.named("George Jungleman")
+			.with(Contact.Type.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
+			.with(Contact.Type.HOME, PhoneNumber.from("415-888-8899"));
+		
+		Person p = sample.save();
+		Person x = Person.named("George Jungleman").find();
+		assertTrue(x.getKey() == p.getKey());
+		assertTrue(x.getHashKey() == p.getHashKey());
+		x.describe();
+		x.remove();
+	}
+	
+	@Test
+	public void invalidAddress() {
+		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CAA", "94005");				
+		String[] results = a.validate();
+		assertTrue(results.length > 0);
+		Log.info(results[0]);
+	}
+	
+	@Test
+	public void validation() {
+		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005");				
+		String[] results = a.validate();
+		assertTrue(results.length == 0);
+	}
+	
+	@Test
+	public void addressCodec() {
+		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005");				
+		String json = EntityCodec.from(a).toJSON();
+		Log.info(json);
+		String xml = EntityCodec.from(a).toXML();
+		Log.info(xml);
+	}
 	
 	@Test
 //	@Ignore
 	public void basicPhones() {
 		PhoneNumber n = PhoneNumber.from("888-888-8888");
 		assertTrue(n.formatNumber().equals("888-888-8888"));
+		String xml = EntityCodec.from(n).toXML();
+		Log.info(xml);
 	}
 	
 	@Test
@@ -48,8 +100,8 @@ public class RepositoryTest {
 	@Test
 //	@Ignore
 	public void addressStability() {
-		StreetAddress a = StreetAddress.with("1234 Main St", "Anytown", "CA", "94005").save();		
-		StreetAddress b = StreetAddress.with("1234 Main St", "Anytown", "CA", "94005").find();
+		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();		
+		MailAddress b = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").find();
 
 		assertTrue(b != null);
 		assertTrue(b.getKey() == a.getKey());
@@ -61,12 +113,12 @@ public class RepositoryTest {
 	@Test
 //	@Ignore
 	public void componentLifecycle() {
-		StreetAddress a = StreetAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
+		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
 		
 		assertTrue(a != null);
 		assertTrue(a.getKey() > 0);
 		
-		StreetAddress b = a.reload();
+		MailAddress b = a.reload();
 		assertTrue(b != null);
 		assertTrue(b.getKey() > 0);
 		a.describe();
@@ -88,21 +140,22 @@ public class RepositoryTest {
 	public void compositeLifecycle() {
 		System.out.println("phone count = " + PhoneNumber.count());
 		System.out.println("email count = " + EmailAddress.count());
-		System.out.println("address count = " + StreetAddress.count());
+		System.out.println("address count = " + MailAddress.count());
 		System.out.println("contact count = " + Contact.count());
 
-		PhoneNumber p = PhoneNumber.from("415-717-2158").save();
-		EmailAddress e = EmailAddress.from("nikboyd@sonic.net").save();
+		PhoneNumber p = PhoneNumber.from("415-888-8899").save();
+		EmailAddress e = EmailAddress.from("sample@educery.com").save();
+		Log.info(EntityCodec.from(e).toXML());
 
-		StreetAddress a = StreetAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
-		StreetAddress b = StreetAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
+		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
+		MailAddress b = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
 
 		Contact c = 
 			new Contact()
-				.addAddress(Contact.Type.HOME, a)
-				.addAddress(Contact.Type.WORK, b)
-				.addEmail(Contact.Type.HOME, e)
-				.addPhone(Contact.Type.HOME, p)
+				.withAddress(Contact.Type.HOME, a)
+				.withAddress(Contact.Type.WORK, b)
+				.withEmail(Contact.Type.HOME, e)
+				.withPhone(Contact.Type.HOME, p)
 				.save();
 
 		assertTrue(c != null);
@@ -112,7 +165,7 @@ public class RepositoryTest {
 		
 		System.out.println("phone count = " + PhoneNumber.count());
 		System.out.println("email count = " + EmailAddress.count());
-		System.out.println("address count = " + StreetAddress.count());
+		System.out.println("address count = " + MailAddress.count());
 		System.out.println("contact count = " + Contact.count());
 		
 		Contact d = c.reload();
@@ -149,7 +202,7 @@ public class RepositoryTest {
 		
 		System.out.println("phone count = " + PhoneNumber.count());
 		System.out.println("email count = " + EmailAddress.count());
-		System.out.println("address count = " + StreetAddress.count());
+		System.out.println("address count = " + MailAddress.count());
 		System.out.println("contact count = " + Contact.count());
 	}
 

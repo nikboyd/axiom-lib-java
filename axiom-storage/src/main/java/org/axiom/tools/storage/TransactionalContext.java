@@ -270,7 +270,11 @@ public class TransactionalContext {
 	 */
 	private <ItemType extends SurrogatedItem> 
 	ItemType save(ItemType item) throws Exception {
-		if (item == null) return null;
+		if (item == null) return null;		
+		if (item instanceof SurrogatedComposite) {
+			return (ItemType) save((SurrogatedComposite) item);
+		}
+
 		try {
 			if (item.getKey() > 0) {
 				ItemType result = manager.merge(item);
@@ -346,6 +350,19 @@ public class TransactionalContext {
 			Object[] componentSets = item.getComponentSets();
 			for (Object componentSet : componentSets) {
 				saveComponents((Set<SurrogatedItem>) componentSet);
+			}
+
+			SurrogatedItem[] components = item.getComponents();
+			if (components.length > 0) {
+				for (int index = 0; index < components.length; index++) {
+					if (components[index].isSaved()) {
+						manager.merge(components[index]);
+					}
+					else {
+						components[index] = save(components[index]);
+					}
+				}
+				item.setComponents(components);
 			}
 			
 			if (item.getKey() > 0) {

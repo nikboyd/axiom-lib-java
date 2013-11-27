@@ -15,19 +15,66 @@
  */
 package org.axiom.tools.domain;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Index;
+
 /**
  * Identifies and describes a person.
  * 
  * <h4>Person Responsibilities:</h4>
  * <ul>
- * <li></li>
- * </ul>
- *
- * <h4>Client Responsibilities:</h4>
- * <ul>
- * <li></li>
+ * <li>knows a personal name</li>
+ * <li>knows personal contact information</li>
  * </ul>
  */
+@Entity
+@Table(name = "PERSON")
+@XmlRootElement(name = "Person", namespace = "##default")
+@SuppressWarnings("unchecked")
 public class Person extends Party {
+
+	private static final Log Logger = LogFactory.getLog(Person.class);
+
+	@Override
+	public Log getLogger() {
+		return Logger;
+	}
+
+	@Override
+	@Index(name = "IX_PARTY_HASH", columnNames = { "HASH_KEY" })
+	public int hashCode() {
+		String hashSource = getName();
+		return hashSource.hashCode();
+	}
+
+	public Person withContact(Contact contact) {
+		setContact(contact);
+		return this;
+	}
+
+	/**
+	 * Returns a new Person.
+	 * @param name a name
+	 * @return a new Person
+	 */
+	public static Person named(String name) {
+		Person result = new Person();
+		result.setName(name);
+		return result;
+	}
+
+	@Override
+	public Person save() {
+		return (Person) super.save();
+	}
+	
+	@Override
+	public Person find() {
+		return (Person) super.find();
+	}
 
 } // Person

@@ -9,7 +9,6 @@
     <persistence-unit name="entity.manager.factory" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
-<!-- 
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
@@ -18,8 +17,8 @@
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/sample"/>
             <property name="hibernate.connection.username" value="sample"/>
             <property name="hibernate.connection.password" value="sampl3user"/>
- -->        
-            <property name="hibernate.show_sql" value="false"/>
+<!-- 
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
  
@@ -27,6 +26,7 @@
             <property name="hibernate.connection.url" value="jdbc:mysql://ec2-50-19-213-178.compute-1.amazonaws.com:3306/axiom-sample"/>
             <property name="hibernate.connection.username" value="axiom-sample"/>
             <property name="hibernate.connection.password" value="sampl3user"/>
+ -->        
 
         </properties>
     </persistence-unit>
