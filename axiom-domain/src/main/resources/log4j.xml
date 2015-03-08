@@ -20,10 +20,10 @@
 	</appender>
 
 	<logger name="org.hibernate">
-		<level value="warn" />
+		<level value="fatal" />
 		<appender-ref ref="CA" />
 	</logger>
-
+<!--
 	<logger name="org.hibernate.hql">
 		<level value="warn" />
 		<appender-ref ref="CA" />
@@ -39,6 +39,16 @@
 		<appender-ref ref="CA" />
 	</logger>
 
+	<logger name="org.hibernate.engine">
+		<level value="warn" />
+		<appender-ref ref="CA" />
+	</logger>
+
+	<logger name="org.hibernate.tool">
+		<level value="fatal" />
+		<appender-ref ref="CA" />
+	</logger>
+-->
 	<logger name="org.springframework">
 		<level value="warn" />
 		<appender-ref ref="CA" />

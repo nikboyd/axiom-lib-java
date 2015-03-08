@@ -11,7 +11,7 @@
 
 	<!-- mvc:annotation-driven / -->
 	
-	<bean id="EntityValidator" class="org.axiom.tools.validations.EntityValidator">
+	<bean id="EntityValidator" class="org.axiom_tools.validations.EntityValidator">
 		<property name="messages" value="/message.properties" />
 	</bean>
 
