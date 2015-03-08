@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="
+        http://maven.apache.org/POM/4.0.0 
+        http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.axiom-tools</groupId>
+    <artifactId>axiom-tools</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>axiom-service</module>
+        <module>axiom-domain</module>
+        <module>axiom-storage</module>
+        <module>axiom-utils</module>
+        <module>axiom-faces</module>
+    </modules>
+    
+    <properties>
+        <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+
+        <version.axiom.libs>[1.0,1.1)</version.axiom.libs>
+        
+        <version.jackson>2.1.4</version.jackson>
+        <version.commons-lang>2.3</version.commons-lang>
+        <version.commons-codec>1.9</version.commons-codec>
+        <version.commons-logging>1.1.1</version.commons-logging>
+        <version.log4j>1.2.16</version.log4j>
+        <version.crypto>1.46</version.crypto>
+
+        <version.cxf>3.0.4</version.cxf>
+        <version.h2>1.4.186</version.h2>
+        <version.postgres>9.3-1101-jdbc41</version.postgres>
+        <version.hibernate>4.3.4.Final</version.hibernate>
+        <version.validator>5.1.0.Final</version.validator>
+        <version.spring>3.2.6.RELEASE</version.spring>
+        <version.validation-api>1.1.0.Final</version.validation-api>
+
+        <version.java>1.7</version.java>
+        <version.javax.el>2.2.4</version.javax.el>
+        <version.junit>4.10</version.junit>
+        <version.compiler.plugin>2.3.2</version.compiler.plugin>
+    </properties>
+  
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.compiler.plugin}</version>
+                <configuration>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
+                </configuration>
+			</plugin>
+		
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>
