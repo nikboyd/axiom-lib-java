@@ -1,14 +1,7 @@
-*.class
+# git filters
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
-filter.properties
-version.properties
-**/pom.xml
-
+.classpath
+.project
 .settings/
+
 target/
-product.builds/
