@@ -40,8 +40,8 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 	private static final Log Logger = LogFactory.getLog(EmailAddress.class);
 	
 	@Override
-	public Log getLogger() {
-		return EmailAddress.Logger;
+	protected Log getLogger() {
+		return Logger;
 	}
 
 	/**

@@ -26,24 +26,24 @@ public interface SurrogatedComposite extends SurrogatedItem {
 	 * generic maps, their actual type signatures are erased. The framework used to 
 	 * save the components contained in the maps will determine their actual types.
 	 */
-	Object[] getComponentMaps();
+	public Object[] componentMaps();
 	
 	/**
 	 * Returns any sets that contain surrogated components. Due to the limitations of
 	 * generic sets, their actual type signatures are erased. The framework used to 
 	 * save the components contained in the maps will determine their actual types.
 	 */
-	Object[] getComponentSets();
+	public Object[] componentSets();
 
 	/**
 	 * Returns any directly related surrogated components.
 	 */
-	SurrogatedItem[] getComponents();
+	public SurrogatedItem[] components();
 
 	/**
 	 * Sets component references after they are saved.
 	 * @param components saved components
 	 */
-	void setComponents(SurrogatedItem[] components);
+	public void components(SurrogatedItem[] components);
 
 } // SurrogatedComposite

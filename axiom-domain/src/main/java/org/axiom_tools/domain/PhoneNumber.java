@@ -17,8 +17,7 @@ package org.axiom_tools.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 import org.hibernate.annotations.Index;
 import org.apache.commons.logging.Log;
@@ -39,8 +38,8 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	private static final Log Logger = LogFactory.getLog(PhoneNumber.class);
 
 	@Override
-	public Log getLogger() {
-		return PhoneNumber.Logger;
+	protected Log getLogger() {
+		return Logger;
 	}
 
 	/**

@@ -15,6 +15,8 @@
  */
 package org.axiom_tools.storage;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Defines protocol for a persistent item.
  * 
@@ -29,23 +31,24 @@ public interface SurrogatedItem {
 	 * A surrogate key which uniquely identifies this item.
 	 * @return a surrogate key value
 	 */
-	long getKey();
+	public long getKey();
 	
 	/**
 	 * Indicates whether this item was saved in persistent storage.
 	 */
-	boolean isSaved();
+    @XmlTransient
+	public boolean wasSaved();
 
 	/**
 	 * Logs a description of this item.
 	 */
-	void describe();
+	public void describe();
 	
 	/**
 	 * Returns this item properly typed.
 	 * @return this item properly typed
 	 */
-	<ItemType> ItemType asItem();
+	public <ItemType> ItemType asItem();
 	
 	/**
 	 * Defines protocol for usage of a SurrogatedItem.

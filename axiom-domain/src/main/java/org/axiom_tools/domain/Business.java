@@ -15,6 +15,9 @@
  */
 package org.axiom_tools.domain;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Identifies and describes a legal business entity.
  * 
@@ -29,5 +32,13 @@ package org.axiom_tools.domain;
  * </ul>
  */
 public class Business extends Party {
+
+	private static final long serialVersionUID = 1001001L;
+	private static final Log Logger = LogFactory.getLog(PhoneNumber.class);
+
+	@Override
+	protected Log getLogger() {
+		return Logger;
+	}
 
 } // Business

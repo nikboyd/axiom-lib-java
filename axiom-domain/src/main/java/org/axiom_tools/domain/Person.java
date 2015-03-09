@@ -42,13 +42,13 @@ public class Person extends Party {
 	private static final long serialVersionUID = 1001001L;
 	private static final Log Logger = LogFactory.getLog(Person.class);
 
-	public static int count() {
-		return Repository.count(Person.class);
+	@Override
+	protected Log getLogger() {
+		return Logger;
 	}
 
-	@Override
-	public Log getLogger() {
-		return Logger;
+	public static int count() {
+		return Repository.count(Person.class);
 	}
 
 	@Override

@@ -52,9 +52,8 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	 * A logger for this class.
 	 */
 	@Override
-	@XmlTransient
-	public Log getLogger() {
-		return MailAddress.Logger;
+	protected Log getLogger() {
+		return Logger;
 	}
 
 	/**

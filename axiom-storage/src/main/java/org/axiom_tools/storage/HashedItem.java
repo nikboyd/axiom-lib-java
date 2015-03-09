@@ -30,6 +30,6 @@ public interface HashedItem extends SurrogatedItem {
 	 * Returns a hash of the contents of this item.
 	 * @return a hash of the contents
 	 */
-	int getHashKey();
+	public int hashKey();
 
 } // HashedItem

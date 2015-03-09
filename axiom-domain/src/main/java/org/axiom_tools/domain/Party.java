@@ -111,13 +111,13 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	@Override
 	@XmlTransient
-	public SurrogatedItem[] getComponents() {
+	public SurrogatedItem[] components() {
 		SurrogatedItem[] results = { getContact() };
 		return results;
 	}
 	
 	@Override
-	public void setComponents(SurrogatedItem[] results) {
+	public void components(SurrogatedItem[] results) {
 		setContact((Contact)results[0]);
 	}
 

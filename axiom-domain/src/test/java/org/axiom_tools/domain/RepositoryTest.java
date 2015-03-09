@@ -30,7 +30,7 @@ import org.axiom_tools.storage.TransactionalContext;
  * Confirms proper operation of sample domain classes and their
  * respective repositories.
  */
-@Ignore
+//@Ignore
 public class RepositoryTest {
 
 	private static final Log Logger = LogFactory.getLog(RepositoryTest.class);
@@ -52,7 +52,7 @@ public class RepositoryTest {
 		Person p = sample.save();
 		Person x = Person.named("George Jungleman").find();
 		assertTrue(x.getKey() == p.getKey());
-		assertTrue(x.getHashKey() == p.getHashKey());
+		assertTrue(x.hashKey() == p.hashKey());
 		x.describe();
         
         List<Person> ps = Person.like("%Jungle%").findLike();
@@ -79,12 +79,11 @@ public class RepositoryTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void phoneStability() {
 		PhoneNumber n = PhoneNumber.from("888-888-8888").save();
 		PhoneNumber p = PhoneNumber.from("888-888-8888").save();
 		assertTrue(n.getKey() == p.getKey());
-		assertTrue(n.getHashKey() == p.getHashKey());
+		assertTrue(n.hashKey() == p.hashKey());
 		
 		PhoneNumber x = PhoneNumber.from("888-888-8888").find();
 		assertTrue(x != null);
@@ -92,20 +91,18 @@ public class RepositoryTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void addressStability() {
 		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();		
 		MailAddress b = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").find();
 
 		assertTrue(b != null);
 		assertTrue(b.getKey() == a.getKey());
-		assertTrue(b.getHashKey() == a.getHashKey());
+		assertTrue(b.hashKey() == a.hashKey());
 		a.describe();
 		b.describe();
 	}
 
 	@Test
-//	@Ignore
 	public void componentLifecycle() {
 		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
 		
@@ -121,7 +118,7 @@ public class RepositoryTest {
 		b = b.withCity("Uptown").save();
 		assertTrue(b != null);
 		assertFalse(b.getKey() == a.getKey());
-		assertFalse(b.getHashKey() == a.getHashKey());
+		assertFalse(b.hashKey() == a.hashKey());
 		assertFalse(b.getCity().equals(a.getCity()));
 		b.describe();
 
@@ -130,7 +127,6 @@ public class RepositoryTest {
 	}
 	
 	@Test
-//	@Ignore
 	public void compositeLifecycle() {
 		System.out.println("phone count = " + PhoneNumber.count());
 		System.out.println("email count = " + EmailAddress.count());
@@ -171,7 +167,7 @@ public class RepositoryTest {
 		a = b.find();
 		assertTrue(a != null);
 		assertTrue(a.getKey() > 0);
-		assertTrue(a.getHashKey() == b.getHashKey());
+		assertTrue(a.hashKey() == b.hashKey());
 		
 		PhoneNumber n = d.getPhone(Kind.HOME);
 		assertTrue(n != null);

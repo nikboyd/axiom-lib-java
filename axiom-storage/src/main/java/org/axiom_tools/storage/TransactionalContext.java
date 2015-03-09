@@ -328,7 +328,7 @@ public class TransactionalContext {
 		if (item == null) return 0;
 		try {
 			ItemType found = find(item);
-			Object[] componentMaps = found.getComponentMaps();
+			Object[] componentMaps = found.componentMaps();
 			return ((Map<Object, SurrogatedItem>) componentMaps[mapIndex]).size();
 		} catch (Exception e) {
 			reportFindProblem(item, e);
@@ -350,7 +350,7 @@ public class TransactionalContext {
 		if (item == null) return null;
 		try {
 			ItemType found = find(item);
-			Object[] componentMaps = found.getComponentMaps();
+			Object[] componentMaps = found.componentMaps();
 			return ((Map<Object, ResultType>) componentMaps[mapIndex]).get(key);
 		} catch (Exception e) {
 			reportFindProblem(item, e);
@@ -369,27 +369,27 @@ public class TransactionalContext {
 	ItemType save(ItemType item) throws Exception {
 		if (item == null) return null;
 		try {
-			Object[] componentMaps = item.getComponentMaps();
+			Object[] componentMaps = item.componentMaps();
 			for (Object componentMap : componentMaps) {
 				saveComponents((Map<Object, SurrogatedItem>) componentMap);
 			}
 			
-			Object[] componentSets = item.getComponentSets();
+			Object[] componentSets = item.componentSets();
 			for (Object componentSet : componentSets) {
 				saveComponents((Set<SurrogatedItem>) componentSet);
 			}
 
-			SurrogatedItem[] components = item.getComponents();
+			SurrogatedItem[] components = item.components();
 			if (components.length > 0) {
 				for (int index = 0; index < components.length; index++) {
-					if (components[index].isSaved()) {
+					if (components[index].wasSaved()) {
 						manager.merge(components[index]);
 					}
 					else {
 						components[index] = save(components[index]);
 					}
 				}
-				item.setComponents(components);
+				item.components(components);
 			}
 			
 			if (item.getKey() > 0) {
@@ -551,7 +551,7 @@ public class TransactionalContext {
 		String className = item.getClass().getSimpleName();
 		String query = "select x from " + className + " x where x.hashKey = :key";		
 		return manager.createQuery(query)
-						.setParameter("key", item.getHashKey())
+						.setParameter("key", item.hashKey())
 						.setMaxResults(1);
 	}
 	
@@ -601,7 +601,7 @@ public class TransactionalContext {
 	 */
 	private <ItemType extends HashedItem> 
 	void reportFindHashProblem(ItemType item) {
-		String message = item.getClass().getSimpleName() + " FIND failed hash = " + item.getHashKey() + " ";
+		String message = item.getClass().getSimpleName() + " FIND failed hash = " + item.hashKey() + " ";
 		Logger.info(message);
 	}
 	

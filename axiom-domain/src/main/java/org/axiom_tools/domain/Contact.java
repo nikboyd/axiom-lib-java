@@ -51,70 +51,19 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
         
     } // Kind
 
-//	/**
-//	 * A kind of contact.
-//	 */
-//	@Embeddable
-//	public static class Type implements Serializable {
-//        
-//    	private static final long serialVersionUID = 1001001L;
-//		
-//		/**
-//		 * Describes a kind of contact.
-//		 */
-//		@Basic
-//		protected String kind;
-//		
-//		/**
-//		 * Constructs a new Type.
-//		 */
-//		public Type() {}
-//		public Type(String kind) {
-//			this.kind = kind;
-//		}
-//		
-//		public static final Type HOME = new Type("HOME");
-//		public static final Type WORK = new Type("WORK");
-//		public static final Type MOBILE = new Type("MOBILE");
-//		public static final Type BILLING = new Type("BILLING");
-//		public static final Type SHIPPING = new Type("SHIPPING");
-//        
-//        public static Type named(String name) {
-//            
-//        }
-//        
-//        /**
-//         * A contact type name.
-//         * @return a contact type name
-//         */
-//        public String getKind() {
-//            return this.kind;
-//        }
-//		
-//		/**
-//		 * A hash code.
-//		 */
-//		@Override
-//		public int hashCode() {
-//			return this.kind.hashCode();
-//		}
-//
-//		/**
-//		 * Indicates whether this kind equals another.
-//		 */
-//		@Override
-//		public boolean equals(Object candidate) {
-//			Type kindred = (Type) candidate;
-//			if (kindred == null) return false;
-//			return this.kind.equals(kindred.kind);
-//		}
-//		
-//	} // Type
 
 	// component map indices for this composite
 	private static final int AddressIndex = 0;
 	private static final int EmailIndex = 1;
 	private static final int PhoneIndex = 2;
+
+	/**
+	 * A logger.
+	 */
+	@Override
+	protected Log getLogger() {
+		return Logger;
+	}
     
     public List<ContactMechanism> getMechanisms() {
         ArrayList<ContactMechanism> results = new ArrayList();
@@ -151,8 +100,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 	 * @return the component maps associated with this Contact
 	 */
 	@Override
-	@XmlTransient
-	public Object[] getComponentMaps() {
+	public Object[] componentMaps() {
 		Object[] results = { this.addresses, this.emails, this.phones };
 		return results;
 	}
@@ -331,14 +279,6 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		for (Kind emailType : emails.keySet()) {
 			emails.get(emailType).describe(emailType);
 		}
-	}
-
-	/**
-	 * A logger.
-	 */
-	@Override
-	public Log getLogger() {
-		return Contact.Logger;
 	}
 	
 	private void updateAddress(Kind kind, MailAddress address) {

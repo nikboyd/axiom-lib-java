@@ -62,7 +62,7 @@ public class ContentTest {
 	}
 	
 	@Test
-	public void basicPhones() {
+	public void samplePhone() {
 		PhoneNumber sample = PhoneNumber.from("888-888-8888");
 		assertTrue(sample.formatNumber().equals("888-888-8888"));
 		String xml = EntityCodec.from(sample).toXML();

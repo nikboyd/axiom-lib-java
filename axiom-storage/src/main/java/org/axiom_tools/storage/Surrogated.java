@@ -21,7 +21,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A persistent item with a surrogate key.
@@ -44,7 +43,6 @@ import org.apache.commons.logging.LogFactory;
 @SuppressWarnings("unchecked")
 public abstract class Surrogated<ItemType> implements SurrogatedItem {
 
-	private static final Log Logger = LogFactory.getLog(Surrogated.class);
 	protected static final String Empty = "";
 	protected static final String Blank = " ";
 	protected static final String Comma = ",";
@@ -61,6 +59,11 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * A repository shared by instances of this kind.
 	 */
 	protected static final ItemRepository Repository = new ItemRepository();
+	
+	/**
+	 * A logger for this kind of item.
+	 */
+	protected abstract Log getLogger();
 
 	/**
 	 * A surrogate key. The key value is generated automatically by the configured
@@ -83,8 +86,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	/**
 	 * Indicates whether this item was previously saved.
 	 */
-	@XmlTransient
-	public boolean isSaved() {
+	public boolean wasSaved() {
 		return getKey() > 0;
 	}
 
@@ -92,7 +94,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * Returns this item properly typed.
 	 * @return this item properly typed
 	 */
-	@Override
+//	@Override
 	public ItemType asItem() {
 		return (ItemType) this;
 	}
@@ -111,8 +113,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * override this method if needed.
 	 * @return empty
 	 */
-	@XmlTransient
-	public Object[] getComponentMaps() {
+	public Object[] componentMaps() {
 		Object[] results = { };
 		return results;
 	}
@@ -123,8 +124,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * override this method if needed.
 	 * @return empty
 	 */
-	@XmlTransient
-	public Object[] getComponentSets() {
+	public Object[] componentSets() {
 		Object[] results = { };
 		return results;
 	}
@@ -135,8 +135,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * override this method if needed.
 	 * @return empty
 	 */
-	@XmlTransient
-	public SurrogatedItem[] getComponents() {
+	public SurrogatedItem[] components() {
 		SurrogatedItem[] results = { };
 		return results;
 	}
@@ -147,7 +146,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * override this method if needed.
 	 * @param components saved components
 	 */
-	public void setComponents(SurrogatedItem[] components) {
+	public void components(SurrogatedItem[] components) {
 		// override this if needed
 	}
 
@@ -175,14 +174,6 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 */
 	public boolean remove() {
 		return Repository.remove(this);
-	}
-	
-	/**
-	 * A logger for this kind of item.
-	 */
-    @XmlTransient
-	public Log getLogger() {
-		return Logger;
 	}
 
 	/**
