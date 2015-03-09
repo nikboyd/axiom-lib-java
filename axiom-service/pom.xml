@@ -25,6 +25,11 @@
 			<artifactId>axiom-faces</artifactId>
 			<version>${version.axiom.libs}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${version.spring.boot}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -37,6 +42,11 @@
             <version>${version.postgres}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-client</artifactId>
+            <version>${version.cxf}</version>
+        </dependency>
         <dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

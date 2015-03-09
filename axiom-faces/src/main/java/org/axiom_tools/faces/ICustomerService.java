@@ -25,15 +25,24 @@ import org.axiom_tools.domain.Person;
  * Maintains customers.
  * @author nik
  */
+@Path(ICustomerService.CustomerPath)
 public interface ICustomerService {
     
     public static final String CustomerId = "id";
     public static final String CustomerPath = "/customers";
-    public static final String CustomerIdPath = CustomerPath + "/{id}";
+    public static final String CustomerIdPath = "/{id}";
     
     public static final String Name = "name";
     public static final String City = "city";
     public static final String Zip = "zip";
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response listCustomers(
+        @QueryParam(Name) String name,
+        @QueryParam(City) String city, 
+        @QueryParam(Zip) String zip
+    );
     
     /**
      * Creates a new Customer.
@@ -44,13 +53,11 @@ public interface ICustomerService {
      * </ul>
      */
     @POST
-    @Path(CustomerPath)
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createCustomer(Person customer);
     
     @PUT
-    @Path(CustomerPath)
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response updateCustomer(Person customer);
@@ -63,14 +70,5 @@ public interface ICustomerService {
     @Path(CustomerIdPath)
     @Produces({MediaType.APPLICATION_JSON})
     public Response getCustomer(@PathParam(CustomerId) long customerID);
-
-    @GET
-    @Path(CustomerPath)
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response listCustomers(
-        @QueryParam(Name) String name,
-        @QueryParam(City) String city, 
-        @QueryParam(Zip) String zip
-    );
     
 } // ICustomerService

@@ -18,6 +18,7 @@ package org.axiom_tools.services;
 import java.util.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import org.springframework.stereotype.Service;
 
 import org.axiom_tools.domain.Person;
 import org.axiom_tools.faces.ICustomerService;
@@ -26,6 +27,7 @@ import org.axiom_tools.faces.ICustomerService;
  * Maintains customers.
  * @author nik
  */
+@Service
 public class CustomerService implements ICustomerService {
     
     private static final String Wild = "%";
