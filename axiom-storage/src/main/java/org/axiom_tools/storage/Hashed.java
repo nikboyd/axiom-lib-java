@@ -59,7 +59,7 @@ public abstract class Hashed<ItemType>
 	 * Resets the id and hash of this item.
 	 */
 	protected void reset() {
-		this.Id = 0;
+		this.key = 0;
 		this.hashKey = 0;
 	}
 	

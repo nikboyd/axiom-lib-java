@@ -15,12 +15,13 @@
  */
 package org.axiom_tools.domain;
 
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.axiom_tools.codecs.EntityCodec;
 import org.axiom_tools.storage.QueryBuilder;
 import org.hibernate.annotations.Index;
 
@@ -41,6 +42,19 @@ public class Person extends Party {
 
 	private static final long serialVersionUID = 1001001L;
 	private static final Log Logger = LogFactory.getLog(Person.class);
+    
+    public static List<Person> listFromJSON(String listJSON) {
+        List<Person> sampleList = new ArrayList();
+        return EntityCodec.to(sampleList.getClass()).fromJSON(listJSON);
+    }
+    
+    public static Person fromJSON(String personJSON) {
+        return EntityCodec.to(Person.class).fromJSON(personJSON);
+    }
+    
+    public String toJSON() {
+        return EntityCodec.from(this).toJSON();
+    }
 
 	@Override
 	protected Log getLogger() {
@@ -87,12 +101,12 @@ public class Person extends Party {
     
     /**
      * Returns a new Person (intended query).
-     * @param id identifies a person
+     * @param key identifies a person
      * @return a new Person
      */
-    public static Person withKey(long id) {
+    public static Person withKey(long key) {
         Person result = new Person();
-        result.Id = id;
+        result.key = key;
         return result;
     }
 

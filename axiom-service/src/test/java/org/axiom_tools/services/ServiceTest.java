@@ -15,12 +15,14 @@
  */
 package org.axiom_tools.services;
 
+import java.util.*;
 import javax.ws.rs.core.Response;
 
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.axiom_tools.codecs.EntityCodec;
 import org.springframework.boot.SpringApplication;
 
 import server.ServiceController;
@@ -38,31 +40,72 @@ public class ServiceTest {
     private static final String ConfigurationFile = "/service-client.xml";
 
     private ICustomerService service;
+    private ICustomerService getService() {
+        if (this.service == null) {
+            this.service = SpringContext.named(ConfigurationFile).getBean(ICustomerService.class);
+        }
+        return this.service;
+    }
     
     @Before
     public void startServer() {
         String[] args = { };
+        Logger.info("starting service tests");
         SpringApplication.run(ServiceController.class, args);
-        this.service = SpringContext.named(ConfigurationFile).getBean(ICustomerService.class);
-        assertFalse(this.service == null);
+        assertFalse(getService() == null);
     }
     
     @Test
-    public void sampleGET() {
-        Response r = this.service.getCustomer(1234);
-        Logger.info("code = " + r.getStatus());
-    }
-    
-    @Test
-    @Ignore
-    public void simpleCalls() {
+    public void customerLifecycle() {
 		Person sample = 
 			Person.named("George Jungleman")
                 .with(Contact.Kind.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
                 .with(Contact.Kind.HOME, PhoneNumber.from("415-888-8899"));
         
-        Response r = this.service.createCustomer(sample);
-        Logger.info("code = " + r.getStatus());
+        sample.describe();
+        Response r = getService().createCustomer(sample.toJSON());
+        assertTrue(r.getStatus() == 200);
+        String keyA = r.readEntity(String.class);
+        
+        r = getService().getCustomer(Long.parseLong(keyA));
+        assertTrue(r.getStatus() == 200);
+        Person p = Person.fromJSON(r.readEntity(String.class));
+        assertFalse(p == null);
+        p.describe();
+        
+        MailAddress a = p.getContact().getAddress(Contact.Kind.HOME);
+        p.getContact().withAddress(Contact.Kind.HOME, a.withCity("Sometown"));
+        r = getService().updateCustomer(p.getKey(), p.toJSON());
+        assertTrue(r.getStatus() == 200);
+
+        p = Person.fromJSON(r.readEntity(String.class));
+        assertFalse(p == null);
+        p.describe();
+
+		Person simple = 
+			Person.named("George Bungleman")
+                .with(Contact.Kind.HOME, MailAddress.with("4321 Main St", "Anytown", "CA", "94005"))
+                .with(Contact.Kind.HOME, PhoneNumber.from("415-889-9988"));
+        
+        r = getService().createCustomer(simple.toJSON());
+        assertTrue(r.getStatus() == 200);
+        String keyB = r.readEntity(String.class);
+        
+        r = getService().listCustomers("George", "", "94005");
+        assertTrue(r.getStatus() == 200);
+        String listJSON = r.readEntity(String.class);
+
+        List<Person> results = Person.listFromJSON(listJSON);
+        assertFalse(results.isEmpty());
+        Logger.info("found " + results.size() + " matches");
+        
+        getService().deleteCustomer(Long.parseLong(keyB));
+        getService().deleteCustomer(Long.parseLong(keyA));
+        
+        r = getService().listCustomers("George", "", "94005");
+        assertTrue(r.getStatus() == 200);
+        listJSON = r.readEntity(String.class);
+        assertTrue(Person.listFromJSON(listJSON).isEmpty());
     }
     
 } // ServiceTest

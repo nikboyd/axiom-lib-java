@@ -16,7 +16,7 @@
 package org.axiom_tools.storage;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -72,16 +72,20 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	@Id
 	@Column(name="ID")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	protected long Id;
+	protected long key;
 
 	/**
 	 * A surrogate key.
 	 */
 	@Override
-	@XmlTransient
+    @XmlAttribute
 	public long getKey() {
-		return Id;
+		return this.key;
 	}
+    
+    public void setKey(long key) {
+        this.key = key;
+    }
 	
 	/**
 	 * Indicates whether this item was previously saved.

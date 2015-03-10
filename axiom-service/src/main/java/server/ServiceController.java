@@ -15,6 +15,8 @@
  */
 package server;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,27 +33,35 @@ import org.springframework.context.annotation.ImportResource;
  * @author nik
  */
 @Configuration
-@ComponentScan
 @EnableAutoConfiguration
-@ImportResource(ServiceController.ConfigurationFile)
+@ComponentScan({ ServiceController.FacadePackage })
+@ImportResource({ ServiceController.ConfigurationFile })
 public class ServiceController {
+
+    private static final Log Logger = LogFactory.getLog(ServiceController.class);
+    private static final String Empty = "";
     
     public static final int DefaultPort = 9001;
     public static final String ApiPath = "/api/*";
     public static final String ConfigurationFile = "classpath:hosted-service.xml";
+    public static final String FacadePackage = "org.axiom_tools.services";
     
     public static void main(String[] args) {
+        Logger.info("starting service");
         SpringApplication.run(ServiceController.class, args);
     }
     
     @Bean
     public EmbeddedServletContainerFactory containerFactory() {
-        return new TomcatEmbeddedServletContainerFactory("", DefaultPort);
+        return new TomcatEmbeddedServletContainerFactory(Empty, DefaultPort);
     }
     
     @Bean
     public ServletRegistrationBean servletRegistration() {
-        return new ServletRegistrationBean(new CXFServlet(), ApiPath);
+        Logger.info("hosting CustomerService on port " + DefaultPort);
+        ServletRegistrationBean result = new ServletRegistrationBean(new CXFServlet(), ApiPath);
+        result.setLoadOnStartup(1);
+        return result;
     }
     
 } // ServiceController

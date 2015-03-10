@@ -16,6 +16,7 @@
 package org.axiom_tools.services;
 
 import java.util.*;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.springframework.stereotype.Service;
@@ -28,20 +29,32 @@ import org.axiom_tools.faces.ICustomerService;
  * @author nik
  */
 @Service
+@Path(ICustomerService.BasePath)
 public class CustomerService implements ICustomerService {
     
     private static final String Wild = "%";
 
     @Override
-    public Response createCustomer(Person person) {
-        Person p = person.save();
+    public Response createCustomer(String customerJSON) {
+        Person sample = Person.fromJSON(customerJSON);
+        Person p = sample.save();
         return Response.ok(p.getKey()).build();
     }
 
     @Override
-    public Response updateCustomer(Person person) {
-        Person p = person.save();
-        return Response.ok().build();
+    public Response updateCustomer(long id, String customerJSON) {
+        Person sample = Person.fromJSON(customerJSON);
+        if (sample.getKey() != id) {
+            return Response.status(Status.CONFLICT).build();
+        }
+
+        Person p = Person.withKey(id).reload();
+        if (p == null) {
+            return Response.status(Status.GONE).build();
+        }
+
+        p = sample.save();
+        return Response.ok(p).build();
     }
 
     @Override
