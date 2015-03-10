@@ -19,11 +19,12 @@ import java.util.*;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.hibernate.annotations.Index;
+
 import org.axiom_tools.codecs.EntityCodec;
 import org.axiom_tools.storage.QueryBuilder;
-import org.hibernate.annotations.Index;
 
 /**
  * Identifies and describes a person.
@@ -41,7 +42,7 @@ import org.hibernate.annotations.Index;
 public class Person extends Party {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Log Logger = LogFactory.getLog(Person.class);
+	private static final Logger Log = LoggerFactory.getLogger(Person.class);
     
     public static List<Person> listFromJSON(String listJSON) {
         List<Person> sampleList = new ArrayList();
@@ -57,8 +58,8 @@ public class Person extends Party {
     }
 
 	@Override
-	protected Log getLogger() {
-		return Logger;
+	protected Logger getLogger() {
+		return Log;
 	}
 
 	public static int count() {

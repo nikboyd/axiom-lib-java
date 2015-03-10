@@ -23,10 +23,10 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -51,7 +51,7 @@ import org.axiom_tools.context.SpringContext;
  */
 public class Symmetric {
 
-	private static final Log Logger = LogFactory.getLog(Symmetric.class);
+	private static final Logger Log = LoggerFactory.getLogger(Symmetric.class);
 	private static final String ConfigurationFile = "cryptographers.xml";
 	
 	private static final HashMap<String, String> CryptographerMap = new HashMap<String, String>();
@@ -84,7 +84,7 @@ public class Symmetric {
 				for (String term : terms) {
 					CryptographerMap.put(term.trim(), map[0].trim());
 				}
-				Logger.info("registered cryptographer " + part.trim());
+				Log.info("registered cryptographer " + part.trim());
 			}
 		}
 	}
@@ -166,7 +166,7 @@ public class Symmetric {
 		try {
 			return encryptBytes(clearText.getBytes(Encoding));
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return EmptyBuffer;
 		}
 	}
@@ -184,7 +184,7 @@ public class Symmetric {
 			clearData = normalize(clearData);
 			return buildEncrypter().doFinal(clearData);
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return EmptyBuffer;
 		}
 	}
@@ -198,7 +198,7 @@ public class Symmetric {
 		try {
 			return decrypt(Hex.decodeHex(cypherText.toCharArray()));
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return Empty;
 		}
 	}
@@ -215,7 +215,7 @@ public class Symmetric {
 		try {
 			return buildDecrypter().doFinal(cypherData);
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return EmptyBuffer;
 		}
 	}
@@ -229,7 +229,7 @@ public class Symmetric {
 		try {
 			return new String(buildDecrypter().doFinal(cypherData), Encoding).trim();
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return Empty;
 		}
 	}

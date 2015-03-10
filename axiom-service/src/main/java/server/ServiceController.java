@@ -15,8 +15,8 @@
  */
 package server;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -38,7 +38,7 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource({ ServiceController.ConfigurationFile })
 public class ServiceController {
 
-    private static final Log Logger = LogFactory.getLog(ServiceController.class);
+    private static final Logger Log = LoggerFactory.getLogger(ServiceController.class);
     private static final String Empty = "";
     
     public static final int DefaultPort = 9001;
@@ -47,7 +47,7 @@ public class ServiceController {
     public static final String FacadePackage = "org.axiom_tools.services";
     
     public static void main(String[] args) {
-        Logger.info("starting service");
+        Log.info("starting service");
         SpringApplication.run(ServiceController.class, args);
     }
     
@@ -58,7 +58,7 @@ public class ServiceController {
     
     @Bean
     public ServletRegistrationBean servletRegistration() {
-        Logger.info("hosting CustomerService on port " + DefaultPort);
+        Log.info("hosting CustomerService on port " + DefaultPort);
         ServletRegistrationBean result = new ServletRegistrationBean(new CXFServlet(), ApiPath);
         result.setLoadOnStartup(1);
         return result;

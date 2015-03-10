@@ -27,8 +27,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A transaction context for persistence operations.
@@ -47,7 +47,7 @@ import org.apache.commons.logging.LogFactory;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class TransactionalContext {
 
-	private static final Log Logger = LogFactory.getLog(TransactionalContext.class);
+	private static final Logger Log = LoggerFactory.getLogger(TransactionalContext.class);
 	private static final String FactoryName = "entity.manager.factory";
 	private static final EntityManagerFactory CachedFactory = createFactory();
 	
@@ -562,7 +562,7 @@ public class TransactionalContext {
 	 */
 	private void reportProblem(String message, Exception e) {
 		if (this.reportProblems) {
-			Logger.error(message + e.getMessage(), e);
+			Log.error(message + e.getMessage(), e);
 		}
 	}
 
@@ -602,7 +602,7 @@ public class TransactionalContext {
 	private <ItemType extends HashedItem> 
 	void reportFindHashProblem(ItemType item) {
 		String message = item.getClass().getSimpleName() + " FIND failed hash = " + item.hashKey() + " ";
-		Logger.info(message);
+		Log.info(message);
 	}
 	
 	private <ItemType extends SurrogatedItem> 
@@ -621,7 +621,7 @@ public class TransactionalContext {
 	void reportMissingItem(ItemType item) {
 		if (this.reportProblems) {
 			String message = item.getClass().getSimpleName() + " MISSING for ID = " + item.getKey() + " ";
-			Logger.warn(message);
+			Log.warn(message);
 		}
 	}
 

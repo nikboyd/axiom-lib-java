@@ -20,13 +20,13 @@ import javax.ws.rs.core.Response;
 
 import org.junit.*;
 import static org.junit.Assert.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.axiom_tools.codecs.EntityCodec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 
 import server.ServiceController;
 import org.axiom_tools.domain.*;
+import org.axiom_tools.codecs.EntityCodec;
 import org.axiom_tools.context.SpringContext;
 import org.axiom_tools.faces.ICustomerService;
 
@@ -36,7 +36,7 @@ import org.axiom_tools.faces.ICustomerService;
  */
 public class ServiceTest {
 
-    private static final Log Logger = LogFactory.getLog(ServiceTest.class);
+    private static final Logger Log = LoggerFactory.getLogger(ServiceTest.class);
     private static final String ConfigurationFile = "/service-client.xml";
 
     private ICustomerService service;
@@ -50,7 +50,7 @@ public class ServiceTest {
     @Before
     public void startServer() {
         String[] args = { };
-        Logger.info("starting service tests");
+        Log.info("starting service tests");
         SpringApplication.run(ServiceController.class, args);
         assertFalse(getService() == null);
     }
@@ -97,7 +97,7 @@ public class ServiceTest {
 
         List<Person> results = Person.listFromJSON(listJSON);
         assertFalse(results.isEmpty());
-        Logger.info("found " + results.size() + " matches");
+        Log.info("found " + results.size() + " matches");
         
         getService().deleteCustomer(Long.parseLong(keyB));
         getService().deleteCustomer(Long.parseLong(keyA));

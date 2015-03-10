@@ -17,12 +17,11 @@ package org.axiom_tools.codecs;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
 import javax.xml.bind.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
@@ -44,7 +43,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 @SuppressWarnings("unchecked")
 public class EntityCodec<EntityType> {
 
-	private static final Log Logger = LogFactory.getLog(EntityCodec.class);
+	private static final Logger Log = LoggerFactory.getLogger(EntityCodec.class);
 	private static final String XML_ENCODING = "UTF-8";	
 	private static final String Empty = "";
 	
@@ -75,7 +74,7 @@ public class EntityCodec<EntityType> {
 			ByteArrayInputStream stream = new ByteArrayInputStream(xmlData);
 			return (EntityType) buildJAXBContext().createUnmarshaller().unmarshal(stream);
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -91,7 +90,7 @@ public class EntityCodec<EntityType> {
 		try {
 			return buildObjectMapper().readValue(entityJSON, this.entityClass);
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -121,7 +120,7 @@ public class EntityCodec<EntityType> {
 			m.marshal(this.entity, stream);
 			return stream.toString(XML_ENCODING).trim();
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return Empty;
 		}
 	}
@@ -134,7 +133,7 @@ public class EntityCodec<EntityType> {
 		try {
 			return buildObjectMapper().writeValueAsString(this.entity);
 		} catch (Exception e) {
-			Logger.error(e.getMessage(), e);
+			Log.error(e.getMessage(), e);
 			return Empty;
 		}
 	}

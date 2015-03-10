@@ -20,8 +20,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 import org.axiom_tools.storage.Hashed;
-import org.axiom_tools.storage.SurrogatedComposite;
 import org.axiom_tools.storage.SurrogatedItem;
+import org.axiom_tools.storage.SurrogatedComposite;
 
 /**
  * Identifies a party along with some contact information.

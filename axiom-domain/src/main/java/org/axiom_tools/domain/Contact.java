@@ -21,8 +21,8 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.axiom_tools.storage.Surrogated;
 import org.axiom_tools.storage.SurrogatedComposite;
 
@@ -36,7 +36,7 @@ import org.axiom_tools.storage.SurrogatedComposite;
 public class Contact extends Surrogated<Contact> implements SurrogatedComposite, Serializable {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Log Logger = LogFactory.getLog(Contact.class);
+	private static final Logger Log = LoggerFactory.getLogger(Contact.class);
     
     /**
      * Indicates a kind of contact.
@@ -61,8 +61,8 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 	 * A logger.
 	 */
 	@Override
-	protected Log getLogger() {
-		return Logger;
+	protected Logger getLogger() {
+		return Log;
 	}
     
     public List<ContactMechanism> getMechanisms() {

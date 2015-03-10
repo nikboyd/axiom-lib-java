@@ -17,9 +17,9 @@ package org.axiom_tools.context;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.*;
@@ -41,7 +41,7 @@ import org.springframework.context.support.*;
  */
 public class SpringContext {
 	
-	private static final Log Logger = LogFactory.getLog(SpringContext.class);
+	private static final Logger Log = LoggerFactory.getLogger(SpringContext.class);
 	
 	private static final String Dot = ".";
 	private static final String Empty = "";
@@ -185,7 +185,7 @@ public class SpringContext {
 	 * @param beanName a bean name
 	 */
 	private void reportMissing(String className, String beanName) {
-		Logger.warn("can't find a configured bean named '" + beanName + "' in " 
+		Log.warn("can't find a configured bean named '" + beanName + "' in " 
 				+ this.contextName + " type " + className);
 	}
 	

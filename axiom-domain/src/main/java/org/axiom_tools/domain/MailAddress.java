@@ -20,9 +20,9 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import javax.validation.constraints.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.annotations.Index;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.axiom_tools.storage.Hashed;
 import org.axiom_tools.validations.EntityValidator;
@@ -37,7 +37,7 @@ import org.axiom_tools.validations.EntityValidator;
 public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Log Logger = LogFactory.getLog(MailAddress.class);
+	private static final Logger Log = LoggerFactory.getLogger(MailAddress.class);
 
 	// allow forward slash and pound sign in addresses and units
 	private static final String StreetAddressValidationPattern = "((\\d+\\s)[\\w\\s/#]+){0,1}"; // must be number(s) + name(s)
@@ -52,8 +52,8 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	 * A logger for this class.
 	 */
 	@Override
-	protected Log getLogger() {
-		return Logger;
+	protected Logger getLogger() {
+		return Log;
 	}
 
 	/**

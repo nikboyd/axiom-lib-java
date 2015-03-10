@@ -20,6 +20,7 @@
     </modules>
     
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
@@ -29,13 +30,14 @@
         <version.commons-lang>2.3</version.commons-lang>
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-logging>1.1.1</version.commons-logging>
-        <version.log4j>1.2.16</version.log4j>
+        <version.slf4j>1.7.10</version.slf4j>
+        <version.log4j>2.0.2</version.log4j>
         <version.crypto>1.46</version.crypto>
 
         <version.cxf>3.0.4</version.cxf>
         <version.h2>1.4.186</version.h2>
         <version.postgres>9.3-1101-jdbc41</version.postgres>
-        <version.hibernate>4.3.4.Final</version.hibernate>
+        <version.hibernate>4.3.8.Final</version.hibernate>
         <version.validator>5.1.0.Final</version.validator>
         <version.spring>4.1.5.RELEASE</version.spring>
         <version.spring.boot>1.2.2.RELEASE</version.spring.boot>
@@ -44,6 +46,7 @@
         <version.java>1.7</version.java>
         <version.javax.el>2.2.4</version.javax.el>
         <version.junit>4.10</version.junit>
+
         <version.compiler.plugin>2.3.2</version.compiler.plugin>
     </properties>
   

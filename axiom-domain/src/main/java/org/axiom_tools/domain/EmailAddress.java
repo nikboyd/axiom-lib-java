@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.mail.internet.InternetAddress;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.annotations.Index;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.axiom_tools.storage.Hashed;
 
@@ -37,11 +37,11 @@ import org.axiom_tools.storage.Hashed;
 public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Log Logger = LogFactory.getLog(EmailAddress.class);
+	private static final Logger Log = LoggerFactory.getLogger(EmailAddress.class);
 	
 	@Override
-	protected Log getLogger() {
-		return Logger;
+	protected Logger getLogger() {
+		return Log;
 	}
 
 	/**

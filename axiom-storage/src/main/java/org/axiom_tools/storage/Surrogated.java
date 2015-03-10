@@ -18,9 +18,9 @@ package org.axiom_tools.storage;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import org.slf4j.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.apache.commons.logging.Log;
 
 /**
  * A persistent item with a surrogate key.
@@ -63,7 +63,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	/**
 	 * A logger for this kind of item.
 	 */
-	protected abstract Log getLogger();
+	protected abstract Logger getLogger();
 
 	/**
 	 * A surrogate key. The key value is generated automatically by the configured

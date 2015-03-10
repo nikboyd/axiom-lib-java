@@ -19,8 +19,8 @@ import java.util.*;
 
 import org.junit.*;
 import static org.junit.Assert.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.axiom_tools.codecs.EntityCodec;
 import org.axiom_tools.domain.Contact.Kind;
@@ -33,11 +33,11 @@ import org.axiom_tools.storage.TransactionalContext;
 //@Ignore
 public class RepositoryTest {
 
-	private static final Log Logger = LogFactory.getLog(RepositoryTest.class);
+	private static final Logger Log = LoggerFactory.getLogger(RepositoryTest.class);
 	
 	@BeforeClass
 	public static void initialize() {
-        Logger.info("starting test");
+        Log.info("starting test");
 		TransactionalContext context = new TransactionalContext();
 		assertFalse(context == null);
 	}
@@ -68,7 +68,7 @@ public class RepositoryTest {
 		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CAA", "94005");				
 		String[] results = a.validate();
 		assertTrue(results.length > 0);
-		Logger.info(results[0]);
+		Log.info(results[0]);
 	}
 	
 	@Test
@@ -135,7 +135,7 @@ public class RepositoryTest {
 
 		PhoneNumber p = PhoneNumber.from("415-888-8899").save();
 		EmailAddress e = EmailAddress.from("sample@educery.com").save();
-		Logger.info(EntityCodec.from(e).toXML());
+		Log.info(EntityCodec.from(e).toXML());
 
 		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
 		MailAddress b = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
