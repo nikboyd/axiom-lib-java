@@ -10,7 +10,7 @@ The storage package includes class that codify idiomatic JPA usage.
 | Element | Description |
 |---------|-------------|
 | SurrogatedItem        | a standard interface for items with surrogate keys |
-| Surrogated<ItemType>  | a base class that implements SurrogatedItem |
+| Surrogated&lt;ItemType&gt;  | a base class that implements SurrogatedItem |
 
 
 <table cellpadding="0" cellspacing="0" width="750">
