@@ -3,6 +3,14 @@ axiom-lib-java
 
 A library of utility classes and tools for Java.
 
+The domain package contains classes that codify a typical model for contacts.
+
+The storage package includes class that codify idiomatic JPA usage.
+
+| SurrogatedItem        | a standard interface for items with surrogate keys |
+| Surrogated(ItemType)  | a base class that implements SurrogatedItem |
+
+
 <table cellpadding="0" cellspacing="0" width="750">
 	 <tr>
 	 <td valign="TOP" colspan="2">
