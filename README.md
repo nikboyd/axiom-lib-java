@@ -7,6 +7,8 @@ The domain package contains classes that codify a typical model for contacts.
 
 The storage package includes class that codify idiomatic JPA usage.
 
+| Element | Description |
+|---------|-------------|
 | SurrogatedItem        | a standard interface for items with surrogate keys |
 | Surrogated(ItemType)  | a base class that implements SurrogatedItem |
 
