@@ -14,7 +14,7 @@ This library contains the following packages:
 | axiom-faces   | contains a thematic service interface |
 | axiom-service | contains a thematic service facade |
 
-==== Axiom Faces ====
+#### Axiom Faces ####
 The _faces_ package contains a service interface definition: **ICustomerService**. 
 The service interface is a central organizational element, addressing several important
 aspects of a service design.
