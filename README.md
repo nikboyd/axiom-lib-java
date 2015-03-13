@@ -6,7 +6,7 @@ A library of utility classes and tools for Java, along with examples of their us
 The faces package contains a service interface definition: **ICustomerService**. 
 The service interface is a central organizational element, addressing several important
 aspects of a service design.
-Using JAX-RS annotations, the interface defines the service endpoint mappings for the service methods,
+Using [JAX-RS][jax-rs] annotations, the interface defines the service endpoint mappings for the service methods,
 thereby providing a RESTful API supporting both JSON and XML payloads.
 
 The service design approach serves as an example of the [Separated Interface][separated-interface] and
@@ -14,7 +14,8 @@ The service design approach serves as an example of the [Separated Interface][se
 The service interface is packaged into its own JAR so that both the service implementation
 and its clients can (depend on and) use the interface. 
 This approach prevents clients from having direct dependence upon the service implementation class.
-It also allows (at least) the test clients to use **Spring + CXF** to create a proxy based on the interface.
+It also allows (at least) the test clients to use [Spring][spring] + [CXF][apache-cxf] to create 
+a proxy based on the interface.
 Such a proxy may reference a local service instance or a remote instance without code changes, only changes
 in the proxy configuration.
 
@@ -25,7 +26,7 @@ The facades package contains a service class: **CustomerFacade**, which implemen
 The server package contains a ServiceController, which takes advantage of [Spring Boot][spring-boot] 
 to create a self-hosting service.
 The service API tests also use the ServiceController to launch a local service instance for which 
-the test then creates a local service proxy using **Spring + CXF + ICustomerService**.
+the test then creates a local service proxy using [Spring][spring] + [CXF][apache-cxf] + **ICustomerService**.
 
 The domain package contains classes that demonstrate idiomatic usage of the storage classes (below).
 
@@ -54,5 +55,8 @@ The storage package contains class that codify idiomatic JPA usage.
 
 [separated-interface]: http://martinfowler.com/eaaCatalog/separatedInterface.html
 [plugin-pattern]: http://martinfowler.com/eaaCatalog/plugin.html
-[enunciate]:
-[spring-boot]:
+[spring-boot]: http://projects.spring.io/spring-boot/
+[spring]: http://projects.spring.io/spring-framework/
+[jax-rs]: https://docs.oracle.com/javaee/7/api/javax/ws/rs/package-summary.html
+[apache-cxf]: http://cxf.apache.org/
+[enunciate]: http://enunciate.codehaus.org/
