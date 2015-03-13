@@ -60,11 +60,11 @@ The _storage_ package contains class that codify idiomatic JPA usage.
 | Element | Description |
 |---------|-------------|
 | SurrogatedItem        | an item with surrogate keys |
-| SurrogatedComposite   | a composite of surrogated items |
+| SurrogatedComposite   | a composite of SurrogatedItems |
 | Surrogated&lt;ItemType&gt;  | a SurrogatedItem base class |
-| HashedItem            | a surrogate item that hashes its contents |
+| HashedItem            | a SurrogatedItem that hashes its contents |
 | Hashed&lt;ItemType&gt; | an HashedItem base class |
-| ItemRepository        | an item repository for idiomatic JPA persistence |
+| ItemRepository        | a SurrogatedItem repository for idiomatic JPA persistence |
 | TransactionalContext  | a context for idiomatic JPA transaction usage |
 
 #### Axiom Utils ####
@@ -80,6 +80,7 @@ The utility library containing some basic utility classes:
 
 [separated-interface]: http://martinfowler.com/eaaCatalog/separatedInterface.html
 [plugin-pattern]: http://martinfowler.com/eaaCatalog/plugin.html
+[repository-pattern]: http://martinfowler.com/eaaCatalog/repository.html
 [spring-boot]: http://projects.spring.io/spring-boot/
 [spring]: http://projects.spring.io/spring-framework/
 [jax-rs]: https://docs.oracle.com/javaee/7/api/javax/ws/rs/package-summary.html
