@@ -36,9 +36,9 @@ Java doc comments, esp. using a tool like [Enunciate][enunciate].
 
 #### Axiom Service ####
 The _facades_ package contains a service class: **CustomerFacade**, which implements **ICustomerService**. 
-The _server_ package contains a ServiceController, which takes advantage of [Spring Boot][spring-boot] 
+The _server_ package contains a **ServiceController**, which takes advantage of [Spring Boot][spring-boot] 
 to create a self-hosting service.
-The service API tests also use the ServiceController to launch a local service instance for which 
+The service API tests also use the **ServiceController** to launch a local service instance for which 
 the test then creates a local service proxy using [Spring][spring] + [CXF][apache-cxf] + **ICustomerService**.
 
 #### Axiom Domain ####
@@ -49,7 +49,7 @@ The _domain_ package contains classes that demonstrate usage of the idiomatic JP
 | Party   | a named composite with some contact information |
 | Person  | represents a person -> party |
 | Contact | a composite containing various contact mechanisms |
-| ContactMechanism&lt;MechanismType&gt; | a generic contact mechanism |
+| ContactMechanism &lt;MechanismType&gt; | a generic contact mechanism |
 | EmailAddress | an email address |
 | MailAddress  | a typical USA street address |
 | PhoneNumber  | a typical USA phone number |
