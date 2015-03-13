@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.hibernate.annotations.Index;
 
-import org.axiom_tools.codecs.EntityCodec;
+import org.axiom_tools.codecs.ModelCodec;
 import org.axiom_tools.storage.QueryBuilder;
 
 /**
@@ -46,15 +46,15 @@ public class Person extends Party {
     
     public static List<Person> listFromJSON(String listJSON) {
         List<Person> sampleList = new ArrayList();
-        return EntityCodec.to(sampleList.getClass()).fromJSON(listJSON);
+        return ModelCodec.to(sampleList.getClass()).fromJSON(listJSON);
     }
     
     public static Person fromJSON(String personJSON) {
-        return EntityCodec.to(Person.class).fromJSON(personJSON);
+        return ModelCodec.to(Person.class).fromJSON(personJSON);
     }
     
     public String toJSON() {
-        return EntityCodec.from(this).toJSON();
+        return ModelCodec.from(this).toJSON();
     }
 
 	@Override

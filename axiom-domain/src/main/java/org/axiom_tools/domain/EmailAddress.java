@@ -35,7 +35,6 @@ import org.axiom_tools.storage.Hashed;
 @XmlRootElement(name = "EmailAddress", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
-
 	private static final long serialVersionUID = 1001001L;
 	private static final Logger Log = LoggerFactory.getLogger(EmailAddress.class);
 	

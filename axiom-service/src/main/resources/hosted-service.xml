@@ -27,12 +27,7 @@
             <!--<cxf:logging/>-->
         </cxf:features>
     </cxf:bus>
-<!--
-    <http-conf:conduit name="*.http-conduit"
-        xmlns="http://cxf.apache.org/transports/http/configuration">
-        <client AllowChunking="false" ConnectionTimeout="30000" />
-    </http-conf:conduit>
--->
+
     <jaxrs:server address="/">
         <jaxrs:serviceBeans>
             <ref bean="serviceBean"/>
@@ -43,7 +38,7 @@
     </jaxrs:server>
 
     <bean id="serviceBean" 
-        class="org.axiom_tools.services.CustomerService" />
+        class="org.axiom_tools.services.CustomerFacade" />
 
     <bean id="jsonProvider" 
           class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.hibernate.annotations.Index;
 
 import org.axiom_tools.storage.Hashed;
-import org.axiom_tools.validations.EntityValidator;
+import org.axiom_tools.validations.ModelValidator;
 
 /**
  * Contains a (unique) mailing address.
@@ -152,7 +152,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	 * @return any problems detected
 	 */
 	public String[] validate() {
-		return EntityValidator.getConfiguredValidator().validate(this);
+		return ModelValidator.getConfiguredValidator().validate(this);
 	}
 
 	/**

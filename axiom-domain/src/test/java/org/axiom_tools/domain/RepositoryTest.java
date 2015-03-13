@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.axiom_tools.codecs.EntityCodec;
+import org.axiom_tools.codecs.ModelCodec;
 import org.axiom_tools.domain.Contact.Kind;
 import org.axiom_tools.storage.TransactionalContext;
 
@@ -135,7 +135,7 @@ public class RepositoryTest {
 
 		PhoneNumber p = PhoneNumber.from("415-888-8899").save();
 		EmailAddress e = EmailAddress.from("sample@educery.com").save();
-		Log.info(EntityCodec.from(e).toXML());
+		Log.info(ModelCodec.from(e).toXML());
 
 		MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();
 		MailAddress b = MailAddress.with("1234 Main St", "Anytown", "CA", "94005").save();

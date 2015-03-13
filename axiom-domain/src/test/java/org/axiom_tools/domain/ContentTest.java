@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.axiom_tools.codecs.EntityCodec;
+import org.axiom_tools.codecs.ModelCodec;
 import org.axiom_tools.domain.Contact.Kind;
 
 /**
@@ -38,10 +38,10 @@ public class ContentTest {
                 .with(Kind.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
                 .with(Kind.HOME, PhoneNumber.from("415-888-8899"));
         
-		String json = EntityCodec.from(sample).toJSON();
+		String json = ModelCodec.from(sample).toJSON();
 		Log.info(json);
         
-        Person test = EntityCodec.to(Person.class).fromJSON(json);
+        Person test = ModelCodec.to(Person.class).fromJSON(json);
         assertFalse(test == null);
         test.describe();
     }
@@ -49,23 +49,23 @@ public class ContentTest {
 	@Test
 	public void addressCodec() {
 		MailAddress sample = MailAddress.with("1234 Main St", "Anytown", "CA", "94005");	
-		String json = EntityCodec.from(sample).toJSON();
+		String json = ModelCodec.from(sample).toJSON();
 		Log.info(json);
-		String xml = EntityCodec.from(sample).toXML();
+		String xml = ModelCodec.from(sample).toXML();
 		Log.info(xml);
         
-        MailAddress test = EntityCodec.to(MailAddress.class).fromJSON(json);
+        MailAddress test = ModelCodec.to(MailAddress.class).fromJSON(json);
         assertFalse(test == null);
         
         ContactMechanism mech = ContactMechanism.with(Kind.HOME, sample);
-        Log.info(EntityCodec.from(mech).toJSON());
+        Log.info(ModelCodec.from(mech).toJSON());
 	}
 	
 	@Test
 	public void samplePhone() {
 		PhoneNumber sample = PhoneNumber.from("888-888-8888");
 		assertTrue(sample.formatNumber().equals("888-888-8888"));
-		String xml = EntityCodec.from(sample).toXML();
+		String xml = ModelCodec.from(sample).toXML();
 		Log.info(xml);
 	}
 

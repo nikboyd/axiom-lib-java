@@ -25,11 +25,11 @@ import javax.validation.*;
 import org.axiom_tools.context.SpringContext;
 
 /**
- * Validate an entity using the bean validation framework.
+ * Validates a model using the bean validation framework.
  * 
- * <h4>EntityValidator Responsibilities:</h4>
+ * <h4>ModelValidator Responsibilities:</h4>
  * <ul>
- * <li>validates an annotated entity</li>
+ * <li>validates an instance of an annotated model class</li>
  * </ul>
  *
  * <h4>Client Responsibilities:</h4>
@@ -37,7 +37,7 @@ import org.axiom_tools.context.SpringContext;
  * <li>properly configure a validator</li>
  * </ul>
  */
-public class EntityValidator {
+public class ModelValidator {
 
 	private static final String Dot = ".";
 
@@ -60,8 +60,8 @@ public class EntityValidator {
 	/**
 	 * Returns the configured validator.
 	 */
-	public static EntityValidator getConfiguredValidator() {
-		return SpringContext.getConfigured(EntityValidator.class);
+	public static ModelValidator getConfiguredValidator() {
+		return SpringContext.getConfigured(ModelValidator.class);
 	}
 	
 	/**
@@ -103,4 +103,4 @@ public class EntityValidator {
 		return builder.toString();
 	}
 
-} // EntityValidator
+} // ModelValidator

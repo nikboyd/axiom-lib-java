@@ -29,7 +29,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 /**
  * Converts a properly annotated object to (or from) XML or JSON.
  * 
- * <h4>EntityCodec Responsibilities:</h4>
+ * <h4>ModelCodec Responsibilities:</h4>
  * <ul>
  * <li>encodes an entity to JSON or XML</li>
  * <li>decodes an entity from JSON or XML</li>
@@ -41,9 +41,9 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
  * </ul>
  */
 @SuppressWarnings("unchecked")
-public class EntityCodec<EntityType> {
+public class ModelCodec<EntityType> {
 
-	private static final Logger Log = LoggerFactory.getLogger(EntityCodec.class);
+	private static final Logger Log = LoggerFactory.getLogger(ModelCodec.class);
 	private static final String XML_ENCODING = "UTF-8";	
 	private static final String Empty = "";
 	
@@ -51,12 +51,12 @@ public class EntityCodec<EntityType> {
 	private EntityType entity;
 	
 	/**
-	 * Returns a new EntityCodec.
+	 * Returns a new ModelCodec.
 	 * @param entityClass an entity class
-	 * @return a new EntityCodec
+	 * @return a new ModelCodec
 	 */
-	public static <EntityType> EntityCodec<EntityType> to(Class<EntityType> entityClass) {
-		EntityCodec<EntityType> result = new EntityCodec<EntityType>();
+	public static <EntityType> ModelCodec<EntityType> to(Class<EntityType> entityClass) {
+		ModelCodec<EntityType> result = new ModelCodec<EntityType>();
 		result.entityClass = entityClass;
 		return result;
 	}
@@ -96,12 +96,12 @@ public class EntityCodec<EntityType> {
 	}
 	
 	/**
-	 * Returns a new EntityCodec.
+	 * Returns a new ModelCodec.
 	 * @param entity an entity to serialize
-	 * @return a new EntityCodec
+	 * @return a new ModelCodec
 	 */
-	public static <EntityType> EntityCodec<EntityType> from(EntityType entity) {
-		EntityCodec<EntityType> result = new EntityCodec<EntityType>();
+	public static <EntityType> ModelCodec<EntityType> from(EntityType entity) {
+		ModelCodec<EntityType> result = new ModelCodec<EntityType>();
 		result.entity = entity;
 		result.entityClass = (Class<EntityType>) entity.getClass();
 		return result;

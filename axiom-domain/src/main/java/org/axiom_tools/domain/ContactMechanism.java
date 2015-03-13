@@ -15,16 +15,18 @@
  */
 package org.axiom_tools.domain;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.*;
 
 /**
- *
+ * A generic contact mechanism.
  * @author nik
  */
 @XmlRootElement
 @XmlSeeAlso({MailAddress.class, EmailAddress.class, PhoneNumber.class})
-public class ContactMechanism<MechanismType> {
-    
+public class ContactMechanism<MechanismType> implements Serializable {
+	private static final long serialVersionUID = 1001001L;
+
     private Contact.Kind type;
     private MechanismType mechanism;
     

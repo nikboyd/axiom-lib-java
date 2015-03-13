@@ -25,12 +25,12 @@ import org.axiom_tools.domain.Person;
 import org.axiom_tools.faces.ICustomerService;
 
 /**
- * Maintains customers.
+ * A service for maintaining customers. Customer data is stored as a Person.
  * @author nik
  */
 @Service
 @Path(ICustomerService.BasePath)
-public class CustomerService implements ICustomerService {
+public class CustomerFacade implements ICustomerService {
     
     private static final String Wild = "%";
 
@@ -85,4 +85,4 @@ public class CustomerService implements ICustomerService {
         return Response.ok(results).build();
     }
     
-} // CustomerService
+} // CustomerFacade
