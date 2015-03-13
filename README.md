@@ -49,7 +49,7 @@ The _domain_ package contains classes that demonstrate usage of the idiomatic JP
 | Party   | a named composite with some contact information |
 | Person  | represents a person -> party |
 | Contact | a composite containing various contact mechanisms |
-| ContactMechanism &lt;MechanismType&gt; | a generic contact mechanism |
+| ContactMechanism | a generic contact mechanism supporting: phone, email, mail |
 | EmailAddress | an email address |
 | MailAddress  | a typical USA street address |
 | PhoneNumber  | a typical USA phone number |
