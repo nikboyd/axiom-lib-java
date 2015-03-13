@@ -49,7 +49,7 @@ The _domain_ package contains classes that demonstrate usage of the idiomatic JP
 | Party   | a named composite with some contact information |
 | Person  | represents a person -> party |
 | Contact | a composite containing various contact mechanisms |
-| ContactMechanism | a generic contact mechanism supporting: phone, email, mail |
+| ContactMechanism | a contact mechanism supporting: phone, email, mail |
 | EmailAddress | an email address |
 | MailAddress  | a typical USA street address |
 | PhoneNumber  | a typical USA phone number |
@@ -59,20 +59,20 @@ The _storage_ package contains class that codify idiomatic JPA usage.
 
 | Element | Description |
 |---------|-------------|
-| SurrogatedItem        | a standard interface for items with surrogate keys |
-| SurrogatedComposite   | a standard interface for composites of surrogated components |
-| Surrogated&lt;ItemType&gt;  | a base class that implements SurrogatedItem  |
-| HashedItem            | a standard interface for surrogates that hash their contents |
-| Hashed&lt;ItemType&gt; | a base class that implements HashedItem |
-| ItemRepository        | a utility class for idiomatic JPA persistence |
-| TransactionalContext  | a utility class for idiomatic JPA transaction usage |
+| SurrogatedItem        | an item with surrogate keys |
+| SurrogatedComposite   | a composite of surrogated items |
+| Surrogated&lt;ItemType&gt;  | a SurrogatedItem base class |
+| HashedItem            | a surrogate item that hashes its contents |
+| Hashed&lt;ItemType&gt; | an HashedItem base class |
+| ItemRepository        | an item repository for idiomatic JPA persistence |
+| TransactionalContext  | a context for idiomatic JPA transaction usage |
 
 #### Axiom Utils ####
-The utility library contains some basic utility classes:
+The utility library containing some basic utility classes:
 
 | Element | Description |
 |---------|-------------|
-| ModelCodec     | a generic class for converting models to and from JSON and XML using JAXB |
+| ModelCodec     | converts models to and from JSON and XML using JAXB |
 | SpringContext  | loads Spring Beans from a Spring context |
 | Symmetric      | encrypts and decrypts payloads using AES |
 | ModelValidator | validates a model using the Bean Validation framework |
