@@ -3,7 +3,7 @@ axiom-lib-java
 
 A library of utility classes and tools for Java, along with examples of their use.
 
-==== Overview ====
+#### Overview ####
 This library contains the following packages:
 
 | Library | Contents |
@@ -34,14 +34,14 @@ in the proxy configuration.
 The interface also provides documentation that can be published automatically using the provided 
 Java doc comments, esp. using a tool like [Enunciate][enunciate].
 
-==== Axiom Service ====
+#### Axiom Service ####
 The _facades_ package contains a service class: **CustomerFacade**, which implements **ICustomerService**. 
 The _server_ package contains a ServiceController, which takes advantage of [Spring Boot][spring-boot] 
 to create a self-hosting service.
 The service API tests also use the ServiceController to launch a local service instance for which 
 the test then creates a local service proxy using [Spring][spring] + [CXF][apache-cxf] + **ICustomerService**.
 
-==== Axiom Domain ====
+#### Axiom Domain ####
 The _domain_ package contains classes that demonstrate usage of the idiomatic JPA storage classes.
 
 | Element | Description |
@@ -54,7 +54,7 @@ The _domain_ package contains classes that demonstrate usage of the idiomatic JP
 | MailAddress  | a typical USA street address |
 | PhoneNumber  | a typical USA phone number |
 
-==== Axiom Storage ====
+#### Axiom Storage ####
 The _storage_ package contains class that codify idiomatic JPA usage.
 
 | Element | Description |
@@ -67,7 +67,7 @@ The _storage_ package contains class that codify idiomatic JPA usage.
 | ItemRepository        | a utility class for idiomatic JPA persistence |
 | TransactionalContext  | a utility class for idiomatic JPA transaction usage |
 
-==== Axiom Utils ====
+#### Axiom Utils ####
 The utility library contains some basic utility classes:
 
 | Element | Description |
