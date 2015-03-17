@@ -79,7 +79,7 @@ The utility library containing some basic utility classes:
 
 ![Axiom Models][axiom-models]
 
-[axiom-models]: https://github.com/nikboyd/axiom-lib-java/raw/master/images/axiom-models.svg "Axiom Models"
+[axiom-models]: https://rawgithub.com/nikboyd/axiom-lib-java/master/images/axiom-models.svg "Axiom Models"
 [separated-interface]: http://martinfowler.com/eaaCatalog/separatedInterface.html
 [plugin-pattern]: http://martinfowler.com/eaaCatalog/plugin.html
 [repository-pattern]: http://martinfowler.com/eaaCatalog/repository.html
