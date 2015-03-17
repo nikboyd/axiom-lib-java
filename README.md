@@ -77,7 +77,9 @@ The utility library containing some basic utility classes:
 | Symmetric      | encrypts and decrypts payloads using AES |
 | ModelValidator | validates a model using the Bean Validation framework |
 
+![Axiom Models][axiom-models]
 
+[axiom-models]: https://github.com/nikboyd/axiom-lib-java/raw/master/axiom-tools/images/axiom-models.svg "Axiom Models"
 [separated-interface]: http://martinfowler.com/eaaCatalog/separatedInterface.html
 [plugin-pattern]: http://martinfowler.com/eaaCatalog/plugin.html
 [repository-pattern]: http://martinfowler.com/eaaCatalog/repository.html
