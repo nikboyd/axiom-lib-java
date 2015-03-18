@@ -25,7 +25,7 @@ The service design approach serves as an example of the [Separated Interface][se
 [Plugin][plugin-pattern] design patterns.
 The service interface is packaged into its own JAR (axiom-faces) so that both the service implementation
 and its clients can (depend on and) use the interface. 
-See the [diagram][axiom-service] below to see how these parts relate to each other.
+See the [diagram][#service-diagram] below to see how these parts relate to each other.
 
 This approach prevents clients from having direct dependence upon the service implementation class.
 It also allows (at least) the test clients to use [Spring][spring] + [CXF][apache-cxf] to create 
@@ -45,7 +45,7 @@ the test then creates a local service proxy using [Spring][spring] + [CXF][apach
 
 #### Axiom Domain ####
 The _domain_ package contains classes that demonstrate usage of the idiomatic JPA storage classes.
-See the [diagram][axiom-models] below to see how these parts relate to each other.
+See the [diagram][#model-diagram] below to see how these parts relate to each other.
 
 
 | Element | Description |
@@ -60,7 +60,7 @@ See the [diagram][axiom-models] below to see how these parts relate to each othe
 
 #### Axiom Storage ####
 The _storage_ package contains class that codify idiomatic JPA usage.
-See the [diagram][axiom-models] below to see how these parts relate to each other.
+See the [diagram][#model-diagram] below to see how these parts relate to each other.
 
 | Element | Description |
 |---------|-------------|
