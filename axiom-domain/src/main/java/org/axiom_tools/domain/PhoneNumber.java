@@ -49,11 +49,11 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	public static int count() {
 		return Repository.count(PhoneNumber.class);
 	}
-	
+
 	private static final String DASH = "-";
 	private static final String FORMAT = "999-999-9999";
 	private static final String PATTERN = "(\\d{3})-(\\d{3})-(\\d{4})";
-	
+
 	/**
 	 * Returns a new PhoneNumber.
 	 * @param phoneNumber a formatted phone number
@@ -69,11 +69,11 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 		result.setFormattedNumber(phoneNumber);
 		return result;
 	}
-	
+
 	/**
 	 * Constructs a new PhoneNumber.
 	 */
-	private PhoneNumber() {
+    protected PhoneNumber() {
         super();
     }
 
@@ -94,7 +94,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	public String getFormattedNumber() {
 		return formatNumber();
 	}
-	
+
 	/**
 	 * A formatted phone number.
 	 */
@@ -102,7 +102,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 		String[] parts = phoneNumber.split(DASH);
 		this.areaCode = parts[0];
 		this.prefix   = parts[1];
-		this.suffix   = parts[2];		
+		this.suffix   = parts[2];
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	public String formatNumber() {
 		return this.areaCode + DASH + this.prefix + DASH + this.suffix;
 	}
-	
+
 	@Override
 	@Index(name = "IX_PHONE_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
@@ -124,9 +124,9 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	public void describe() {
 		describe(Contact.Kind.HOME);
 	}
-	
+
 	public void describe(Contact.Kind type) {
 		getLogger().info("key = " + getKey() + " " + type.name() + " " + formatNumber());
 	}
-	
+
 } // PhoneNumber
