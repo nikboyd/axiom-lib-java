@@ -27,6 +27,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import static server.ServiceController.ConfigurationFile;
+import static server.ServiceController.FacadePackage;
+import static server.ServiceController.StoragePackage;
 
 /**
  * Launches embedded Tomcat hosting CXF servlet.
@@ -34,28 +37,29 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan({ ServiceController.FacadePackage })
-@ImportResource({ ServiceController.ConfigurationFile })
+@ComponentScan({ FacadePackage, StoragePackage })
+@ImportResource({ ConfigurationFile })
 public class ServiceController {
 
     private static final Logger Log = LoggerFactory.getLogger(ServiceController.class);
     private static final String Empty = "";
-    
+
     public static final int DefaultPort = 9001;
     public static final String ApiPath = "/api/*";
     public static final String ConfigurationFile = "classpath:hosted-service.xml";
     public static final String FacadePackage = "org.axiom_tools.services";
-    
+    public static final String StoragePackage = "org.axiom_tools.storage";
+
     public static void main(String[] args) {
         Log.info("starting service");
         SpringApplication.run(ServiceController.class, args);
     }
-    
+
     @Bean
     public EmbeddedServletContainerFactory containerFactory() {
         return new TomcatEmbeddedServletContainerFactory(Empty, DefaultPort);
     }
-    
+
     @Bean
     public ServletRegistrationBean servletRegistration() {
         Log.info("hosting CustomerService on port " + DefaultPort);
@@ -63,5 +67,5 @@ public class ServiceController {
         result.setLoadOnStartup(1);
         return result;
     }
-    
+
 } // ServiceController

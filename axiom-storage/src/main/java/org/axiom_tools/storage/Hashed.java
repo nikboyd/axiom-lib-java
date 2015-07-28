@@ -17,12 +17,13 @@ package org.axiom_tools.storage;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import org.springframework.data.repository.CrudRepository;
 
 /**
- * An item that can be saved persistently and uniquely 
+ * An item that can be saved persistently and uniquely
  * identified using a hash of its contents.
  * @param <ItemType> a kind of derived persistent item
- * 
+ *
  * <h4>Hashed&lt;ItemType&gt; Responsibilities:</h4>
  * <ul>
  * <li>knows a surrogate key (ID)</li>
@@ -38,23 +39,24 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")
-public abstract class Hashed<ItemType> 
+public abstract class Hashed<ItemType>
 	extends Surrogated<ItemType> implements HashedItem {
 
 	/**
 	 * A hash of the item contents.
 	 */
-	@Column(name = "HASH_KEY", nullable = false)
+    @Column(name = "hash_key", nullable = false)
 	protected int hashKey = 0;
 
-	/**
-	 * @return this item
+    /**
+     * Returns this item.
+   	 * @return this item
 	 */
 	@Override
 	public ItemType asItem() {
 		return (ItemType) this;
 	}
-	
+
 	/**
 	 * Resets the id and hash of this item.
 	 */
@@ -62,7 +64,7 @@ public abstract class Hashed<ItemType>
 		this.key = 0;
 		this.hashKey = 0;
 	}
-	
+
 	/**
 	 * Prepares this item for saving.
 	 */
@@ -79,32 +81,61 @@ public abstract class Hashed<ItemType>
 	public int hashKey() {
 		prepareHash();
 		return this.hashKey;
-	}
+    }
 
-	/**
-	 * Finds a saved instance of this item (if possible).
-	 * @return a saved item whose hash matches this, or null
-	 */
-	public ItemType find() {
-		return (ItemType) Repository.findWithHash(this);
-	}
+    /**
+     * Finds this item.
+     * @return this item
+     */
+    @Override
+    public ItemType findItem() {
+        if (getKey() == 0) return findWithHash();
+        return getStore().findOne(this.getKey());
+    }
 
-	/**
-	 * A saved instance whose hash matches that of this item.
-	 */
-	@Override
-	public ItemType save() {
-		if (getKey() > 0) 
-			return this.asItem();
-		
-		prepareHash();
-		ItemType result = find();
-		if (result == null) {
-			return super.save();
-		}
-		else {
-			return result;
-		}
-	}
+    /**
+     * Finds this item with its hash.
+     * @return this item
+     */
+    public ItemType findWithHash() {
+        prepareHash();
+        return getSearchStore().findHash(hashKey());
+    }
+
+    protected Search<ItemType> getSearchStore() {
+        return (Search<ItemType>) getStore();
+    }
+
+    /**
+     * Saves this item.
+     * @return this item after saving it
+     */
+    @Override
+    public ItemType saveItem() {
+        if (getKey() > 0)
+            return findItem();
+
+        ItemType result = findWithHash();
+        if (result == null) {
+            return super.saveItem();
+        }
+        else {
+            return result;
+        }
+    }
+
+    /**
+     * Defines protocol for searching for a hashed item.
+     * @param <ItemType> an item type
+     */
+    public static interface Search<ItemType> extends CrudRepository<ItemType, Long> {
+
+        /**
+         * Finds a hashed item.
+         * @param hashKey a hash key value
+         * @return a hashed item, or null
+         */
+        public ItemType findHash(Integer hashKey);
+    }
 
 } // Hashed<ItemType>

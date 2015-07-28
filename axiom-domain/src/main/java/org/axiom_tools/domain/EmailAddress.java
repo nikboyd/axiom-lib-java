@@ -23,7 +23,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hibernate.annotations.Index;
 
 import org.axiom_tools.storage.Hashed;
 
@@ -31,13 +30,15 @@ import org.axiom_tools.storage.Hashed;
  * Contains an email address.
  */
 @Entity
-@Table(name = "EMAIL_ADDRESS")
+@Table(name = "email_address", indexes = {
+    @Index(name = "ix_email_hash", columnList = "hash_key") })
 @XmlRootElement(name = "EmailAddress", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 	private static final long serialVersionUID = 1001001L;
-	private static final Logger Log = LoggerFactory.getLogger(EmailAddress.class);
-	
+    private static final Logger Log = LoggerFactory.getLogger(EmailAddress.class);
+    private static final EmailAddress SampleAddress = EmailAddress.from("sample@business.com");
+
 	@Override
 	protected Logger getLogger() {
 		return Log;
@@ -48,11 +49,11 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 	 * @return a count of all saved email addresses
 	 */
 	public static int count() {
-		return Repository.count(EmailAddress.class);
+        return (int) SampleAddress.getStore().count();
 	}
-	
+
 	private static final String AT = "@";
-	
+
 	/**
 	 * Returns a new EmailAddress.
 	 * @param emailAddress a formatted email address
@@ -72,7 +73,7 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 		result.hostName = parts[1];
 		return result;
 	}
-	
+
 	/**
 	 * Constructs a new EmailAddress.
 	 */
@@ -81,10 +82,10 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
     }
 
 
-	@Column(name = "ACCOUNT", nullable = false, length = 30)
+    @Column(name = "account", nullable = false, length = 30)
 	private String account = Empty;
 
-	@Column(name = "HOST", nullable = false, length = 30)
+    @Column(name = "host", nullable = false, length = 30)
 	private String hostName = Empty;
 
 
@@ -95,7 +96,7 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 	public String getFormattedAddress() {
 		return formatAddress();
 	}
-	
+
 	/**
 	 * A formatted email address.
 	 */
@@ -112,9 +113,8 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 	public String formatAddress() {
 		return this.account + AT + this.hostName;
 	}
-	
+
 	@Override
-	@Index(name = "IX_EMAIL_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
 		String hashSource = formatAddress();
 		return hashSource.hashCode();

@@ -21,14 +21,14 @@ import javax.xml.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hibernate.annotations.Index;
 
 import org.axiom_tools.codecs.ModelCodec;
-import org.axiom_tools.storage.QueryBuilder;
+import org.axiom_tools.storage.PersonStorage;
+import org.axiom_tools.storage.StorageMechanism;
 
 /**
  * Identifies and describes a person.
- * 
+ *
  * <h4>Person Responsibilities:</h4>
  * <ul>
  * <li>knows a personal name</li>
@@ -36,23 +36,25 @@ import org.axiom_tools.storage.QueryBuilder;
  * </ul>
  */
 @Entity
-@Table(name = "PERSON")
+@Table(name = "person", indexes = {
+    @Index(name = "ix_party_hash", columnList = "hash_key") })
 @XmlRootElement(name = "Person", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class Person extends Party {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Logger Log = LoggerFactory.getLogger(Person.class);
-    
+    private static final Logger Log = LoggerFactory.getLogger(Person.class);
+    private static final Person SamplePerson = new Person();
+
     public static List<Person> listFromJSON(String listJSON) {
         List<Person> sampleList = new ArrayList();
         return ModelCodec.to(sampleList.getClass()).fromJSON(listJSON);
     }
-    
+
     public static Person fromJSON(String personJSON) {
         return ModelCodec.to(Person.class).fromJSON(personJSON);
     }
-    
+
     public String toJSON() {
         return ModelCodec.from(this).toJSON();
     }
@@ -62,12 +64,18 @@ public class Person extends Party {
 		return Log;
 	}
 
-	public static int count() {
-		return Repository.count(Person.class);
+    public static int count() {
+        return (int) SamplePerson.getStore().count();
 	}
 
+    @Override
+    public boolean equals(Object candidate) {
+        if (candidate == null) return false;
+        if (getClass() != candidate.getClass()) return false;
+        return hashCode() == candidate.hashCode();
+    }
+
 	@Override
-	@Index(name = "IX_PARTY_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
 		String hashSource = getName();
 		return hashSource.hashCode();
@@ -88,18 +96,18 @@ public class Person extends Party {
 		result.setName(name);
 		return result;
 	}
-    
+
     /**
      * Returns a new Person (intended query).
      * @param text query text
-     * @return a new Person
+     * @return a list of similar Persons
      */
-    public static Person like(String text) {
+    public static List<Person> like(String text) {
 		Person result = new Person();
 		result.name = text;
-		return result;
+        return result.findSimilar();
     }
-    
+
     /**
      * Returns a new Person (intended query).
      * @param key identifies a person
@@ -111,29 +119,23 @@ public class Person extends Party {
         return result;
     }
 
-	@Override
-	public Person save() {
-		return (Person) super.save();
-	}
-	
-	@Override
-	public Person find() {
-		return (Person) super.find();
-	}
-    
     @Override
-    public Person reload() {
-        return (Person) super.reload();
+    public Person findItem() {
+        return (Person) super.findItem();
     }
-    
-    public List<Person> findLike() {
-        return Repository.findItems(buildQuery());
+
+    @Override
+    public Person saveItem() {
+        return (Person) super.saveItem();
     }
-    
-    private QueryBuilder buildQuery() {
-        return QueryBuilder.withQueryText(Resemblance).withValue("personName", getName());
+
+    @Override
+    public Person findWithHash() {
+        return (Person) super.findWithHash();
     }
-    
-    private static final String Resemblance = "select p from Person p where p.name like :personName";
+
+    public List<Person> findSimilar() {
+        return StorageMechanism.getStorage(PersonStorage.class).findLike(getName());
+    }
 
 } // Person

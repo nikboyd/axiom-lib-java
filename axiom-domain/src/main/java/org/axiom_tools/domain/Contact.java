@@ -36,19 +36,20 @@ import org.axiom_tools.storage.SurrogatedComposite;
 public class Contact extends Surrogated<Contact> implements SurrogatedComposite, Serializable {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Logger Log = LoggerFactory.getLogger(Contact.class);
-    
+    private static final Logger Log = LoggerFactory.getLogger(Contact.class);
+    private static final Contact SampleContact = new Contact();
+
     /**
      * Indicates a kind of contact.
      */
     public static enum Kind {
-        
+
         HOME,
         WORK,
         MOBILE,
         BILLING,
         SHIPPING,
-        
+
     } // Kind
 
 
@@ -64,23 +65,23 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 	protected Logger getLogger() {
 		return Log;
 	}
-    
+
     public List<ContactMechanism> getMechanisms() {
         ArrayList<ContactMechanism> results = new ArrayList();
 		for (Kind addressType : addresses.keySet()) {
             results.add(ContactMechanism.with(addressType, addresses.get(addressType)));
 		}
-		
+
 		for (Kind phoneType : phones.keySet()) {
             results.add(ContactMechanism.with(phoneType, phones.get(phoneType)));
 		}
-		
+
 		for (Kind emailType : emails.keySet()) {
             results.add(ContactMechanism.with(emailType, emails.get(emailType)));
 		}
         return results;
     }
-    
+
     public void setMechanisms(List<ContactMechanism> mechanisms) {
         for (ContactMechanism mechanism : mechanisms) {
             if (mechanism.getMechanism() instanceof MailAddress) {
@@ -94,7 +95,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
             }
         }
     }
-	
+
 	/**
 	 * Any components that are managed as maps.
 	 * @return the component maps associated with this Contact
@@ -104,7 +105,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		Object[] results = { this.addresses, this.emails, this.phones };
 		return results;
 	}
-	
+
 	/**
 	 * Any street addresses associated with this contact.
 	 */
@@ -113,71 +114,68 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		cascade = CascadeType.ALL)
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "kind", length = 10, nullable = false)
-	private Map<Kind, MailAddress> 
-		addresses = new HashMap<Kind, MailAddress>();
-	
+    private Map<Kind, MailAddress> addresses = new HashMap<>();
+
 	/**
 	 * Any phone numbers associated with this contact.
 	 */
 	@OneToMany(
 		fetch = FetchType.EAGER,
-		cascade = CascadeType.ALL, 
+		cascade = CascadeType.ALL,
 		orphanRemoval = true)
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "kind", length = 10, nullable = false)
-	private Map<Kind, PhoneNumber> 
-		phones = new HashMap<Kind, PhoneNumber>();
+    private Map<Kind, PhoneNumber> phones = new HashMap<>();
 
 	/**
 	 * Any email addresses associated with this contact.
 	 */
 	@OneToMany(
 		fetch = FetchType.EAGER,
-		cascade = CascadeType.ALL, 
+		cascade = CascadeType.ALL,
 		orphanRemoval = true)
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "kind", length = 10, nullable = false)
-	private Map<Kind, EmailAddress> 
-		emails = new HashMap<Kind, EmailAddress>();
-	
+    private Map<Kind, EmailAddress> emails = new HashMap<>();
+
 	/**
 	 * Counts the number of saved contacts.
 	 * @return a count, or zero
 	 */
-	public static int count() {
-		return Repository.count(Contact.class);
+    public static int count() {
+        return (int) SampleContact.getStore().count();
 	}
 
 	/**
 	 * A count of the mail addresses associated with this contact.
 	 */
-	public int countAddresses() {
-		return Repository.countElements(this, AddressIndex);
+    public int countAddresses() {
+        return this.addresses.size();
 	}
 
 	/**
 	 * A count of the phones associated with this contact.
 	 */
-	public int countPhones() {
-		return Repository.countElements(this, PhoneIndex);
+    public int countPhones() {
+        return this.phones.size();
 	}
 
 	/**
 	 * A count of the email addresses associated with this contact.
 	 */
-	public int countEmails() {
-		return Repository.countElements(this, EmailIndex);
+    public int countEmails() {
+        return this.emails.size();
 	}
-	
+
 	/**
 	 * Returns an address of a given kind.
 	 * @param kind a kind of address
 	 * @return a StreetAddress, or null
 	 */
-	public MailAddress getAddress(Kind kind) {
-		return Repository.getMapElement(this, AddressIndex, kind);
+    public MailAddress getAddress(Kind kind) {
+        return this.addresses.get(kind);
 	}
-	
+
 	/**
 	 * Adds an address of a given kind.
 	 * @param kind a kind of address
@@ -189,7 +187,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		updateAddress(kind, address);
 		return this;
 	}
-	
+
 	/**
 	 * Removes an address of a given kind.
 	 * @param kind a kind of address
@@ -199,16 +197,16 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		updateAddress(kind, null);
 		return this;
 	}
-	
+
 	/**
 	 * Returns a phone of a given kind.
 	 * @param kind a kind of phone
 	 * @return a PhoneNumber, or null
 	 */
-	public PhoneNumber getPhone(Kind kind) {
-		return Repository.getMapElement(this, PhoneIndex, kind);
+    public PhoneNumber getPhone(Kind kind) {
+        return this.phones.get(kind);
 	}
-	
+
 	/**
 	 * Adds a phone to this contact.
 	 * @param kind a kind of phone
@@ -220,7 +218,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		updatePhone(kind, phone);
 		return this;
 	}
-	
+
 	/**
 	 * Removes a phone from this contact.
 	 * @param kind a kind of phone
@@ -230,16 +228,16 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		updatePhone(kind, null);
 		return this;
 	}
-	
+
 	/**
 	 * Returns an email address of a given kind.
 	 * @param kind a kind of email address
 	 * @return an EmailAddress, or null
 	 */
-	public EmailAddress getEmail(Kind kind) {
-		return Repository.getMapElement(this, EmailIndex, kind);
+    public EmailAddress getEmail(Kind kind) {
+        return this.emails.get(kind);
 	}
-	
+
 	/**
 	 * Adds an email address of a given kind.
 	 * @param kind a kind of email address
@@ -251,7 +249,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		updateEmail(kind, email);
 		return this;
 	}
-	
+
 	/**
 	 * Removes an email address of a given kind.
 	 * @param kind a kind of email address
@@ -271,16 +269,16 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		for (Kind addressType : addresses.keySet()) {
 			addresses.get(addressType).describe(addressType);
 		}
-		
+
 		for (Kind phoneType : phones.keySet()) {
 			phones.get(phoneType).describe(phoneType);
 		}
-		
+
 		for (Kind emailType : emails.keySet()) {
 			emails.get(emailType).describe(emailType);
 		}
 	}
-	
+
 	private void updateAddress(Kind kind, MailAddress address) {
 		if (address == null) {
 			this.addresses.remove(kind);
@@ -289,7 +287,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 			this.addresses.put(kind, address);
 		}
 	}
-	
+
 	private void updatePhone(Kind kind, PhoneNumber phoneNumber) {
 		if (phoneNumber == null) {
 			this.phones.remove(kind);
@@ -298,7 +296,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 			this.phones.put(kind, phoneNumber);
 		}
 	}
-	
+
 	private void updateEmail(Kind kind, EmailAddress emailAddress) {
 		if (emailAddress == null) {
 			this.emails.remove(kind);

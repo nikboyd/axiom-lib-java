@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Defines protocol for a persistent item.
- * 
+ *
  * <h4>SurrogatedItem Responsibilities:</h4>
  * <ul>
  * <li>knows a surrogate key</li>
@@ -32,10 +32,11 @@ public interface SurrogatedItem {
 	 * @return a surrogate key value
 	 */
 	public long getKey();
-	
+
 	/**
 	 * Indicates whether this item was saved in persistent storage.
-	 */
+     * @return whether this item was saved
+   	 */
     @XmlTransient
 	public boolean wasSaved();
 
@@ -43,23 +44,19 @@ public interface SurrogatedItem {
 	 * Logs a description of this item.
 	 */
 	public void describe();
-	
-	/**
-	 * Returns this item properly typed.
-	 * @return this item properly typed
-	 */
-	public <ItemType> ItemType asItem();
-	
-	/**
-	 * Defines protocol for usage of a SurrogatedItem.
-	 */
-	public static interface Usage {
 
-		/**
-		 * Uses a saved item that's been retrieved from storage.
-		 * @param item a previously saved item
-		 */
-		public <ItemType extends SurrogatedItem> void use(ItemType item);
-	}
+    /**
+     * Returns this item properly typed.
+     * @param <ItemType> an item type
+     * @return this item
+     */
+    public <ItemType> ItemType asItem();
+
+    /**
+     * Saves this item.
+     * @param <ItemType> an item type
+     * @return this item
+     */
+    public <ItemType> ItemType saveItem();
 
 } // SurrogatedItem

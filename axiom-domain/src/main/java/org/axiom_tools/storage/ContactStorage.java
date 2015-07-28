@@ -1,5 +1,5 @@
 /**
- * Copyright 2013,2015 Nikolas Boyd.
+ * Copyright 2015 Nikolas Boyd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,20 @@
  */
 package org.axiom_tools.storage;
 
+import org.axiom_tools.domain.Contact;
+import org.axiom_tools.domain.PhoneNumber;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
 /**
- * Defines protocol for a hashed persistent item.
- *
- * <h4>HashedItem Responsibilities:</h4>
- * <ul>
- * <li>knows a surrogate key</li>
- * <li>knows a hash key</li>
- * </ul>
+ * A storage mechanism for contacts.
+ * @author nik
  */
-public interface HashedItem extends SurrogatedItem {
+public interface ContactStorage
+        extends CrudRepository<Contact, Long> {
 
-	/**
-	 * Returns a hash of the contents of this item.
-	 * @return a hash of the contents
-	 */
-    public int hashKey();
+    @Query("SELECT c FROM Contact c WHERE c.key = :key")
+    PhoneNumber findKey(@Param("key") Long key);
 
-} // HashedItem
+} // ContactStorage

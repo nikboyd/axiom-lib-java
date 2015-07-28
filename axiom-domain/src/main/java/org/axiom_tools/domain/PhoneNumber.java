@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hibernate.annotations.Index;
+//import org.hibernate.annotations.Index;
 
 import org.axiom_tools.storage.Hashed;
 
@@ -29,25 +29,27 @@ import org.axiom_tools.storage.Hashed;
  * Contains a phone number.
  */
 @Entity
-@Table(name = "PHONE")
+@Table(name = "phone", indexes = {
+    @Index(name = "ix_phone_hash", columnList = "hash_key") })
 @XmlRootElement(name = "PhoneNumber", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 
 	private static final long serialVersionUID = 1001001L;
-	private static final Logger Log = LoggerFactory.getLogger(PhoneNumber.class);
+    private static final Logger Log = LoggerFactory.getLogger(PhoneNumber.class);
+    private static final PhoneNumber SamplePhone = PhoneNumber.from("999-999-9999");
 
 	@Override
 	protected Logger getLogger() {
 		return Log;
-	}
+    }
 
 	/**
-	 * Counts all the addresses saved in storage.
-	 * @return a count of all saved addresses
-	 */
+	 * Counts all the phone numbers saved in storage.
+   	 * @return a count of all saved phone numbers
+   	 */
 	public static int count() {
-		return Repository.count(PhoneNumber.class);
+        return (int) SamplePhone.getStore().count();
 	}
 
 	private static final String DASH = "-";
@@ -78,13 +80,13 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
     }
 
 
-	@Column(name = "AREA", nullable = false, length = 3)
+    @Column(name = "phone_area", nullable = false, length = 3)
 	private String areaCode = "";
 
-	@Column(name = "PREFIX", nullable = false, length = 3)
+    @Column(name = "phone_prefix", nullable = false, length = 3)
 	private String prefix = "";
 
-	@Column(name = "SUFFIX", nullable = false, length = 4)
+    @Column(name = "phone_suffix", nullable = false, length = 4)
 	private String suffix = "";
 
 	/**
@@ -111,10 +113,14 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	 */
 	public String formatNumber() {
 		return this.areaCode + DASH + this.prefix + DASH + this.suffix;
-	}
+    }
+
+//    public PhoneNumber findWithHash() {
+//        int hashKey = hashKey();
+//        return StorageBean.Registry.Instance.getStorage(PhoneStorage.class).findHash(hashKey);
+//    }
 
 	@Override
-	@Index(name = "IX_PHONE_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
 		String hashSource = formatNumber();
 		return hashSource.hashCode();

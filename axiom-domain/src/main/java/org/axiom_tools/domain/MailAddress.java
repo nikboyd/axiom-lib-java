@@ -22,7 +22,6 @@ import javax.validation.constraints.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hibernate.annotations.Index;
 
 import org.axiom_tools.storage.Hashed;
 import org.axiom_tools.validations.ModelValidator;
@@ -31,7 +30,8 @@ import org.axiom_tools.validations.ModelValidator;
  * Contains a (unique) mailing address.
  */
 @Entity
-@Table(name = "MAIL_ADDRESS")
+@Table(name = "mail_address", indexes = {
+    @Index(name = "ix_address_hash", columnList = "hash_key") })
 @XmlRootElement(name = "MailAddress", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class MailAddress extends Hashed<MailAddress> implements Serializable {
@@ -47,6 +47,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	private static final String PostalCodeValidationPattern = "[\\w\\s]+"; // must be a code with some number(s) and/or word(s)
 	//private static final String CountryCodeValidationPattern = "[A-Z]{3}"; // must be a code with 3 upper case letters
 	private static final String FailedMatchMessage = "failed.match";
+    private static final MailAddress SampleAddress = new MailAddress();
 
 	/**
 	 * A logger for this class.
@@ -61,39 +62,39 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	 * @return a count of all saved addresses
 	 */
 	public static int count() {
-		return Repository.count(MailAddress.class);
+        return (int) SampleAddress.getStore().count();
 	}
-	
+
 	public int countReferences() {
 		return 0;
 	}
-	
+
 
 	@XmlAttribute(name = "street")
-	@Column(name = "STREET", nullable = true, length = 50)
+    @Column(name = "street", nullable = true, length = 50)
 	@Size(min = 0, max = 50, message = FailedMatchMessage)
 	@Pattern(regexp = StreetAddressValidationPattern, message = FailedMatchMessage)
 	protected String street;
 
 	@XmlAttribute(name = "office")
-	@Column(name = "OFFICE", nullable = true, length = 50)
+    @Column(name = "office", nullable = true, length = 50)
 	@Size(min = 0, max = 50, message = FailedMatchMessage)
 	@Pattern(regexp = BuildingUnitValidationPattern, message = FailedMatchMessage)
 	protected String office;
 
 	@XmlAttribute(name = "city")
-	@Column(name = "CITY", nullable = false, length = 50)
+    @Column(name = "city", nullable = false, length = 50)
 	@Size(min = 5, max = 50, message = FailedMatchMessage)
 	@Pattern(regexp = CityNameValidationPattern, message = FailedMatchMessage)
 	protected String city;
 
 	@XmlAttribute(name = "state")
-	@Column(name = "STATE_CODE", nullable = false, length = 2)
+    @Column(name = "state_code", nullable = false, length = 2)
 	@Pattern(regexp = StateCodeValidationPattern, message = FailedMatchMessage)
 	protected String stateCode;
 
 	@XmlAttribute(name = "zip")
-	@Column(name = "POSTAL_CODE", nullable = false, length = 15)
+    @Column(name = "postal_code", nullable = false, length = 15)
 	@Size(min = 5, max = 15, message = FailedMatchMessage)
 	@Pattern(regexp = PostalCodeValidationPattern, message = FailedMatchMessage)
 	protected String postalCode;
@@ -109,7 +110,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	public static MailAddress with(String street, String city, String stateCode, String postalCode) {
 		return with(street, Empty, city, stateCode, postalCode);
 	}
-	
+
 	/**
 	 * Builds a new StreetAddress.
 	 * @param street a street number and name
@@ -127,7 +128,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 					.withStateCode(stateCode)
 					.withPostalCode(postalCode);
 	}
-	
+
 	/**
 	 * Constructs a new StreetAddress.
 	 */
@@ -139,9 +140,8 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 		this.stateCode = Empty;
 		this.postalCode = Empty;
 	}
-	
+
 	@Override
-	@Index(name = "IX_ADDRESS_HASH", columnNames = { "HASH_KEY" })
 	public int hashCode() {
 		String hashSource = getStreet() + getOffice() + getCity() + getPostalCode();
 		return hashSource.hashCode();

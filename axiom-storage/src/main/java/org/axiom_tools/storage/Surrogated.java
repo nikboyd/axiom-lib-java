@@ -15,17 +15,20 @@
  */
 package org.axiom_tools.storage;
 
+import java.util.*;
+import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * A persistent item with a surrogate key.
  * @param <ItemType> a kind of derived persistent item
- * 
+ *
  * <h4>Surrogated Responsibilities:</h4>
  * <ul>
  * <li>knows a surrogate key (ID)</li>
@@ -41,7 +44,7 @@ import org.apache.commons.lang.WordUtils;
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")
-public abstract class Surrogated<ItemType> implements SurrogatedItem {
+public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializable {
 
 	protected static final String Empty = "";
 	protected static final String Blank = " ";
@@ -55,11 +58,26 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	protected static final String PunctuationFilter = "["+ PosixSymbols + PosixPunctuators + AND + ExcludedSymbols + "]";
 	protected static final String MultipleSpaceFilter = " +";
 
-	/**
-	 * A repository shared by instances of this kind.
-	 */
-	protected static final ItemRepository Repository = new ItemRepository();
-	
+    /**
+     * Returns the storage mechanism for a given model type.
+     * @param <ItemType> a kind of model
+     * @param itemType a kind of model
+     * @return a storage mechanism
+     */
+    protected static <ItemType> CrudRepository<ItemType, Long> getStore(Class<?> itemType) {
+        CrudRepository<ItemType, Long> store = (CrudRepository<ItemType, Long>) StorageMechanism.get(itemType);
+        return (store == null ? null : store);
+    }
+
+    /**
+     * Returns the storage mechanism for items of this kind.
+     * @param <StoreType> a storage type
+     * @return a storage mechanism
+     */
+    protected <StoreType extends CrudRepository<ItemType, Long>> StoreType getStore() {
+        return (StoreType) getStore(getClass());
+    }
+
 	/**
 	 * A logger for this kind of item.
 	 */
@@ -70,7 +88,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * persistence framework.
 	 */
 	@Id
-	@Column(name="ID")
+    @Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	protected long key;
 
@@ -82,14 +100,15 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	public long getKey() {
 		return this.key;
 	}
-    
+
     public void setKey(long key) {
         this.key = key;
     }
-	
+
 	/**
 	 * Indicates whether this item was previously saved.
 	 */
+    @Override
 	public boolean wasSaved() {
 		return getKey() > 0;
 	}
@@ -98,22 +117,92 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	 * Returns this item properly typed.
 	 * @return this item properly typed
 	 */
-//	@Override
+	@Override
 	public ItemType asItem() {
 		return (ItemType) this;
-	}
+    }
 
-	/**
-	 * Saves this item.
-	 * @return this item
-	 */
-	public ItemType save() {
-		return Repository.save(this).asItem();
-	}
+    @Override
+    public ItemType saveItem() {
+        if (this.isComposite()) saveComponents();
+        return getStore().save(this.asItem());
+    }
+
+    private boolean isComposite() {
+        return this instanceof SurrogatedComposite;
+    }
+
+    private SurrogatedComposite asComposite() {
+        return (SurrogatedComposite) this;
+    }
+
+    private void saveComponents() {
+        try {
+            Object[] componentMaps = this.asComposite().componentMaps();
+            for (Object componentMap : componentMaps) {
+                saveComponents((Map<Object, SurrogatedItem>) componentMap);
+            }
+
+            Object[] componentSets = this.asComposite().componentSets();
+            for (Object componentSet : componentSets) {
+                saveComponents((Set<SurrogatedItem>) componentSet);
+            }
+
+            saveComponents(this.asComposite().components());
+        }
+        catch (Exception e) {
+            getLogger().error(e.getMessage(), e);
+        }
+    }
+
+    private <KeyType, ComponentType extends SurrogatedItem>
+            void saveComponents(Map<KeyType, ComponentType> components) throws Exception {
+        for (KeyType mapKey : components.keySet()) {
+            components.put(mapKey, (ComponentType) components.get(mapKey).saveItem());
+        }
+    }
+
+    private <ComponentType extends SurrogatedItem>
+            void saveComponents(Set<ComponentType> components) throws Exception {
+        HashSet<ComponentType> results = new HashSet<>(components);
+        for (ComponentType component : components) {
+            results.add((ComponentType) component.saveItem());
+        }
+
+        components.clear();
+        components.addAll(results);
+    }
+
+    private void saveComponents(SurrogatedItem[] components) {
+        if (components.length == 0) return;
+        for (int index = 0; index < components.length; index++) {
+            components[index] = components[index].saveItem();
+        }
+        this.asComposite().components(components);
+    }
+
+    /**
+     * Removes this item from its backing store.
+     * @return whether this item was removed
+     */
+    public boolean removeItem() {
+        if (getKey() == 0) return false;
+        getStore().delete(this.asItem());
+        return true;
+    }
+
+    /**
+     * Finds this item.
+     * @return this item
+     */
+    public ItemType findItem() {
+        if (getKey() == 0) return this.asItem();
+        return getStore().findOne(this.getKey());
+    }
 
 	/**
 	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite 
+	 * Derived classes that implement SurrogatedComposite
 	 * override this method if needed.
 	 * @return empty
 	 */
@@ -124,7 +213,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 
 	/**
 	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite 
+	 * Derived classes that implement SurrogatedComposite
 	 * override this method if needed.
 	 * @return empty
 	 */
@@ -135,7 +224,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 
 	/**
 	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite 
+	 * Derived classes that implement SurrogatedComposite
 	 * override this method if needed.
 	 * @return empty
 	 */
@@ -146,7 +235,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 
 	/**
 	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite 
+	 * Derived classes that implement SurrogatedComposite
 	 * override this method if needed.
 	 * @param components saved components
 	 */
@@ -155,34 +244,9 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem {
 	}
 
 	/**
-	 * Reloads this item (if available).
-	 * @return this item, or null
-	 */
-	public ItemType reload() {
-		Surrogated<ItemType> result = Repository.findWithId(this);
-		if (result == null) return null;
-		return result.asItem();
-	}
-	
-	/**
-	 * Reloads this item and provides it to a scope for reference.
-	 * @param usage an item usage scope
-	 */
-	public void useWithin(SurrogatedItem.Usage usage) {
-		Repository.use(this, usage);
-	}
-
-	/**
-	 * Removes this item from persistent storage.
-	 * @return whether this item was removed
-	 */
-	public boolean remove() {
-		return Repository.remove(this);
-	}
-
-	/**
 	 * Describes this item in the log.
 	 */
+    @Override
 	public void describe() {
 		getLogger().info("key = " + getKey());
 	}

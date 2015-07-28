@@ -15,23 +15,28 @@
  */
 package org.axiom_tools.storage;
 
-import org.axiom_tools.domain.PhoneNumber;
+import java.util.*;
+import org.axiom_tools.domain.Person;
+import org.axiom_tools.storage.Hashed.Search;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 /**
- *
+ * A storage mechanism for phone numbers.
  * @author nik
  */
-public interface PhoneStorage
-        extends CrudRepository<PhoneNumber, Long>, Hashed.Search<PhoneNumber> {
+public interface PersonStorage
+        extends CrudRepository<Person, Long>, Search<Person> {
 
-    @Query("SELECT p FROM PhoneNumber p WHERE p.key = :key")
-    PhoneNumber findKey(@Param("key") Long key);
+    @Query("SELECT p FROM Person p WHERE p.key = :key")
+    Person findKey(@Param("key") Long key);
 
     @Override
-    @Query("SELECT p FROM PhoneNumber p WHERE p.hashKey = :hashKey")
-    PhoneNumber findHash(@Param("hashKey") Integer key);
+    @Query("SELECT p FROM Person p WHERE p.hashKey = :hashKey")
+    Person findHash(@Param("hashKey") Integer key);
 
-} // PhoneStorage
+    @Query("SELECT p FROM Person p WHERE p.name like :personName")
+    List<Person> findLike(@Param("personName") String personName);
+
+} // PersonStorage

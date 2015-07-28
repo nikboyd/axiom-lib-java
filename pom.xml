@@ -33,6 +33,7 @@
         <version.slf4j>1.7.7</version.slf4j>
         <version.log4j>2.0.2</version.log4j>
         <version.crypto>1.46</version.crypto>
+        <version.aspectj>1.8.5</version.aspectj>
 
         <version.cxf>3.0.4</version.cxf>
         <version.h2>1.4.186</version.h2>

@@ -20,24 +20,27 @@ package org.axiom_tools.storage;
  * held in maps or sets.
  */
 public interface SurrogatedComposite extends SurrogatedItem {
-	
+
 	/**
 	 * Returns any maps that contain surrogated components. Due to the limitations of
-	 * generic maps, their actual type signatures are erased. The framework used to 
+	 * generic maps, their actual type signatures are erased. The framework used to
 	 * save the components contained in the maps will determine their actual types.
-	 */
+     * @return any component maps
+   	 */
 	public Object[] componentMaps();
-	
+
 	/**
 	 * Returns any sets that contain surrogated components. Due to the limitations of
-	 * generic sets, their actual type signatures are erased. The framework used to 
+	 * generic sets, their actual type signatures are erased. The framework used to
 	 * save the components contained in the maps will determine their actual types.
-	 */
+     * @return any component sets
+   	 */
 	public Object[] componentSets();
 
 	/**
 	 * Returns any directly related surrogated components.
-	 */
+     * @return any components
+   	 */
 	public SurrogatedItem[] components();
 
 	/**

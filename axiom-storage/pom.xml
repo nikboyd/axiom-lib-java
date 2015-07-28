@@ -26,6 +26,11 @@
 			<version>${version.axiom.libs}</version>
 		</dependency>
         <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${version.spring.data}</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${version.hibernate}</version>
