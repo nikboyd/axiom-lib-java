@@ -19,8 +19,11 @@ import java.util.*;
 import javax.sql.DataSource;
 import javax.persistence.EntityManagerFactory;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
@@ -36,16 +39,19 @@ import org.axiom_tools.domain.MailAddress;
 import org.axiom_tools.domain.Person;
 import org.axiom_tools.domain.PhoneNumber;
 import static org.axiom_tools.storage.PersistenceContext.StoragePackage;
+import static org.axiom_tools.storage.PersistenceContext.DatabaseConfiguration;
 
 /**
  * Configures the persistence mechanisms.
  * @author nik
  */
 @Configuration
+@PropertySource(DatabaseConfiguration)
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = { StoragePackage })
 public class PersistenceContext {
 
+    public static final String DatabaseConfiguration = "classpath:db.properties";
     public static final String StoragePackage = "org.axiom_tools.storage";
     public static final String ModelsPackage = "org.axiom_tools.domain";
 
@@ -116,13 +122,25 @@ public class PersistenceContext {
         return em;
     }
 
+    @Value("${db.driver.class}")
+    private String driverClassName;
+
+    @Value("${db.username}")
+    private String databaseUsername;
+
+    @Value("${db.password}")
+    private String databasePassword;
+
+    @Value("${db.url}")
+    private String databaseURL;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUrl("jdbc:h2:~/test");
-        dataSource.setUsername("sa");
-        dataSource.setPassword("");
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUsername(databaseUsername);
+        dataSource.setPassword(databasePassword);
+        dataSource.setUrl(databaseURL);
         return dataSource;
     }
 
@@ -133,10 +151,23 @@ public class PersistenceContext {
         return transactionManager;
     }
 
+    @Value("${hibernate.dialect}")
+    private String databaseDialect;
+
+    @Value("${hibernate.hbm2ddl.auto}")
+    private String codeGeneration;
+
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty("hibernate.dialect", databaseDialect);
+        if (!codeGeneration.isEmpty()) {
+            properties.setProperty("hibernate.hbm2ddl.auto", codeGeneration);
+        }
         return properties;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyReplacer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }
