@@ -25,7 +25,7 @@ import org.axiom_tools.storage.SurrogatedComposite;
 
 /**
  * Identifies a party along with some contact information.
- * 
+ *
  * <h4>Party Responsibilities:</h4>
  * <ul>
  * <li>knows a party name (personal or business)</li>
@@ -36,13 +36,13 @@ import org.axiom_tools.storage.SurrogatedComposite;
 @SuppressWarnings("unchecked")
 public abstract class Party extends Hashed<Party> implements SurrogatedComposite {
 
-	@Column(name = "NAME", nullable = false, length = 75)
+    @Column(name = "name", nullable = false, length = 75)
 	@Size(min = 5, max = 75, message = "personal name too short or long")
 	protected String name;
 
 	@ManyToOne(
 		fetch = FetchType.EAGER,
-		cascade = CascadeType.ALL, 
+		cascade = CascadeType.ALL,
 		optional = true)
 	protected Contact contact = new Contact();
 
@@ -115,7 +115,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 		SurrogatedItem[] results = { getContact() };
 		return results;
 	}
-	
+
 	@Override
 	public void components(SurrogatedItem[] results) {
 		setContact((Contact)results[0]);

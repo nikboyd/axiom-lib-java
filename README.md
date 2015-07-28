@@ -56,6 +56,10 @@ See the [diagram](#model-diagram) below to see how these parts relate to each ot
 | EmailAddress | an email address |
 | MailAddress  | a typical USA street address |
 | PhoneNumber  | a typical USA phone number |
+| PersistenceContext | configures the JPA persistence mechanisms |
+
+Note that **PhoneNumber, EmailAddress, MailAddress, Person** are all derived from **HashedItem**.
+As such, they all have associated hash-based lookup queries (see more below).
 
 #### Axiom Storage ####
 The _storage_ package contains class that codify idiomatic JPA usage.
@@ -68,8 +72,13 @@ See the [diagram](#model-diagram) below to see how these parts relate to each ot
 | Surrogated&lt;ItemType&gt;  | a SurrogatedItem base class |
 | HashedItem            | a SurrogatedItem that hashes its contents |
 | Hashed&lt;ItemType&gt; | an HashedItem base class |
-| ItemRepository        | a SurrogatedItem repository for idiomatic JPA persistence |
-| TransactionalContext  | a context for idiomatic JPA transaction usage |
+| StorageMechanism        | associates a JPA repository with its model type |
+| StorageMechanism.Registry  | a storage mechanism registry |
+
+In addition to a surrogate key, each **HashedItem** computes and stores a hash of its contents.
+The stored hash provides a simple way to prevent duplicate instances from being stored.
+It also provides an additional index on which to search for an item.
+Thus, each **HashedItem** is immutable, and guaranteed to be unique within the backing store.
 
 #### Axiom Utils ####
 The utility library containing some basic utility classes:
