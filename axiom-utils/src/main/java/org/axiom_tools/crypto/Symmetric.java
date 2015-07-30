@@ -34,7 +34,7 @@ import org.axiom_tools.context.SpringContext;
 
 /**
  * Symmetrically encrypts and decrypts data under AES.
- * 
+ *
  * <h4>Symmetric Responsibilities:</h4>
  * <ul>
  * <li>knows which cryptographer supports a given kind of usage</li>
@@ -51,11 +51,9 @@ import org.axiom_tools.context.SpringContext;
  */
 public class Symmetric {
 
-	private static final Logger Log = LoggerFactory.getLogger(Symmetric.class);
 	private static final String ConfigurationFile = "cryptographers.xml";
-	
-	private static final HashMap<String, String> CryptographerMap = new HashMap<String, String>();
-	
+	private static final HashMap<String, String> CryptographerMap = new HashMap<>();
+
 	/**
 	 * Returns the cryptographer configured to handle usage of a given kind.
 	 * @param usageName identifies a kind of usage
@@ -66,7 +64,7 @@ public class Symmetric {
 		if (cryptName == null) return null;
 		return Symmetric.named(cryptName);
 	}
-	
+
 	/**
 	 * Initializes mappings from usage names to cryptographer names.
 	 */
@@ -84,16 +82,20 @@ public class Symmetric {
 				for (String term : terms) {
 					CryptographerMap.put(term.trim(), map[0].trim());
 				}
-				Log.info("registered cryptographer " + part.trim());
+                getLogger().info("registered cryptographer " + part.trim());
 			}
 		}
-	}
-	
+
+        private Logger getLogger() {
+            return LoggerFactory.getLogger(getClass());
+        }
+    }
+
 	static {
 		Security.addProvider(new BouncyCastleProvider());
 		SpringContext.named(ConfigurationFile).getBean(Mapper.class);
 	}
-	
+
 	private static final String Empty = "";
 	private static final String Comma = ",";
 	private static final String Equals = "=";
@@ -109,15 +111,15 @@ public class Symmetric {
 	private static final int ByteNibbles = 2;
 	private static final int VectorSize = BlockSize * ByteNibbles;
 	private static final byte[] EmptyBuffer = { };
-	
+
 	private String seedValue;
 	private String keyValue;
-	
+
 	/**
 	 * Constructs a new Symmetric.
 	 */
 	public Symmetric() { }
-	
+
 	/**
 	 * Returns a configured cryptographer.
 	 * @param configuredName a configured cryptographer name.
@@ -126,7 +128,7 @@ public class Symmetric {
 	public static Symmetric named(String configuredName) {
 		return SpringContext.named(ConfigurationFile).getBean(Symmetric.class, configuredName);
 	}
-	
+
 	/**
 	 * Returns a new Symmetric.
 	 * @param seedValue an AES initialization vector (32 hex digits)
@@ -137,7 +139,7 @@ public class Symmetric {
 		result.seedValue = checkLength(seedValue, BadSeed);
 		return result;
 	}
-	
+
 	/**
 	 * Sets the AES key.
 	 * @param keyValue an AES key (32 hex digits).
@@ -147,7 +149,7 @@ public class Symmetric {
 		this.keyValue = checkLength(keyValue, BadKey);
 		return this;
 	}
-	
+
 	/**
 	 * Encrypts clear text into a hex string.
 	 * @param clearText clear text data
@@ -156,7 +158,7 @@ public class Symmetric {
 	public String encryptAsHex(String clearText) {
 		return Hex.encodeHexString(encrypt(clearText));
 	}
-	
+
 	/**
 	 * Encrypts clear text data.
 	 * @param clearText clear text data
@@ -166,11 +168,11 @@ public class Symmetric {
 		try {
 			return encryptBytes(clearText.getBytes(Encoding));
 		} catch (Exception e) {
-			Log.error(e.getMessage(), e);
+            getLogger().error(e.getMessage(), e);
 			return EmptyBuffer;
 		}
 	}
-	
+
 	/**
 	 * Encrypts clear text data.
 	 * @param clearData a buffer containing the clear text data
@@ -179,16 +181,16 @@ public class Symmetric {
 	public byte[] encryptBytes(byte[] clearData) {
 		if (clearData == null) return EmptyBuffer;
 		if (clearData.length == 0) return EmptyBuffer;
-		
+
 		try {
 			clearData = normalize(clearData);
 			return buildEncrypter().doFinal(clearData);
 		} catch (Exception e) {
-			Log.error(e.getMessage(), e);
+            getLogger().error(e.getMessage(), e);
 			return EmptyBuffer;
 		}
 	}
-	
+
 	/**
 	 * Decrypts cypher text encoded as hex.
 	 * @param cypherText a hex string that contains cypher data
@@ -198,11 +200,11 @@ public class Symmetric {
 		try {
 			return decrypt(Hex.decodeHex(cypherText.toCharArray()));
 		} catch (Exception e) {
-			Log.error(e.getMessage(), e);
+            getLogger().error(e.getMessage(), e);
 			return Empty;
 		}
 	}
-	
+
 	/**
 	 * Decrypts cypher text data.
 	 * @param cypherData a buffer that contains cypher data
@@ -211,15 +213,15 @@ public class Symmetric {
 	public byte[] decryptBytes(byte[] cypherData) {
 		if (cypherData == null) return EmptyBuffer;
 		if (cypherData.length == 0) return EmptyBuffer;
-		
+
 		try {
 			return buildDecrypter().doFinal(cypherData);
 		} catch (Exception e) {
-			Log.error(e.getMessage(), e);
+            getLogger().error(e.getMessage(), e);
 			return EmptyBuffer;
 		}
 	}
-	
+
 	/**
 	 * Decrypts cypher text data.
 	 * @param cypherData a buffer that contains cypher data
@@ -229,11 +231,11 @@ public class Symmetric {
 		try {
 			return new String(buildDecrypter().doFinal(cypherData), Encoding).trim();
 		} catch (Exception e) {
-			Log.error(e.getMessage(), e);
+            getLogger().error(e.getMessage(), e);
 			return Empty;
 		}
 	}
-	
+
 	/**
 	 * A seed value.
 	 * @return a seedValue
@@ -265,7 +267,7 @@ public class Symmetric {
 	public void setKeyValue(String keyValue) {
 		this.keyValue = keyValue;
 	}
-	
+
 	/**
 	 * Normalizes a buffer to the length needed for encryption.
 	 * @param clearData a buffer containing clear text data
@@ -282,46 +284,50 @@ public class Symmetric {
 		while (padding-- > 0) hex += Pad;
 		return Hex.decodeHex(hex.toCharArray());
 	}
-	
+
 	private Cipher buildEncrypter() throws Exception {
 		Cipher result = getCipher();
 		result.init(Cipher.ENCRYPT_MODE, buildKey(), buildSeed());
 		return result;
 	}
-	
+
 	private Cipher buildDecrypter() throws Exception {
 		Cipher result = getCipher();
 		result.init(Cipher.DECRYPT_MODE, buildKey(), buildSeed());
 		return result;
 	}
-	
+
 	private Cipher getCipher() throws Exception {
 		return Cipher.getInstance(Transform, BouncyCastleProvider.PROVIDER_NAME);
 	}
-	
+
 	private IvParameterSpec buildSeed() throws Exception {
 		return new IvParameterSpec(Hex.decodeHex(getSeedValue().toCharArray()));
 	}
-	
+
 	private Key buildKey() throws Exception {
 		return new SecretKeySpec(Hex.decodeHex(getKeyValue().toCharArray()), Algorithm);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static String checkLength(String value, String failMessage) {
 		String result = StringUtils.defaultString(value).trim();
 		if (result.length() != VectorSize) {
 			throw new IllegalArgumentException(failMessage);
 		}
-		
+
 		try {
 			byte[] bytes = Hex.decodeHex(result.toCharArray());
 		} catch (Exception e) {
 			throw new IllegalArgumentException(failMessage);
 		}
-		
+
 		return result;
 	}
+
+    private Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
+    }
 
 	private static final String BadSeed = "seed value must be a hex value of length " + VectorSize + " digits";
 	private static final String BadKey = "key value must be a hex value of length " + VectorSize + " digits";

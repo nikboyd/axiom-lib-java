@@ -47,6 +47,7 @@
 
         <version.java>1.7</version.java>
         <version.javax.el>2.2.4</version.javax.el>
+        <version.joda>2.8.1</version.joda>
         <version.junit>4.10</version.junit>
 
         <version.compiler.plugin>2.3.2</version.compiler.plugin>
