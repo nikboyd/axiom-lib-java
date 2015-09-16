@@ -19,6 +19,9 @@
 -->
     </Appenders>
     <Loggers>
+        <Logger name="springfox.documentation" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="org.springframework" level="WARN" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>

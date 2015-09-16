@@ -33,7 +33,7 @@ import org.axiom_tools.faces.ICustomerService;
  * Confirms proper operation of the customer service.
  * @author nik
  */
-@Ignore
+//@Ignore
 public class ServiceTest {
 
     private static final String ConfigurationFile = "/service-client.xml";
