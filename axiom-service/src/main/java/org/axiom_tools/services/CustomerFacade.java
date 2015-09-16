@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import io.swagger.annotations.*;
 import org.springframework.stereotype.Service;
 
 import org.axiom_tools.domain.Person;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 @Transactional
 @Path(ICustomerService.BasePath)
+@Api(value = ICustomerService.BasePath, description = "Operations on Customers")
 public class CustomerFacade implements ICustomerService {
 
     private static final String Wild = "%";

@@ -18,18 +18,21 @@ package org.axiom_tools.faces;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import io.swagger.annotations.*;
+import org.axiom_tools.domain.Person;
 
 /**
  * Maintains customers.
  * @author nik
  */
+@Api(value = ICustomerService.BasePath, description = "Operations on Customers")
 public interface ICustomerService {
-    
+
     public static final String BasePath = "/";
     public static final String CustomerId = "id";
     public static final String CustomerPath = "/customers";
     public static final String CustomerIdPath = CustomerPath + "/{id}";
-    
+
     public static final String Name = "name";
     public static final String City = "city";
     public static final String Zip = "zip";
@@ -39,76 +42,85 @@ public interface ICustomerService {
      * @param name a name
      * @param city a city
      * @param zip a zip code
-     * @return a list of matching customers
+     * @return a Response containing a list of matching customers
      */
     @GET
     @Path(CustomerPath)
     @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(response = Person.class, responseContainer = "List",
+        value = "Gets a list of selected customers.",
+        notes = "Gets a list of customers that resemble the supplied data.")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "found customer"), })
     public Response listCustomers(
-        @QueryParam(Name) String name,
-        @QueryParam(City) String city, 
-        @QueryParam(Zip)  String zip);
-    
+        @ApiParam(value = "a customer name", required = true) @QueryParam(Name) String name,
+        @ApiParam(value = "a customer address city", required = false) @QueryParam(City) String city,
+        @ApiParam(value = "a customer address zip", required = false) @QueryParam(Zip) String zip);
+
     /**
      * Creates a new Customer.
-     * @param customerJSON a customer formatted as JSON
-     * @return a Response indicating:
-     * <ul>
-     * <li>200 if properly created</li>
-     * </ul>
+     * @param customer a customer formatted as JSON
+     * @return a Response containing a new customer ID.
      */
     @POST
     @Path(CustomerPath)
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
+    @ApiOperation(response = Long.class,
+        value = "Creates a new customer.",
+        notes = "Creates a new customer (if not already present).")
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "created a customer"), })
     public Response createCustomer(
-        String customerJSON);
+        @ApiParam(value = "a customer", required = false) String customer);
 
     /**
      * Updates a Customer.
      * @param customerID identifies a customer
-     * @param customerJSON a customer formatted as JSON
+     * @param customer a customer formatted as JSON
      * @return a Response containing updated JSON
-     * <ul>
-     * <li>200 if properly updated</li>
-     * <li>409 if the supplied ID conflicts with the payload</li>
-     * <li>410 if not found</li>
-     * </ul>
      */
     @PUT
     @Path(CustomerIdPath)
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
+    @ApiOperation(response = Person.class,
+        value = "Updates a customer." )
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "updated the customer"),
+        @ApiResponse(code = 410, message = "customer missing"), })
     public Response updateCustomer(
-        @PathParam(CustomerId) long customerID, String customerJSON);
-    
+        @ApiParam(value = "a customer ID", required = true) @PathParam(CustomerId) long customerID,
+        @ApiParam(value = "a customer", required = true) String customer);
+
     /**
      * Deletes a Customer.
      * @param customerID identifies a customer
-     * @return a Response indicating:
-     * <ul>
-     * <li>201 if created</li>
-     * <li>410 if not found</li>
-     * </ul>
+     * @return a Response indicating whether accepted and deleted.
      */
     @DELETE
     @Path(CustomerIdPath)
+    @ApiOperation(
+        value = "Deletes a selected customer." )
+    @ApiResponses({
+        @ApiResponse(code = 202, message = "customer deleted"),
+        @ApiResponse(code = 410, message = "customer missing"), })
     public Response deleteCustomer(
-        @PathParam(CustomerId) long customerID);
+        @ApiParam(value = "a customer ID", required = true) @PathParam(CustomerId) long customerID);
 
     /**
      * Gets a Customer.
      * @param customerID identifies a customer
-     * @return a Response containing customer data, and
-     * <ul>
-     * <li>200 if found</li>
-     * <li>410 if not found</li>
-     * </ul>
+     * @return a Response containing customer data
      */
     @GET
     @Path(CustomerIdPath)
     @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(response = Person.class,
+        value = "Gets a selected customer." )
+    @ApiResponses({
+        @ApiResponse(code = 410, message = "customer missing"), })
     public Response getCustomer(
-        @PathParam(CustomerId) long customerID);
-    
+        @ApiParam(value = "a customer ID", required = true) @PathParam(CustomerId) long customerID);
+
 } // ICustomerService

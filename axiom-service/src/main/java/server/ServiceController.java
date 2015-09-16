@@ -15,43 +15,59 @@
  */
 package server;
 
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.axiom_tools.services.CustomerFacade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import static server.ServiceController.ConfigurationFile;
 import static server.ServiceController.FacadePackage;
 import static server.ServiceController.StoragePackage;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Launches embedded Tomcat hosting CXF servlet.
  * @author nik
  */
 @Configuration
+@EnableWebMvc
+@EnableSwagger2
 @EnableAutoConfiguration
-@ComponentScan({ FacadePackage, StoragePackage })
-@ImportResource({ ConfigurationFile })
-public class ServiceController {
-
-    private static final Logger Log = LoggerFactory.getLogger(ServiceController.class);
-    private static final String Empty = "";
+@ComponentScan(
+    basePackageClasses = { CustomerFacade.class },
+    basePackages = { FacadePackage, StoragePackage })
+@ImportResource({ ConfigurationFile }) //, CxfConfiguration, CxfServletConfiguration }) //
+public class ServiceController extends WebMvcConfigurerAdapter {
 
     public static final int DefaultPort = 9001;
+
+    public static final String Empty = "";
     public static final String ApiPath = "/api/*";
-    public static final String ConfigurationFile = "classpath:hosted-service.xml";
     public static final String FacadePackage = "org.axiom_tools.services";
     public static final String StoragePackage = "org.axiom_tools.storage";
+    public static final String ConfigurationFile = "classpath:hosted-service.xml";
+    public static final String CxfConfiguration = "classpath:META-INF/cxf/cxf.xml";
+    public static final String CxfServletConfiguration = "classpath:META-INF/cxf/cxf-servlet.xml";
+
+    @Autowired
+    private ApplicationContext context;
 
     public static void main(String[] args) {
-        Log.info("starting service");
+        System.out.println("starting service");
         SpringApplication.run(ServiceController.class, args);
     }
 
@@ -62,10 +78,23 @@ public class ServiceController {
 
     @Bean
     public ServletRegistrationBean servletRegistration() {
-        Log.info("hosting CustomerService on port " + DefaultPort);
+        getLogger().info("hosting CustomerService on port " + DefaultPort);
         ServletRegistrationBean result = new ServletRegistrationBean(new CXFServlet(), ApiPath);
         result.setLoadOnStartup(1);
         return result;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    private Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
     }
 
 } // ServiceController

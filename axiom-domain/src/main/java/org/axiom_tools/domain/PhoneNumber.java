@@ -18,6 +18,7 @@ package org.axiom_tools.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import io.swagger.annotations.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import org.axiom_tools.storage.Hashed;
  * Contains a phone number.
  */
 @Entity
+@ApiModel("A phone number")
 @Table(name = "phone", indexes = {
     @Index(name = "ix_phone_hash", columnList = "hash_key") })
 @XmlRootElement(name = "PhoneNumber", namespace = "##default")
@@ -93,6 +95,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 	 * A formatted phone number.
 	 */
 	@XmlAttribute(name = "value")
+    @ApiModelProperty(value = "a formatted number: " + FORMAT)
 	public String getFormattedNumber() {
 		return formatNumber();
 	}

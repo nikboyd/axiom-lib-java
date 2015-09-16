@@ -33,9 +33,9 @@ import org.axiom_tools.faces.ICustomerService;
  * Confirms proper operation of the customer service.
  * @author nik
  */
+@Ignore
 public class ServiceTest {
 
-    private static final Logger Log = LoggerFactory.getLogger(ServiceTest.class);
     private static final String ConfigurationFile = "/service-client.xml";
 
     private ICustomerService service;
@@ -49,7 +49,7 @@ public class ServiceTest {
     @Before
     public void startServer() {
         String[] args = { };
-        Log.info("starting service tests");
+        getLogger().info("starting service tests");
         SpringApplication.run(ServiceController.class, args);
         assertFalse(getService() == null);
     }
@@ -96,7 +96,7 @@ public class ServiceTest {
 
         List<Person> results = Person.listFromJSON(listJSON);
         assertFalse(results.isEmpty());
-        Log.info("found " + results.size() + " matches");
+        getLogger().info("found " + results.size() + " matches");
 
         getService().deleteCustomer(Long.parseLong(keyB));
         getService().deleteCustomer(Long.parseLong(keyA));
@@ -105,6 +105,10 @@ public class ServiceTest {
         assertTrue(r.getStatus() == 200);
         listJSON = r.readEntity(String.class);
         assertTrue(Person.listFromJSON(listJSON).isEmpty());
+    }
+
+    private Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
     }
 
 } // ServiceTest

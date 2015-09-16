@@ -19,6 +19,9 @@
 -->
     </Appenders>
     <Loggers>
+        <Logger name="springfox.documentation" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="org.springframework" level="WARN" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
@@ -37,7 +40,7 @@
         <Logger name="org.hibernate.tool.hbm2ddl" level="WARN" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="org.apache.cxf" level="WARN" additivity="false">
+        <Logger name="org.apache.cxf" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <Root level="INFO">

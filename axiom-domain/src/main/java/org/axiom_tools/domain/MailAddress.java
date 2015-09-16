@@ -15,6 +15,7 @@
  */
 package org.axiom_tools.domain;
 
+import io.swagger.annotations.*;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -30,6 +31,7 @@ import org.axiom_tools.validations.ModelValidator;
  * Contains a (unique) mailing address.
  */
 @Entity
+@ApiModel("A mailing address")
 @Table(name = "mail_address", indexes = {
     @Index(name = "ix_address_hash", columnList = "hash_key") })
 @XmlRootElement(name = "MailAddress", namespace = "##default")

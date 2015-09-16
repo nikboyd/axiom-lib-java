@@ -35,8 +35,9 @@
         <version.crypto>1.46</version.crypto>
         <version.aspectj>1.8.5</version.aspectj>
 
-        <version.cxf>3.0.4</version.cxf>
+        <version.cxf>3.1.2</version.cxf>
         <version.h2>1.4.186</version.h2>
+        <version.swagger>1.5.3</version.swagger>
         <version.postgres>9.3-1101-jdbc41</version.postgres>
         <version.hibernate>4.3.8.Final</version.hibernate>
         <version.validator>5.1.0.Final</version.validator>

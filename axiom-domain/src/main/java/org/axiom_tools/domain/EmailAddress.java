@@ -15,6 +15,7 @@
  */
 package org.axiom_tools.domain;
 
+import io.swagger.annotations.*;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -30,6 +31,7 @@ import org.axiom_tools.storage.Hashed;
  * Contains an email address.
  */
 @Entity
+@ApiModel("An email address")
 @Table(name = "email_address", indexes = {
     @Index(name = "ix_email_hash", columnList = "hash_key") })
 @XmlRootElement(name = "EmailAddress", namespace = "##default")

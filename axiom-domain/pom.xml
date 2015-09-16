@@ -30,6 +30,12 @@
 			<artifactId>axiom-storage</artifactId>
 			<version>${version.axiom.libs}</version>
 		</dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${version.swagger}</version>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>

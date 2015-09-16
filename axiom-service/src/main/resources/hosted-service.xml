@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans 
     xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:cxf="http://cxf.apache.org/core"
@@ -9,6 +10,8 @@
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://cxf.apache.org/core
@@ -35,12 +38,22 @@
         <jaxrs:providers>
             <ref bean="jsonProvider" />
         </jaxrs:providers>
+        <jaxrs:features>
+            <ref bean="swaggerFeature" />
+        </jaxrs:features>
     </jaxrs:server>
 
-    <bean id="serviceBean" 
-        class="org.axiom_tools.services.CustomerFacade" />
+    <bean id="serviceBean" class="org.axiom_tools.services.CustomerFacade" />
 
     <bean id="jsonProvider" 
           class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />
+
+    <bean id="swaggerFeature" class="org.apache.cxf.jaxrs.swagger.Swagger2Feature">
+        <property name="basePath" value="/api"/>
+        <property name="version" value="1.1" />
+        <property name="title" value="Customer API" />
+        <property name="description" value="Customer Service API" />
+        <property name="contact" value="nikboyd@educery.com" />
+    </bean>
 
 </beans>

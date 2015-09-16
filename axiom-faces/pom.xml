@@ -30,5 +30,10 @@
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
             <version>${version.cxf}</version>
         </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${version.swagger}</version>
+        </dependency>
     </dependencies>
 </project>
