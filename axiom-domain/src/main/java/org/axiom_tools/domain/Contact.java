@@ -60,6 +60,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 
 	/**
 	 * A logger.
+     * @return a Logger
 	 */
 	@Override
 	protected Logger getLogger() {
@@ -115,7 +116,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		cascade = CascadeType.ALL)
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "kind", length = 10, nullable = false)
-    private Map<Kind, MailAddress> addresses = new HashMap<>();
+    private final Map<Kind, MailAddress> addresses = new HashMap<>();
 
 	/**
 	 * Any phone numbers associated with this contact.
@@ -126,7 +127,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		orphanRemoval = true)
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "kind", length = 10, nullable = false)
-    private Map<Kind, PhoneNumber> phones = new HashMap<>();
+    private final Map<Kind, PhoneNumber> phones = new HashMap<>();
 
 	/**
 	 * Any email addresses associated with this contact.
@@ -137,7 +138,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 		orphanRemoval = true)
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "kind", length = 10, nullable = false)
-    private Map<Kind, EmailAddress> emails = new HashMap<>();
+    private final Map<Kind, EmailAddress> emails = new HashMap<>();
 
 	/**
 	 * Counts the number of saved contacts.
@@ -149,6 +150,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 
 	/**
 	 * A count of the mail addresses associated with this contact.
+     * @return a count
 	 */
     public int countAddresses() {
         return this.addresses.size();
@@ -156,6 +158,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 
 	/**
 	 * A count of the phones associated with this contact.
+     * @return a count
 	 */
     public int countPhones() {
         return this.phones.size();
@@ -163,6 +166,7 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
 
 	/**
 	 * A count of the email addresses associated with this contact.
+     * @return a count
 	 */
     public int countEmails() {
         return this.emails.size();

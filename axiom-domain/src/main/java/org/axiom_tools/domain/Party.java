@@ -48,6 +48,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * A name.
+     * @return a name
 	 */
 	@XmlAttribute(name = "name")
 	public String getName() {
@@ -56,6 +57,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * A name.
+     * @param name a name
 	 */
 	protected void setName(String name) {
 		this.name = normalizeWords(name);
@@ -63,6 +65,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * A contact.
+     * @return a contact
 	 */
 	@XmlElement(name = "contact")
 	public Contact getContact() {
@@ -71,6 +74,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * A contact.
+     * @param contact a contact
 	 */
 	protected void setContact(Contact contact) {
 		this.contact = contact;
@@ -78,6 +82,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * Adds a mail address to this party.
+     * @param <PartyType> a party type
 	 * @param kind a kind of mail address
 	 * @param address a mail address
 	 * @return this party
@@ -89,6 +94,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * Adds an email address to this party.
+     * @param <PartyType> a party type
 	 * @param kind a kind of email address
 	 * @param email an email address
 	 * @return this party
@@ -100,6 +106,7 @@ public abstract class Party extends Hashed<Party> implements SurrogatedComposite
 
 	/**
 	 * Adds a phone number to this party.
+     * @param <PartyType> a party type
 	 * @param kind a kind of phone
 	 * @param phone a phone number
 	 * @return this party

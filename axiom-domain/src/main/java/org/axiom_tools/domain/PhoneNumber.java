@@ -91,6 +91,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 
 	/**
 	 * A formatted phone number.
+     * @return a formatted phone number
 	 */
 	@XmlAttribute(name = "value")
 	public String getFormattedNumber() {
@@ -99,6 +100,7 @@ public class PhoneNumber extends Hashed<PhoneNumber> implements Serializable {
 
 	/**
 	 * A formatted phone number.
+     * @param phoneNumber a formatted phone number
 	 */
 	protected void setFormattedNumber(String phoneNumber) {
 		String[] parts = phoneNumber.split(DASH);

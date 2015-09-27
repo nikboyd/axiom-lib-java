@@ -91,6 +91,7 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 
 	/**
 	 * A formatted email address.
+     * @return a formatted email address
 	 */
 	@XmlAttribute(name = "value")
 	public String getFormattedAddress() {
@@ -99,6 +100,7 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 
 	/**
 	 * A formatted email address.
+     * @param emailAddress a formatted email address
 	 */
 	protected void setFormattedAddress(String emailAddress) {
 		String[] parts = emailAddress.split(AT);

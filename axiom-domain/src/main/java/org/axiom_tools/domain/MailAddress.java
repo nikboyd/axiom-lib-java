@@ -51,6 +51,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A logger for this class.
+     * @return a Logger
 	 */
 	@Override
 	protected Logger getLogger() {
@@ -159,7 +160,8 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	}
 
 	/**
-	 * A street address.
+	 * A street number, name, and type.
+     * @return a street number, name, and type
 	 */
 	@XmlAttribute(name = "street")
 	public String getStreet() {
@@ -168,6 +170,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A street address.
+	 * @param street a street number, name, and type
 	 */
 	protected void setStreet(String street) {
 		this.street = normalizeWords(street);
@@ -186,6 +189,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A building unit (office).
+	 * @return a building unit
 	 */
 	@XmlAttribute(name = "office")
 	public String getOffice() {
@@ -194,6 +198,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A building unit (office).
+	 * @param office a building unit
 	 */
 	protected void setOffice(String office) {
 		this.office = normalizeWords(office);
@@ -212,6 +217,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A city name.
+	 * @return a city name
 	 */
 	@XmlAttribute(name = "city")
 	public String getCity() {
@@ -220,6 +226,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A city name.
+	 * @param city a city name
 	 */
 	protected void setCity(String city) {
 		this.city = normalizeWords(city);
@@ -238,6 +245,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A state code.
+	 * @return a state code
 	 */
 	@XmlAttribute(name = "state")
 	public String getStateCode() {
@@ -246,6 +254,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A state code.
+	 * @param stateCode a state code
 	 */
 	protected void setStateCode(String stateCode) {
 		this.stateCode = normalizeCode(stateCode);
@@ -264,6 +273,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A postal code.
+	 * @return a postal code
 	 */
 	@XmlAttribute(name = "zip")
 	public String getPostalCode() {
@@ -272,6 +282,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 
 	/**
 	 * A postal code.
+	 * @param postalCode a postal code
 	 */
 	protected void setPostalCode(String postalCode) {
 		this.postalCode = normalizeCode(postalCode);
