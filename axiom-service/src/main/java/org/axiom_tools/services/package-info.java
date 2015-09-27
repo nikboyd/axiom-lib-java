@@ -17,4 +17,8 @@
 /**
  * Contains the service implementations.
  */
+@XmlSchema(namespace = "http://api.axiom-tools.com/axiom-facades")
 package org.axiom_tools.services;
+
+import javax.xml.bind.annotation.XmlSchema;
+

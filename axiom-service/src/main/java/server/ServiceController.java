@@ -15,7 +15,6 @@
  */
 package server;
 
-import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -31,21 +30,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import static server.ServiceController.ConfigurationFile;
 import static server.ServiceController.FacadePackage;
 import static server.ServiceController.StoragePackage;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Launches embedded Tomcat hosting CXF servlet.
  * @author nik
  */
 @Configuration
-@EnableWebMvc
-@EnableSwagger2
 @EnableAutoConfiguration
 @ComponentScan(
     basePackageClasses = { CustomerFacade.class },
@@ -85,12 +81,15 @@ public class ServiceController extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/docs/").setViewName("forward:/docs/index.html");
+        registry.addViewController("/docs/ui/").setViewName("forward:/docs/ui/index.html");
+    }
 
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/docs/**")
+                .addResourceLocations("classpath:/resources/docs/");
     }
 
     private Logger getLogger() {

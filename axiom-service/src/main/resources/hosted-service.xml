@@ -24,7 +24,7 @@
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
- 
+
     <cxf:bus>
         <cxf:features>
             <!--<cxf:logging/>-->
@@ -38,22 +38,11 @@
         <jaxrs:providers>
             <ref bean="jsonProvider" />
         </jaxrs:providers>
-        <jaxrs:features>
-            <ref bean="swaggerFeature" />
-        </jaxrs:features>
     </jaxrs:server>
 
     <bean id="serviceBean" class="org.axiom_tools.services.CustomerFacade" />
 
     <bean id="jsonProvider" 
           class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />
-
-    <bean id="swaggerFeature" class="org.apache.cxf.jaxrs.swagger.Swagger2Feature">
-        <property name="basePath" value="/api"/>
-        <property name="version" value="1.1" />
-        <property name="title" value="Customer API" />
-        <property name="description" value="Customer Service API" />
-        <property name="contact" value="nikboyd@educery.com" />
-    </bean>
 
 </beans>

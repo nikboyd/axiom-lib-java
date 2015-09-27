@@ -16,7 +16,6 @@
 package org.axiom_tools.domain;
 
 import java.util.*;
-import javax.transaction.Transactional;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.axiom_tools.codecs.ModelCodec;
 import org.axiom_tools.domain.Contact.Kind;

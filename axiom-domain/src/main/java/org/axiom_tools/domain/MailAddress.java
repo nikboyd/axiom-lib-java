@@ -15,7 +15,6 @@
  */
 package org.axiom_tools.domain;
 
-import io.swagger.annotations.*;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -31,7 +30,6 @@ import org.axiom_tools.validations.ModelValidator;
  * Contains a (unique) mailing address.
  */
 @Entity
-@ApiModel("A mailing address")
 @Table(name = "mail_address", indexes = {
     @Index(name = "ix_address_hash", columnList = "hash_key") })
 @XmlRootElement(name = "MailAddress", namespace = "##default")
@@ -72,30 +70,25 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	}
 
 
-	@XmlAttribute(name = "street")
     @Column(name = "street", nullable = true, length = 50)
 	@Size(min = 0, max = 50, message = FailedMatchMessage)
 	@Pattern(regexp = StreetAddressValidationPattern, message = FailedMatchMessage)
 	protected String street;
 
-	@XmlAttribute(name = "office")
     @Column(name = "office", nullable = true, length = 50)
 	@Size(min = 0, max = 50, message = FailedMatchMessage)
 	@Pattern(regexp = BuildingUnitValidationPattern, message = FailedMatchMessage)
 	protected String office;
 
-	@XmlAttribute(name = "city")
     @Column(name = "city", nullable = false, length = 50)
 	@Size(min = 5, max = 50, message = FailedMatchMessage)
 	@Pattern(regexp = CityNameValidationPattern, message = FailedMatchMessage)
 	protected String city;
 
-	@XmlAttribute(name = "state")
     @Column(name = "state_code", nullable = false, length = 2)
 	@Pattern(regexp = StateCodeValidationPattern, message = FailedMatchMessage)
 	protected String stateCode;
 
-	@XmlAttribute(name = "zip")
     @Column(name = "postal_code", nullable = false, length = 15)
 	@Size(min = 5, max = 15, message = FailedMatchMessage)
 	@Pattern(regexp = PostalCodeValidationPattern, message = FailedMatchMessage)
@@ -149,6 +142,14 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 		return hashSource.hashCode();
 	}
 
+    @Override
+    public boolean equals(Object candidate) {
+        if (candidate == null) return false;
+        if (getClass() != candidate.getClass()) return false;
+        final MailAddress other = (MailAddress) candidate;
+        return other.formatAddress().equals(formatAddress());
+    }
+
 	/**
 	 * Validates this address.
 	 * @return any problems detected
@@ -160,6 +161,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	/**
 	 * A street address.
 	 */
+	@XmlAttribute(name = "street")
 	public String getStreet() {
 		return this.street;
 	}
@@ -185,6 +187,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	/**
 	 * A building unit (office).
 	 */
+	@XmlAttribute(name = "office")
 	public String getOffice() {
 		return this.office;
 	}
@@ -210,6 +213,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	/**
 	 * A city name.
 	 */
+	@XmlAttribute(name = "city")
 	public String getCity() {
 		return this.city;
 	}
@@ -235,6 +239,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	/**
 	 * A state code.
 	 */
+	@XmlAttribute(name = "state")
 	public String getStateCode() {
 		return this.stateCode;
 	}
@@ -260,6 +265,7 @@ public class MailAddress extends Hashed<MailAddress> implements Serializable {
 	/**
 	 * A postal code.
 	 */
+	@XmlAttribute(name = "zip")
 	public String getPostalCode() {
 		return this.postalCode;
 	}

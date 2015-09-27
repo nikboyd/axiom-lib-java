@@ -26,24 +26,25 @@
 
         <version.axiom.libs>[1.0,1.1)</version.axiom.libs>
         
-        <version.jackson>2.1.4</version.jackson>
-        <version.commons-lang>2.3</version.commons-lang>
+        <version.jackson>2.5.3</version.jackson>
+        <version.commons-lang>2.6</version.commons-lang>
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-logging>1.1.1</version.commons-logging>
-        <version.slf4j>1.7.7</version.slf4j>
+        <version.slf4j>1.7.12</version.slf4j>
         <version.log4j>2.0.2</version.log4j>
         <version.crypto>1.46</version.crypto>
-        <version.aspectj>1.8.5</version.aspectj>
+        <version.aspectj>1.8.7</version.aspectj>
 
         <version.cxf>3.1.2</version.cxf>
         <version.h2>1.4.186</version.h2>
         <version.swagger>1.5.3</version.swagger>
+        <version.enunciate>2.0.0-M.3</version.enunciate>
         <version.postgres>9.3-1101-jdbc41</version.postgres>
-        <version.hibernate>4.3.8.Final</version.hibernate>
-        <version.validator>5.1.0.Final</version.validator>
-        <version.spring>4.0.9.RELEASE</version.spring>
-        <version.spring.data>1.8.1.RELEASE</version.spring.data>
-        <version.spring.boot>1.2.2.RELEASE</version.spring.boot>
+        <version.hibernate>5.0.1.Final</version.hibernate>
+        <version.validator>5.2.1.Final</version.validator>
+        <version.spring>4.1.7.RELEASE</version.spring>
+        <version.spring.data>1.9.0.RELEASE</version.spring.data>
+        <version.spring.boot>1.2.6.RELEASE</version.spring.boot>
         <version.validation-api>1.1.0.Final</version.validation-api>
 
         <version.java>1.7</version.java>

@@ -15,11 +15,10 @@
  */
 package org.axiom_tools.domain;
 
-import io.swagger.annotations.*;
 import java.io.Serializable;
+import javax.mail.internet.AddressException;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import org.axiom_tools.storage.Hashed;
  * Contains an email address.
  */
 @Entity
-@ApiModel("An email address")
 @Table(name = "email_address", indexes = {
     @Index(name = "ix_email_hash", columnList = "hash_key") })
 @XmlRootElement(name = "EmailAddress", namespace = "##default")
@@ -65,7 +63,7 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 	public static EmailAddress from(String emailAddress) {
 		try {
 			InternetAddress test = new InternetAddress(emailAddress);
-		} catch (Exception e) {
+		} catch (AddressException e) {
 			throw new IllegalArgumentException("bad email address " + emailAddress, e);
 		}
 
@@ -87,7 +85,7 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
     @Column(name = "account", nullable = false, length = 30)
 	private String account = Empty;
 
-    @Column(name = "host", nullable = false, length = 30)
+    @Column(name = "hostname", nullable = false, length = 30)
 	private String hostName = Empty;
 
 
@@ -121,6 +119,14 @@ public class EmailAddress extends Hashed<EmailAddress> implements Serializable {
 		String hashSource = formatAddress();
 		return hashSource.hashCode();
 	}
+
+    @Override
+    public boolean equals(Object candidate) {
+        if (candidate == null) return false;
+        if (getClass() != candidate.getClass()) return false;
+        final EmailAddress other = (EmailAddress) candidate;
+        return other.formatAddress().equals(formatAddress());
+    }
 
 	@Override
 	public void describe() {

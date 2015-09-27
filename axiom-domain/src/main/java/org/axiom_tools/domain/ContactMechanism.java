@@ -29,7 +29,7 @@ public class ContactMechanism<MechanismType> implements Serializable {
 
     private Contact.Kind type;
     private MechanismType mechanism;
-    
+
     public static <MechanismType> ContactMechanism<MechanismType> with(Contact.Kind type, MechanismType mechanism) {
         ContactMechanism result = new ContactMechanism();
         result.mechanism = mechanism;
@@ -49,5 +49,5 @@ public class ContactMechanism<MechanismType> implements Serializable {
     public MechanismType getMechanism() {
         return mechanism;
     }
-    
+
 } // ContactMechanism<Mechanism>

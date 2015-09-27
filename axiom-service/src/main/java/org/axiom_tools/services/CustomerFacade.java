@@ -16,17 +16,16 @@
 package org.axiom_tools.services;
 
 import java.util.*;
-import javax.transaction.Transactional;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import io.swagger.annotations.*;
 import org.springframework.stereotype.Service;
 
 import org.axiom_tools.domain.Person;
 import org.axiom_tools.faces.ICustomerService;
 import org.axiom_tools.storage.StorageMechanism;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * A service for maintaining customers. Customer data is stored as a Person.
@@ -35,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 @Transactional
 @Path(ICustomerService.BasePath)
-@Api(value = ICustomerService.BasePath, description = "Operations on Customers")
 public class CustomerFacade implements ICustomerService {
 
     private static final String Wild = "%";
@@ -44,20 +42,20 @@ public class CustomerFacade implements ICustomerService {
     private StorageMechanism.Registry registry;
 
     @Override
-    public Response createCustomer(String customerJSON) {
-        Person sample = Person.fromJSON(customerJSON);
+    public Response createCustomer(String body) {
+        Person sample = Person.fromJSON(body);
         Person p = sample.saveItem();
         return Response.ok(p.getKey()).build();
     }
 
     @Override
-    public Response updateCustomer(long id, String customerJSON) {
+    public Response updateCustomer(long customerID, String customerJSON) {
         Person sample = Person.fromJSON(customerJSON);
-        if (sample.getKey() != id) {
+        if (sample.getKey() != customerID) {
             return Response.status(Status.CONFLICT).build();
         }
 
-        Person p = Person.withKey(id).findItem();
+        Person p = Person.withKey(customerID).findItem();
         if (p == null) {
             return Response.status(Status.GONE).build();
         }
@@ -67,8 +65,8 @@ public class CustomerFacade implements ICustomerService {
     }
 
     @Override
-    public Response deleteCustomer(long id) {
-        Person p = Person.withKey(id).findItem();
+    public Response deleteCustomer(long customerID) {
+        Person p = Person.withKey(customerID).findItem();
         if (p == null) {
             return Response.status(Status.GONE).build();
         }
@@ -78,8 +76,8 @@ public class CustomerFacade implements ICustomerService {
     }
 
     @Override
-    public Response getCustomer(long id) {
-        Person p = Person.withKey(id).findItem();
+    public Response getCustomer(long customerID) {
+        Person p = Person.withKey(customerID).findItem();
         if (p == null) {
             return Response.status(Status.GONE).build();
         }
@@ -89,7 +87,10 @@ public class CustomerFacade implements ICustomerService {
     }
 
     @Override
-    public Response listCustomers(String name, String city, String zip) {
+    public Response listCustomers(
+            String name,
+            String city,
+            String zip) {
         List<Person> results = Person.like(Wild + name + Wild);
         return Response.ok(results).build();
     }
