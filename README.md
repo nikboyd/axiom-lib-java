@@ -62,7 +62,7 @@ Note that **PhoneNumber, EmailAddress, MailAddress, Person** are all derived fro
 As such, they all have associated hash-based lookup queries (see more below).
 
 #### Axiom Storage ####
-The _storage_ package contains class that codify idiomatic JPA usage.
+The _storage_ package contains several classes that codify idiomatic JPA usage.
 See the [diagram](#model-diagram) below to see how these parts relate to each other.
 
 | Element | Description |
@@ -75,10 +75,28 @@ See the [diagram](#model-diagram) below to see how these parts relate to each ot
 | StorageMechanism        | associates a JPA repository with its model type |
 | StorageMechanism.Registry  | a storage mechanism registry |
 
-In addition to a surrogate key, each **HashedItem** computes and stores a hash of its contents.
-The stored hash provides a simple way to prevent duplicate instances from being stored.
-It also provides an additional index on which to search for an item.
-Thus, each **HashedItem** is immutable, and guaranteed to be unique within the backing store.
+Items persisted into a SQL backing store will typically use a surrogate key for their primary keys and identity.
+The **Surrogated&lt;ItemType&gt;** base class factors this common design pattern out into a base class.
+Each **SurrogatedItem** may also be marked as a **SurrogatedComposite** by implementing that interface.
+A **SurrogatedComposite** cooperates with the persistence layer to coordinate the persistence of its components, 
+which will also typically be **SurrogatedItem**s.
+
+Certain kinds of persisted items will typically want storage of a single unique immutable instance given 
+its contents.
+Examples of this kind of item include phone numbers, email addresses, mailing addresses, account numbers, 
+and other forms of unique identifiers, esp. those issued to a person by an institution with which that person 
+will maintain a durable (and sometimes perishable) relationship.
+To support this kind of design pattern, the library includes the **Hashed&lt;ItemType&gt;** base class.
+In addition to a surrogate key, each **Hashed&lt;ItemType&gt;** computes and stores a hash of its contents.
+Lookup of the stored hash provides a simple way to prevent duplicate instances from being stored.
+It also provides an additional index on which to search for an item given its contents.
+This provides the associated persistence layer a consistent way to guarantee uniqueness within the backing store,
+beyond that provided by surrogate keys.
+
+The **StorageMechanism** class serves as a generic mechanism for associating a persisted model class with its
+JPA storage interface definition. Then, a collection of these mechanisms into a **StorageMechanism.Registry**
+provides a way to bootstrap the creation of the associated persistence layer classes at runtime using 
+standard Spring dependency injection.
 
 #### Axiom Utils ####
 The utility library containing some basic utility classes:
@@ -89,6 +107,8 @@ The utility library containing some basic utility classes:
 | SpringContext  | loads Spring Beans from a Spring context |
 | Symmetric      | encrypts and decrypts payloads using AES |
 | ModelValidator | validates a model using the Bean Validation framework |
+
+See the associated test for examples of how to use these utility classes.
 
 #### Service Diagram ####
 ![Axiom Service][axiom-service]
