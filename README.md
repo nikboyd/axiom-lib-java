@@ -14,6 +14,29 @@ This library contains the following packages:
 | axiom-faces   | contains a thematic service interface |
 | axiom-service | contains a thematic service facade |
 
+#### Sample Service Build and Launch ####
+
+Clone the sources from GitHub. Then, in the cloned project folder, run the following Maven build.
+
+```
+mvn -U clean install
+```
+
+The various library modules and tests will build, and produce an executable JAR in the **target** folder.
+From the project base folder, launch the service with:
+
+```
+java -jar axiom-service/target/*.jar
+```
+
+The sample service will launch via Spring Boot. Then, you can browse the service API docs at:
+
+```
+http://localhost:9001/docs
+```
+
+
+
 #### Axiom Faces ####
 The _faces_ package contains a service interface definition: **ICustomerService**. 
 The service interface is a central organizational element, addressing several important
