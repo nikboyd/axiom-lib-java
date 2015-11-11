@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 /**
@@ -153,6 +154,7 @@ public class ModelCodec<EntityType> {
 	private ObjectMapper buildObjectMapper() {
 		ObjectMapper result = new ObjectMapper();
 		result.setAnnotationIntrospector(new JaxbAnnotationIntrospector(result.getTypeFactory()));
+                result.enable(SerializationFeature.INDENT_OUTPUT);
 		return result;
 	}
 

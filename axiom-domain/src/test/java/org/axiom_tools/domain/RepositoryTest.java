@@ -219,6 +219,7 @@ public class RepositoryTest {
     public void fullContact() {
         Person sample = Person.named("George Jungleman")
             .with(Kind.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
+            .with(Kind.HOME, EmailAddress.from("george@jungleman.com"))
             .with(Kind.HOME, PhoneNumber.from("415-888-8899"));
 
         Person p = sample.saveItem();
@@ -232,6 +233,13 @@ public class RepositoryTest {
 
         p = Person.withKey(p.getKey()).findItem();
         assertFalse(p == null);
+        
+        ps = Person.findSimilar(EmailAddress.from("george@jungleman.com"));
+        assertFalse(ps.isEmpty());
+        
+        ps = Person.findSimilar(PhoneNumber.from("415-888-8899"));
+        assertFalse(ps.isEmpty());
+
         x.removeItem();
     }
 

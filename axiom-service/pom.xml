@@ -20,10 +20,10 @@
     </parent>
 
     <dependencies>
-		<dependency>
-			<groupId>org.axiom-tools</groupId>
-			<artifactId>axiom-faces</artifactId>
-			<version>${version.axiom.libs}</version>
+        <dependency>
+            <groupId>org.axiom-tools</groupId>
+            <artifactId>axiom-faces</artifactId>
+            <version>${version.axiom.libs}</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -82,11 +82,11 @@
             <version>${version.enunciate}</version>
         </dependency>
         <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

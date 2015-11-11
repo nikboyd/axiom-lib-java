@@ -17,10 +17,10 @@ package org.axiom_tools.context;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.log4j.Logger;
 import org.junit.*;
 
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -56,7 +56,7 @@ public class SpringContextTest {
 		assertTrue(sample.getX() == 2);
 	}
 
-    private org.slf4j.Logger getLogger() {
+    private Logger getLogger() {
         return LoggerFactory.getLogger(getClass());
     }
 }

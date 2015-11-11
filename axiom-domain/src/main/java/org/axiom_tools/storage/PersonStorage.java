@@ -38,5 +38,11 @@ public interface PersonStorage
 
     @Query("SELECT p FROM Person p WHERE p.name like :personName")
     List<Person> findLike(@Param("personName") String personName);
+    
+    @Query("SELECT p FROM Person p join p.contact c join c.emails em WHERE em.hashKey = :emailKey")
+    List<Person> findEmail(@Param("emailKey") Integer emailKey);
+    
+    @Query("SELECT p FROM Person p join p.contact c join c.phones ph WHERE ph.hashKey = :phoneKey")
+    List<Person> findPhone(@Param("phoneKey") Integer phoneKey);
 
 } // PersonStorage

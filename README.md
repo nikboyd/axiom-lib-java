@@ -38,7 +38,7 @@ http://localhost:9001/docs
 
 
 #### Axiom Faces ####
-The _faces_ package contains a service interface definition: **ICustomerService**. 
+The _faces_ package contains a service interface definition: **IPersonService**. 
 The service interface is a central organizational element, addressing several important
 aspects of a service design.
 Using [JAX-RS][jax-rs] annotations, the interface defines the service [endpoint mappings][endpoints] 
@@ -60,11 +60,11 @@ The interface also provides documentation that can be published automatically us
 Java doc comments, esp. using a tool like [Enunciate][enunciate].
 
 #### Axiom Service ####
-The service contains a service class: **CustomerFacade**, which implements **ICustomerService**. 
+The service contains a service class: **PersonFacade**, which implements **IPersonService**. 
 The service also contains a **ServiceController**, which takes advantage of [Spring Boot][spring-boot] 
 to create a self-hosting service.
 The service API tests also use the **ServiceController** to launch a local service instance for which 
-the test then creates a local service proxy using [Spring][spring] + [CXF][apache-cxf] + **ICustomerService**.
+the test then creates a local service proxy using [Spring][spring] + [CXF][apache-cxf] + **IPersonService**.
 
 #### Axiom Domain ####
 The _domain_ package contains classes that demonstrate usage of the idiomatic JPA storage classes.

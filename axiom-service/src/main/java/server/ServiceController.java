@@ -18,7 +18,6 @@ package server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.axiom_tools.services.CustomerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -44,7 +43,6 @@ import static server.ServiceController.StoragePackage;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(
-    basePackageClasses = { CustomerFacade.class },
     basePackages = { FacadePackage, StoragePackage })
 @ImportResource({ ConfigurationFile }) //, CxfConfiguration, CxfServletConfiguration }) //
 public class ServiceController extends WebMvcConfigurerAdapter {

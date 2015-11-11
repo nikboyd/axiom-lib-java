@@ -25,9 +25,9 @@
         </cxf:features>
     </cxf:bus>
 
-    <jaxrs:client id="ICustomerService"
+    <jaxrs:client id="IPersonService"
         address="${local.host.address}"
-        serviceClass="org.axiom_tools.faces.ICustomerService"
+        serviceClass="org.axiom_tools.faces.IPersonService"
         inheritHeaders="true">
         <jaxrs:headers>
             <entry key="Accept" value="application/json"/>

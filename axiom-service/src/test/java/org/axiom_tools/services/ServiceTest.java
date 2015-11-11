@@ -17,6 +17,7 @@ package org.axiom_tools.services;
 
 import java.util.*;
 import javax.ws.rs.core.Response;
+import org.axiom_tools.codecs.ValueMap;
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -27,7 +28,8 @@ import org.springframework.boot.SpringApplication;
 import server.ServiceController;
 import org.axiom_tools.domain.*;
 import org.axiom_tools.context.SpringContext;
-import org.axiom_tools.faces.ICustomerService;
+import org.axiom_tools.domain.Contact.Type;
+import org.axiom_tools.faces.IPersonService;
 
 /**
  * Confirms proper operation of the customer service.
@@ -38,10 +40,10 @@ public class ServiceTest {
 
     private static final String ConfigurationFile = "/service-client.xml";
 
-    private ICustomerService service;
-    private ICustomerService getService() {
+    private IPersonService service;
+    private IPersonService getService() {
         if (this.service == null) {
-            this.service = SpringContext.named(ConfigurationFile).getBean(ICustomerService.class);
+            this.service = SpringContext.named(ConfigurationFile).getBean(IPersonService.class);
         }
         return this.service;
     }
@@ -55,56 +57,76 @@ public class ServiceTest {
     }
 
     @Test
-    public void customerLifecycle() {
-		Person sample =
-			Person.named("George Jungleman")
-                .with(Contact.Kind.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
-                .with(Contact.Kind.HOME, PhoneNumber.from("415-888-8899"));
+    public void sampleLifecycle() {
+        Person sample =
+        Person.named("George Jungleman")
+            .with(Contact.Kind.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
+            .with(Contact.Kind.HOME, EmailAddress.from("george@jungleman.com"))
+            .with(Contact.Kind.HOME, PhoneNumber.from("415-888-8899"));
 
         sample.describe();
-        Response r = getService().createCustomer(sample.toJSON());
+        Response r = getService().createPerson(sample.toJSON());
         assertTrue(r.getStatus() == 200);
-        String keyA = r.readEntity(String.class);
+        Integer idA = ValueMap.fromJSON(readJSON(r)).getValue(ValueMap.ID);
 
-        r = getService().getCustomer(Long.parseLong(keyA));
+        r = getService().getPerson(idA);
         assertTrue(r.getStatus() == 200);
-        Person p = Person.fromJSON(r.readEntity(String.class));
+        Person p = Person.fromJSON(readJSON(r));
         assertFalse(p == null);
         p.describe();
+
+        PhoneNumber ph = p.getContact().getPhone(Contact.Kind.HOME);
+        r = getService().getPersonWithHash(Type.phone, ph.formatNumber());
+        assertTrue(r.getStatus() == 200);
+        List<Person> results = Person.listFromJSON(readJSON(r));
+        assertFalse(results.isEmpty());
+
+        EmailAddress em = p.getContact().getEmail(Contact.Kind.HOME);
+        r = getService().getPersonWithHash(Type.email, em.formatAddress());
+        assertTrue(r.getStatus() == 200);
+        results = Person.listFromJSON(readJSON(r));
+        assertFalse(results.isEmpty());
+
+        r = getService().getPersonWithHash(Type.hash, p.getName());
+        assertTrue(r.getStatus() == 200);
+        results = Person.listFromJSON(readJSON(r));
+        assertFalse(results.isEmpty());
 
         MailAddress a = p.getContact().getAddress(Contact.Kind.HOME);
         p.getContact().withAddress(Contact.Kind.HOME, a.withCity("Sometown"));
-        r = getService().updateCustomer(p.getKey(), p.toJSON());
+        r = getService().savePerson(p.getKey(), p.toJSON());
         assertTrue(r.getStatus() == 200);
 
-        p = Person.fromJSON(r.readEntity(String.class));
+        p = Person.fromJSON(readJSON(r));
         assertFalse(p == null);
         p.describe();
 
-		Person simple =
-			Person.named("George Bungleman")
-                .with(Contact.Kind.HOME, MailAddress.with("4321 Main St", "Anytown", "CA", "94005"))
-                .with(Contact.Kind.HOME, PhoneNumber.from("415-889-9988"));
+        Person simple =
+        Person.named("George Bungleman")
+            .with(Contact.Kind.HOME, MailAddress.with("4321 Main St", "Anytown", "CA", "94005"))
+            .with(Contact.Kind.HOME, PhoneNumber.from("415-889-9988"));
 
-        r = getService().createCustomer(simple.toJSON());
+        r = getService().createPerson(simple.toJSON());
         assertTrue(r.getStatus() == 200);
-        String keyB = r.readEntity(String.class);
+        Integer idB = ValueMap.fromJSON(readJSON(r)).getValue(ValueMap.ID);
 
-        r = getService().listCustomers("George", "", "94005");
+        r = getService().listPersons("George", "", "94005");
         assertTrue(r.getStatus() == 200);
-        String listJSON = r.readEntity(String.class);
 
-        List<Person> results = Person.listFromJSON(listJSON);
+        results = Person.listFromJSON(readJSON(r));
         assertFalse(results.isEmpty());
         getLogger().info("found " + results.size() + " matches");
 
-        getService().deleteCustomer(Long.parseLong(keyB));
-        getService().deleteCustomer(Long.parseLong(keyA));
+        getService().deletePerson(idB);
+        getService().deletePerson(idA);
 
-        r = getService().listCustomers("George", "", "94005");
+        r = getService().listPersons("George", "", "94005");
         assertTrue(r.getStatus() == 200);
-        listJSON = r.readEntity(String.class);
-        assertTrue(Person.listFromJSON(listJSON).isEmpty());
+        assertTrue(Person.listFromJSON(readJSON(r)).isEmpty());
+    }
+    
+    private String readJSON(Response r) {
+        return r.readEntity(String.class);
     }
 
     private Logger getLogger() {

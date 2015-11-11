@@ -40,9 +40,9 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="serviceBean" class="org.axiom_tools.services.CustomerFacade" />
+    <bean id="serviceBean" class="org.axiom_tools.services.PersonFacade" />
 
     <bean id="jsonProvider" 
-          class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />
+        class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />
 
 </beans>

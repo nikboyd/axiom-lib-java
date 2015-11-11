@@ -42,8 +42,7 @@ import org.axiom_tools.storage.StorageMechanism;
 @SuppressWarnings("unchecked")
 public class Person extends Party {
 
-	private static final long serialVersionUID = 1001001L;
-    private static final Logger Log = LoggerFactory.getLogger(Person.class);
+    private static final long serialVersionUID = 1001001L;
     private static final Person SamplePerson = new Person();
 
     public static List<Person> listFromJSON(String listJSON) {
@@ -59,10 +58,10 @@ public class Person extends Party {
         return ModelCodec.from(this).toJSON();
     }
 
-	@Override
-	protected Logger getLogger() {
-		return Log;
-	}
+    @Override
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
+    }
 
     public static int count() {
         return (int) SamplePerson.getStore().count();
@@ -75,27 +74,27 @@ public class Person extends Party {
         return hashCode() == candidate.hashCode();
     }
 
-	@Override
-	public int hashCode() {
-		String hashSource = getName();
-		return hashSource.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        String hashSource = getName();
+        return hashSource.hashCode();
+    }
 
-	public Person withContact(Contact contact) {
-		setContact(contact);
-		return this;
-	}
+    public Person withContact(Contact contact) {
+        setContact(contact);
+        return this;
+    }
 
-	/**
-	 * Returns a new Person.
-	 * @param name a name
-	 * @return a new Person
-	 */
-	public static Person named(String name) {
-		Person result = new Person();
-		result.setName(name);
-		return result;
-	}
+    /**
+     * Returns a new Person.
+     * @param name a name
+     * @return a new Person
+     */
+    public static Person named(String name) {
+        Person result = new Person();
+        result.setName(name);
+        return result;
+    }
 
     /**
      * Returns a new Person (intended query).
@@ -103,8 +102,8 @@ public class Person extends Party {
      * @return a list of similar Persons
      */
     public static List<Person> like(String text) {
-		Person result = new Person();
-		result.name = text;
+        Person result = new Person();
+        result.name = text;
         return result.findSimilar();
     }
 
@@ -136,6 +135,14 @@ public class Person extends Party {
 
     public List<Person> findSimilar() {
         return StorageMechanism.getStorage(PersonStorage.class).findLike(getName());
+    }
+    
+    public static List<Person> findSimilar(EmailAddress email) {
+        return StorageMechanism.getStorage(PersonStorage.class).findEmail(email.hashKey());
+    }
+    
+    public static List<Person> findSimilar(PhoneNumber phone) {
+        return StorageMechanism.getStorage(PersonStorage.class).findPhone(phone.hashKey());
     }
 
 } // Person

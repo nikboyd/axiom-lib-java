@@ -7,11 +7,11 @@
 		http://maven.apache.org/xsd/maven-4.0.0.xsd
 		">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.axiom-tools</groupId>
-	<artifactId>axiom-domain</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.axiom-tools</groupId>
+    <artifactId>axiom-domain</artifactId>
     <version>${project.parent.version}.${build.timestamp}</version>
-	<packaging>jar</packaging>
+    <packaging>jar</packaging>
     
     <parent>
         <groupId>org.axiom-tools</groupId>
@@ -19,17 +19,17 @@
         <version>1.0</version>
     </parent>
   
-	<dependencies>
-		<dependency>
-			<groupId>org.axiom-tools</groupId>
-			<artifactId>axiom-utils</artifactId>
-			<version>${version.axiom.libs}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.axiom-tools</groupId>
-			<artifactId>axiom-storage</artifactId>
-			<version>${version.axiom.libs}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.axiom-tools</groupId>
+            <artifactId>axiom-utils</artifactId>
+            <version>${version.axiom.libs}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.axiom-tools</groupId>
+            <artifactId>axiom-storage</artifactId>
+            <version>${version.axiom.libs}</version>
+        </dependency>
         <dependency>
             <groupId>com.webcohesion.enunciate</groupId>
             <artifactId>enunciate-core-annotations</artifactId>
@@ -57,16 +57,16 @@
             <version>${version.javax.el}</version>
         </dependency>
         <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4</version>
-		</dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
