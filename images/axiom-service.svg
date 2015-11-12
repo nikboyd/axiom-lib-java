@@ -26,21 +26,21 @@
     <rect style="fill: #add8e6" x="380" y="80" width="180.55" height="60"/>
     <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="380" y="80" width="180.55" height="60"/>
     <text font-size="16.9333" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:italic;font-weight:normal" x="470.275" y="116.467">
-      <tspan x="470.275" y="116.467">ICustomer Service</tspan>
+      <tspan x="470.275" y="116.467">IPerson Service</tspan>
     </text>
   </g>
   <g>
     <rect style="fill: #ffffff" x="640" y="180" width="180" height="60"/>
     <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="640" y="180" width="180" height="60"/>
     <text font-size="16.9333" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="730" y="212.117">
-      <tspan x="730" y="212.117">Customer Facade</tspan>
+      <tspan x="730" y="212.117">Person Facade</tspan>
     </text>
   </g>
   <g>
     <rect style="fill: #ffffff" x="120" y="180" width="180" height="64.3333"/>
     <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="120" y="180" width="180" height="64.3333"/>
     <text font-size="16.9333" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="210" y="203.7">
-      <tspan x="210" y="203.7">Customer Service</tspan>
+      <tspan x="210" y="203.7">Person Service</tspan>
       <tspan x="210" y="224.867">(Proxy)</tspan>
     </text>
   </g>
