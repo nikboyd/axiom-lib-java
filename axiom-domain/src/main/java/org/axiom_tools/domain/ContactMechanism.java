@@ -37,10 +37,18 @@ public class ContactMechanism<MechanismType> implements Serializable {
         return result;
     }
 
+    /**
+     * A mechanism type.
+     * @return a type name
+     */
     public String getType() {
         return type.name();
     }
 
+    /**
+     * A specific contact mechanism.
+     * @return depends on type
+     */
     @XmlElements(value = {
         @XmlElement(name = "address", type = MailAddress.class),
         @XmlElement(name = "email", type = EmailAddress.class),

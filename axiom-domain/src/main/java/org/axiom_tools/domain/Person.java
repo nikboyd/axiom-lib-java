@@ -28,12 +28,6 @@ import org.axiom_tools.storage.StorageMechanism;
 
 /**
  * Identifies and describes a person.
- *
- * <h4>Person Responsibilities:</h4>
- * <ul>
- * <li>knows a personal name</li>
- * <li>knows personal contact information</li>
- * </ul>
  */
 @Entity
 @Table(name = "person", indexes = {

@@ -74,6 +74,10 @@ public class Contact extends Surrogated<Contact> implements SurrogatedComposite,
             return Log;
     }
 
+    /**
+     * The available contact mechanisms.
+     * @return a ContactMechanism list
+     */
     @XmlElement(name = "mechanisms")
     public List<ContactMechanism> getMechanisms() {
         ArrayList<ContactMechanism> results = new ArrayList();

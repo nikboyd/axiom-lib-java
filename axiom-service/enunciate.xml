@@ -6,9 +6,15 @@
     <services>
         <rest defaultRestSubcontext="/api" />
     </services>
+    
+    <api-classes>
+        <include pattern="org.axiom_tools.storage.**" />
+        <include pattern="org.axiom_tools.domain.**" />
+    </api-classes>
 
     <namespaces>
         <namespace id="axiom-models" uri="http://api.axiom-tools.com/axiom-models"/>
+        <namespace id="axiom-storage" uri="http://api.axiom-tools.com/axiom-storage"/>
         <namespace id="axiom-facades" uri="http://api.axiom-tools.com/axiom-facades"/>
     </namespaces>
 

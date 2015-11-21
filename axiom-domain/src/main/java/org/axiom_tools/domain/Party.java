@@ -25,12 +25,6 @@ import org.axiom_tools.storage.SurrogatedComposite;
 
 /**
  * Identifies a party along with some contact information.
- *
- * <h4>Party Responsibilities:</h4>
- * <ul>
- * <li>knows a party name (personal or business)</li>
- * <li>knows a party contact</li>
- * </ul>
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")

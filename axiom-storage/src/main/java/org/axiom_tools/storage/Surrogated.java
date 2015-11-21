@@ -28,19 +28,6 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * A persistent item with a surrogate key.
  * @param <ItemType> a kind of derived persistent item
- *
- * <h4>Surrogated Responsibilities:</h4>
- * <ul>
- * <li>knows a surrogate key (ID)</li>
- * <li>saves this item persistently</li>
- * <li>reloads this item from its backing store</li>
- * <li>removes this item from its backing store</li>
- * </ul>
- *
- * <h4>Client Responsibilities:</h4>
- * <ul>
- * <li>derived classes extend this item with domain model data</li>
- * </ul>
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")

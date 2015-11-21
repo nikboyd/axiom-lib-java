@@ -55,21 +55,21 @@
         <version.compiler.plugin>2.3.2</version.compiler.plugin>
     </properties>
   
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${version.compiler.plugin}</version>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
                 <configuration>
                     <source>${version.java}</source>
                     <target>${version.java}</target>
                 </configuration>
-			</plugin>
-		
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
-			</plugin>
-		</plugins>
-	</build>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

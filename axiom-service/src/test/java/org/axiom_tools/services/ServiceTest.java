@@ -28,17 +28,21 @@ import org.springframework.boot.SpringApplication;
 import server.ServiceController;
 import org.axiom_tools.domain.*;
 import org.axiom_tools.context.SpringContext;
+import static org.axiom_tools.domain.Contact.Kind.HOME;
 import org.axiom_tools.domain.Contact.Type;
 import org.axiom_tools.faces.IPersonService;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * Confirms proper operation of the customer service.
+ * Confirms proper operation of the person service.
  * @author nik
  */
 //@Ignore
 public class ServiceTest {
 
     private static final String ConfigurationFile = "/service-client.xml";
+
+    private ConfigurableApplicationContext context;
 
     private IPersonService service;
     private IPersonService getService() {
@@ -52,17 +56,22 @@ public class ServiceTest {
     public void startServer() {
         String[] args = { };
         getLogger().info("starting service tests");
-        SpringApplication.run(ServiceController.class, args);
+        context = SpringApplication.run(ServiceController.class, args);
         assertFalse(getService() == null);
+    }
+    
+    @After
+    public void stopServer() {
+        context.close();
     }
 
     @Test
     public void sampleLifecycle() {
         Person sample =
         Person.named("George Jungleman")
-            .with(Contact.Kind.HOME, MailAddress.with("1234 Main St", "Anytown", "CA", "94005"))
-            .with(Contact.Kind.HOME, EmailAddress.from("george@jungleman.com"))
-            .with(Contact.Kind.HOME, PhoneNumber.from("415-888-8899"));
+            .with(HOME, createSampleAddress("1234 Main St"))
+            .with(HOME, createSampleEmail())
+            .with(HOME, createSamplePhone());
 
         sample.describe();
         Response r = getService().createPerson(sample.toJSON());
@@ -75,13 +84,13 @@ public class ServiceTest {
         assertFalse(p == null);
         p.describe();
 
-        PhoneNumber ph = p.getContact().getPhone(Contact.Kind.HOME);
+        PhoneNumber ph = p.getContact().getPhone(HOME);
         r = getService().getPersonWithHash(Type.phone, ph.formatNumber());
         assertTrue(r.getStatus() == 200);
         List<Person> results = Person.listFromJSON(readJSON(r));
         assertFalse(results.isEmpty());
 
-        EmailAddress em = p.getContact().getEmail(Contact.Kind.HOME);
+        EmailAddress em = p.getContact().getEmail(HOME);
         r = getService().getPersonWithHash(Type.email, em.formatAddress());
         assertTrue(r.getStatus() == 200);
         results = Person.listFromJSON(readJSON(r));
@@ -92,8 +101,8 @@ public class ServiceTest {
         results = Person.listFromJSON(readJSON(r));
         assertFalse(results.isEmpty());
 
-        MailAddress a = p.getContact().getAddress(Contact.Kind.HOME);
-        p.getContact().withAddress(Contact.Kind.HOME, a.withCity("Sometown"));
+        MailAddress a = p.getContact().getAddress(HOME);
+        p.getContact().withAddress(HOME, a.withCity("Sometown"));
         r = getService().savePerson(p.getKey(), p.toJSON());
         assertTrue(r.getStatus() == 200);
 
@@ -103,8 +112,8 @@ public class ServiceTest {
 
         Person simple =
         Person.named("George Bungleman")
-            .with(Contact.Kind.HOME, MailAddress.with("4321 Main St", "Anytown", "CA", "94005"))
-            .with(Contact.Kind.HOME, PhoneNumber.from("415-889-9988"));
+            .with(HOME, createSampleAddress("4321 Main St"))
+            .with(HOME, PhoneNumber.from("415-889-9988"));
 
         r = getService().createPerson(simple.toJSON());
         assertTrue(r.getStatus() == 200);
@@ -123,6 +132,18 @@ public class ServiceTest {
         r = getService().listPersons("George", "", "94005");
         assertTrue(r.getStatus() == 200);
         assertTrue(Person.listFromJSON(readJSON(r)).isEmpty());
+    }
+    
+    private MailAddress createSampleAddress(String streetAddress) {
+        return MailAddress.with(streetAddress, "Anytown", "CA", "94005");
+    }
+    
+    private EmailAddress createSampleEmail() {
+        return EmailAddress.from("george@jungleman.com");
+    }
+    
+    private PhoneNumber createSamplePhone() {
+        return PhoneNumber.from("415-888-8899");
     }
     
     private String readJSON(Response r) {

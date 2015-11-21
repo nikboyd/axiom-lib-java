@@ -20,22 +20,8 @@ import javax.persistence.MappedSuperclass;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * An item that can be saved persistently and uniquely
- * identified using a hash of its contents.
+ * An item uniquely identified using a hash of its contents.
  * @param <ItemType> a kind of derived persistent item
- *
- * <h4>Hashed&lt;ItemType&gt; Responsibilities:</h4>
- * <ul>
- * <li>knows a surrogate key (ID)</li>
- * <li>knows a hash key (HASH_KEY)</li>
- * <li>immutable once constructed</li>
- * </ul>
- *
- * <h4>Client Responsibilities:</h4>
- * <ul>
- * <li>derived classes must override hashCode()</li>
- * <li>derived classes must remain immutable after construction</li>
- * </ul>
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")

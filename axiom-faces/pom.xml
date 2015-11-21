@@ -19,12 +19,12 @@
         <version>1.0</version>
     </parent>
   
-	<dependencies>
-		<dependency>
-			<groupId>org.axiom-tools</groupId>
-			<artifactId>axiom-domain</artifactId>
-			<version>${version.axiom.libs}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.axiom-tools</groupId>
+            <artifactId>axiom-domain</artifactId>
+            <version>${version.axiom.libs}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
