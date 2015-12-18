@@ -72,7 +72,7 @@ public class ServiceController extends WebMvcConfigurerAdapter {
 
     @Bean
     public ServletRegistrationBean servletRegistration() {
-        getLogger().info("hosting CustomerService on port " + DefaultPort);
+        getLogger().info("hosting service on port " + DefaultPort);
         ServletRegistrationBean result = new ServletRegistrationBean(new CXFServlet(), ApiPath);
         result.setLoadOnStartup(1);
         return result;

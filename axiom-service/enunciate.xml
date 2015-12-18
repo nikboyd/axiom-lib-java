@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <enunciate label="axiom-service-api"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-1.30.xsd">
+    xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-2.0.0.xsd">
 
     <services>
         <rest defaultRestSubcontext="/api" />
@@ -10,6 +10,7 @@
     <api-classes>
         <include pattern="org.axiom_tools.storage.**" />
         <include pattern="org.axiom_tools.domain.**" />
+        <include pattern="org.axiom_tools.faces.**" />
     </api-classes>
 
     <namespaces>
@@ -19,18 +20,23 @@
     </namespaces>
 
     <modules>
-        <docs includeExampleJson="true" forceExampleJson="true" />
-        <cxf enableJaxrs="true" enableJaxws="false" />
-
-        <c disabled="true" />
-        <csharp disabled="true" />
-        <obj-c disabled="true" />
-        <java-client disabled="true" />
+        <c-xml-client disabled="true" />
+        <csharp-xml-client disabled="true" />
+        <!--<docs />-->
+        <gwt-json-overlay disabled="true" />
+        <idl disabled="true" />
+        <!--<jackson disabled="false" />-->
+        <jackson1 disabled="true" />
+        <java-json-client disabled="true" />
+        <java-xml-client disabled="true" />
+        <jaxb disabled="true" />
+        <jaxrs groupBy="class" />
         <jaxws disabled="true" />
-        <jaxws-ri disabled="true" />
-        <jaxws-client disabled="true" />
-        <ruby disabled="true" />
-        <php disabled="true" />
+        <obj-c-xml-client disabled="true" />
+        <php-json-client disabled="true" />
+        <php-xml-client disabled="true" />
+        <ruby-json-client disabled="true" />
+        <!--<swagger />-->
 
     </modules>
 

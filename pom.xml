@@ -37,7 +37,6 @@
 
         <version.cxf>3.1.2</version.cxf>
         <version.h2>1.4.186</version.h2>
-        <version.swagger>1.5.3</version.swagger>
         <version.enunciate>2.1.1</version.enunciate>
         <version.postgres>9.3-1101-jdbc41</version.postgres>
         <version.hibernate>5.0.1.Final</version.hibernate>
