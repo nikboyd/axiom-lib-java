@@ -31,13 +31,21 @@ import org.axiom_tools.context.SpringContext;
 import static org.axiom_tools.domain.Contact.Kind.HOME;
 import org.axiom_tools.domain.Contact.Type;
 import org.axiom_tools.faces.IPersonService;
+import org.axiom_tools.storage.PersistenceContext;
+import org.junit.runner.RunWith;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Confirms proper operation of the person service.
  * @author nik
  */
 //@Ignore
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ActiveProfiles(value = { "default" })
+//@ContextConfiguration(classes = { PersistenceContext.class })
 public class ServiceTest {
 
     private static final String ConfigurationFile = "/service-client.xml";
@@ -56,6 +64,7 @@ public class ServiceTest {
     public void startServer() {
         String[] args = { };
         getLogger().info("starting service tests");
+        System.getProperties().put("spring.profiles.active", "default");
         context = SpringApplication.run(ServiceController.class, args);
         assertFalse(getService() == null);
     }

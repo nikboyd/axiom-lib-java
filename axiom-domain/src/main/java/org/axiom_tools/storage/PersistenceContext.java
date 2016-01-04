@@ -15,16 +15,15 @@
  */
 package org.axiom_tools.storage;
 
-import java.util.*;
-import javax.sql.DataSource;
 import javax.persistence.EntityManagerFactory;
+import org.axiom_tools.data.CloudDataSource;
+import org.axiom_tools.data.DirectDataSource;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -38,22 +37,75 @@ import org.axiom_tools.domain.EmailAddress;
 import org.axiom_tools.domain.MailAddress;
 import org.axiom_tools.domain.Person;
 import org.axiom_tools.domain.PhoneNumber;
+
 import static org.axiom_tools.storage.PersistenceContext.StoragePackage;
-import static org.axiom_tools.storage.PersistenceContext.DatabaseConfiguration;
 
 /**
  * Configures the persistence mechanisms.
  * @author nik
  */
 @Configuration
-@PropertySource(DatabaseConfiguration)
 @EnableTransactionManagement
+@Import({ CloudDataSource.class, DirectDataSource.class })
 @EnableJpaRepositories(basePackages = { StoragePackage })
 public class PersistenceContext {
 
-    public static final String DatabaseConfiguration = "classpath:db.properties";
     public static final String StoragePackage = "org.axiom_tools.storage";
-    public static final String ModelsPackage = "org.axiom_tools.domain";
+    
+    @Autowired
+    DirectDataSource directDataSource;
+    
+    @Autowired
+    CloudDataSource cloudDataSource;
+
+    @Profile("default")
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean defaultEntityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setDataSource(directDataSource.dataSource());
+        em.setPackagesToScan(directDataSource.modelPackages());
+        em.setJpaProperties(directDataSource.additionalProperties());
+        return em;
+    }
+
+    @Profile("cloud")
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean cloudEntityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setDataSource(cloudDataSource.dataSource());
+        em.setPackagesToScan(cloudDataSource.modelPackages());
+        em.setJpaProperties(cloudDataSource.additionalProperties());
+        return em;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(emf);
+        return transactionManager;
+    }
+
+    @Bean
+    public JpaRepositoryFactory repositoryFactory(EntityManagerFactory emf) {
+        return new JpaRepositoryFactory(emf.createEntityManager());
+    }
+
+    @Bean
+    public AddressStorage addressStorage(JpaRepositoryFactory rf) {
+        return rf.getRepository(AddressStorage.class);
+    }
+
+    @Bean
+    public EmailStorage emailStorage(JpaRepositoryFactory rf) {
+        return rf.getRepository(EmailStorage.class);
+    }
+
+    @Bean
+    public PhoneStorage phoneStorage(JpaRepositoryFactory rf) {
+        return rf.getRepository(PhoneStorage.class);
+    }
 
     @Bean
     public StorageMechanism.Registry storageRegistry(
@@ -91,83 +143,4 @@ public class PersistenceContext {
         return new StorageMechanism(store, PhoneStorage.class, PhoneNumber.class);
     }
 
-    @Bean
-    public AddressStorage addressStorage(JpaRepositoryFactory rf) {
-        return rf.getRepository(AddressStorage.class);
-    }
-
-    @Bean
-    public EmailStorage emailStorage(JpaRepositoryFactory rf) {
-        return rf.getRepository(EmailStorage.class);
-    }
-
-    @Bean
-    public PhoneStorage phoneStorage(JpaRepositoryFactory rf) {
-        return rf.getRepository(PhoneStorage.class);
-    }
-
-    @Bean
-    public JpaRepositoryFactory repositoryFactory(EntityManagerFactory emf) {
-        return new JpaRepositoryFactory(emf.createEntityManager());
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        String[] models = { ModelsPackage };
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        em.setDataSource(dataSource());
-        em.setPackagesToScan(models);
-        em.setJpaProperties(additionalProperties());
-        return em;
-    }
-
-    @Value("${db.driver.class}")
-    private String driverClassName;
-
-    @Value("${db.username}")
-    private String databaseUsername;
-
-    @Value("${db.password}")
-    private String databasePassword;
-
-    @Value("${db.url}")
-    private String databaseURL;
-
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driverClassName);
-        dataSource.setUsername(databaseUsername);
-        dataSource.setPassword(databasePassword);
-        dataSource.setUrl(databaseURL);
-        return dataSource;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;
-    }
-
-    @Value("${hibernate.dialect}")
-    private String databaseDialect;
-
-    @Value("${hibernate.hbm2ddl.auto}")
-    private String codeGeneration;
-
-    Properties additionalProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", databaseDialect);
-        if (!codeGeneration.isEmpty()) {
-            properties.setProperty("hibernate.hbm2ddl.auto", codeGeneration);
-        }
-        return properties;
-    }
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyReplacer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
 }

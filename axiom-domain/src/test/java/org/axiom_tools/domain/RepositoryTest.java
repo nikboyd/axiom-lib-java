@@ -32,18 +32,20 @@ import org.axiom_tools.codecs.ModelCodec;
 import org.axiom_tools.domain.Contact.Kind;
 import org.axiom_tools.storage.StorageMechanism;
 import org.axiom_tools.storage.PersistenceContext;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Confirms proper operation of sample models and their persistence.
  * @author nik
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles(value = { "default" })
 @ContextConfiguration(classes = { PersistenceContext.class })
 public class RepositoryTest {
 
     @BeforeClass
     public static void prepare() {
-        LoggerFactory.getLogger(RepositoryTest.class).info("started SampleTest");
+        System.out.println("started SampleTest");
     }
 
     @Autowired
