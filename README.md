@@ -3,6 +3,8 @@ axiom-lib-java
 
 A library of utility classes and tools for Java, along with examples of their use.
 
+A demo instance of the [example service][axiom-shift] is available for tests, hosted in [OpenShift][open-shift].
+
 #### Overview ####
 This library contains the following packages:
 
@@ -34,9 +36,6 @@ The sample service will launch via Spring Boot. Then, you can browse the service
 ```
 http://localhost:9001/docs/
 ```
-
-An example instance of this service is hosted in [OpenShift][open-shift] [here][axiom-shift].
-
 
 #### Axiom Faces ####
 The _faces_ package contains a service interface definition: **IPersonService**. 
