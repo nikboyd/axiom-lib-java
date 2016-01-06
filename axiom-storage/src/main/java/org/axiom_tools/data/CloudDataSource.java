@@ -17,11 +17,14 @@ package org.axiom_tools.data;
 
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.axiom_tools.data.CloudDataSource.DatabaseConfiguration;
 
 /**
@@ -29,6 +32,7 @@ import static org.axiom_tools.data.CloudDataSource.DatabaseConfiguration;
  * @author nik
  */
 @Configuration
+@Profile("cloud")
 @PropertySource(DatabaseConfiguration)
 public class CloudDataSource extends BasicDataSource {
 
@@ -57,6 +61,9 @@ public class CloudDataSource extends BasicDataSource {
         int max = driverClassName.length() - Driver.length();
         String dialect = driverClassName.substring(pos, max);
         String databaseURL = "jdbc:" + dialect + "://" + databaseHost + "/" + databaseName;
+        getLogger().info(String.format(CloudDriver, driverClassName));
+        getLogger().info(String.format(CloudURL, databaseURL));
+
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUsername(databaseUsername);
@@ -64,5 +71,12 @@ public class CloudDataSource extends BasicDataSource {
         dataSource.setUrl(databaseURL);
         return dataSource;
     }
+    
+    private Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
+    }
+    
+    static final String CloudURL = "JPA cloud URL: %s";
+    static final String CloudDriver = "JPA cloud driver: %s";
 
 }

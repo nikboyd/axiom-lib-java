@@ -39,7 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @author nik
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(value = { "default" })
+@ActiveProfiles(value = { "direct" })
 @ContextConfiguration(classes = { PersistenceContext.class })
 public class RepositoryTest {
 

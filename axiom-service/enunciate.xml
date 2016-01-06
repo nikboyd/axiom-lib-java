@@ -3,10 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-2.0.0.xsd">
 
-    <services>
-        <rest defaultRestSubcontext="/api" />
-    </services>
-    
     <api-classes>
         <include pattern="org.axiom_tools.storage.**" />
         <include pattern="org.axiom_tools.domain.**" />
@@ -30,13 +26,16 @@
         <java-json-client disabled="true" />
         <java-xml-client disabled="true" />
         <jaxb disabled="true" />
-        <jaxrs groupBy="class" />
         <jaxws disabled="true" />
         <obj-c-xml-client disabled="true" />
         <php-json-client disabled="true" />
         <php-xml-client disabled="true" />
         <ruby-json-client disabled="true" />
         <!--<swagger />-->
+
+        <jaxrs groupBy="class">
+            <application path="api" />
+        </jaxrs>
 
     </modules>
 

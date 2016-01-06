@@ -52,22 +52,8 @@ public class PersistenceContext {
 
     public static final String StoragePackage = "org.axiom_tools.storage";
     
-    @Autowired
-    DirectDataSource directDataSource;
-    
-    @Autowired
+    @Autowired(required = false)
     CloudDataSource cloudDataSource;
-
-    @Profile("default")
-    @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean defaultEntityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        em.setDataSource(directDataSource.dataSource());
-        em.setPackagesToScan(directDataSource.modelPackages());
-        em.setJpaProperties(directDataSource.additionalProperties());
-        return em;
-    }
 
     @Profile("cloud")
     @Bean(name = "entityManagerFactory")
@@ -77,6 +63,21 @@ public class PersistenceContext {
         em.setDataSource(cloudDataSource.dataSource());
         em.setPackagesToScan(cloudDataSource.modelPackages());
         em.setJpaProperties(cloudDataSource.additionalProperties());
+        return em;
+    }
+
+    
+    @Autowired(required = false)
+    DirectDataSource directDataSource;
+
+    @Profile("direct")
+    @Bean(name = "entityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean directEntityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setDataSource(directDataSource.dataSource());
+        em.setPackagesToScan(directDataSource.modelPackages());
+        em.setJpaProperties(directDataSource.additionalProperties());
         return em;
     }
 

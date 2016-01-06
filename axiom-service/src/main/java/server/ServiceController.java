@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -44,21 +45,28 @@ import static server.ServiceController.StoragePackage;
 @EnableAutoConfiguration
 @ComponentScan(
     basePackages = { FacadePackage, StoragePackage })
-@ImportResource({ ConfigurationFile }) //, CxfConfiguration, CxfServletConfiguration }) //
+@ImportResource({ ConfigurationFile })
 public class ServiceController extends WebMvcConfigurerAdapter {
-
-    public static final int DefaultPort = 9001;
 
     public static final String Empty = "";
     public static final String ApiPath = "/api/*";
     public static final String FacadePackage = "org.axiom_tools.services";
     public static final String StoragePackage = "org.axiom_tools.storage";
     public static final String ConfigurationFile = "classpath:hosted-service.xml";
-    public static final String CxfConfiguration = "classpath:META-INF/cxf/cxf.xml";
-    public static final String CxfServletConfiguration = "classpath:META-INF/cxf/cxf-servlet.xml";
+
+    static final String StartMessage = "hosting service at %s:%d with profiles '%s'";
 
     @Autowired
     private ApplicationContext context;
+    
+    @Value("${server.port:9001}")
+    int serverPort;
+    
+    @Value("${server.address:}")
+    String serverAddress;
+    
+    @Value("${spring.profiles.active:}")
+    String springProfiles;
 
     public static void main(String[] args) {
         System.out.println("starting service");
@@ -67,12 +75,12 @@ public class ServiceController extends WebMvcConfigurerAdapter {
 
     @Bean
     public EmbeddedServletContainerFactory containerFactory() {
-        return new TomcatEmbeddedServletContainerFactory(Empty, DefaultPort);
+        getLogger().info(String.format(StartMessage, serverAddress, serverPort, springProfiles));
+        return new TomcatEmbeddedServletContainerFactory(Empty, serverPort);
     }
 
     @Bean
     public ServletRegistrationBean servletRegistration() {
-        getLogger().info("hosting service on port " + DefaultPort);
         ServletRegistrationBean result = new ServletRegistrationBean(new CXFServlet(), ApiPath);
         result.setLoadOnStartup(1);
         return result;

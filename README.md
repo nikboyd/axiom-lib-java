@@ -32,9 +32,10 @@ java -jar axiom-service/target/*.jar
 The sample service will launch via Spring Boot. Then, you can browse the service API docs at:
 
 ```
-http://localhost:9001/docs
+http://localhost:9001/docs/
 ```
 
+An example instance of this service is hosted in [OpenShift][open-shift] [here][axiom-shift].
 
 
 #### Axiom Faces ####
@@ -150,3 +151,5 @@ See the associated test for examples of how to use these utility classes.
 [jax-rs]: https://docs.oracle.com/javaee/7/api/javax/ws/rs/package-summary.html
 [apache-cxf]: http://cxf.apache.org/
 [enunciate]: http://enunciate.codehaus.org/
+[open-shift]: https://www.openshift.com/
+[axiom-shift]: http://demo-axioms.rhcloud.com/docs/
