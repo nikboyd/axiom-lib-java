@@ -1,17 +1,14 @@
 /**
  * Copyright 2013,2015 Nikolas Boyd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 package org.axiom_tools.storage;
 
@@ -27,26 +24,28 @@ import org.springframework.data.repository.CrudRepository;
 
 /**
  * A persistent item with a surrogate key.
+ *
  * @param <ItemType> a kind of derived persistent item
  */
 @MappedSuperclass
 @SuppressWarnings("unchecked")
 public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializable {
 
-	protected static final String Empty = "";
-	protected static final String Blank = " ";
-	protected static final String Comma = ",";
-	private static final String AND = "&&";
+    protected static final String Empty = "";
+    protected static final String Blank = " ";
+    protected static final String Comma = ",";
+    private static final String AND = "&&";
 
-	protected static final String PosixSymbols = "\\p{S}";
-	protected static final String PosixPunctuators = "\\p{P}";
-	protected static final String AllowedSymbols = "/#";
-	protected static final String ExcludedSymbols = "[^" + AllowedSymbols + "]";
-	protected static final String PunctuationFilter = "["+ PosixSymbols + PosixPunctuators + AND + ExcludedSymbols + "]";
-	protected static final String MultipleSpaceFilter = " +";
+    protected static final String PosixSymbols = "\\p{S}";
+    protected static final String PosixPunctuators = "\\p{P}";
+    protected static final String AllowedSymbols = "/#";
+    protected static final String ExcludedSymbols = "[^" + AllowedSymbols + "]";
+    protected static final String PunctuationFilter = "[" + PosixSymbols + PosixPunctuators + AND + ExcludedSymbols + "]";
+    protected static final String MultipleSpaceFilter = " +";
 
     /**
      * Returns the storage mechanism for a given model type.
+     *
      * @param <ItemType> a kind of model
      * @param itemType a kind of model
      * @return a storage mechanism
@@ -58,6 +57,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializab
 
     /**
      * Returns the storage mechanism for items of this kind.
+     *
      * @param <StoreType> a storage type
      * @return a storage mechanism
      */
@@ -65,53 +65,55 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializab
         return (StoreType) getStore(getClass());
     }
 
-	/**
-	 * A logger for this kind of item.
-	 */
-	protected abstract Logger getLogger();
+    /**
+     * A logger for this kind of item.
+     */
+    protected abstract Logger getLogger();
 
-	/**
-	 * A surrogate key. The key value is generated automatically by the configured
-	 * persistence framework.
-	 */
-	@Id
+    /**
+     * A surrogate key. The key value is generated automatically by the configured persistence framework.
+     */
+    @Id
     @Column(name = "id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	protected long key;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected long key;
 
-	/**
-	 * A surrogate key.
-	 */
-	@Override
+    /**
+     * A surrogate key.
+     */
+    @Override
     @XmlAttribute
-	public long getKey() {
-		return this.key;
-	}
+    public long getKey() {
+        return this.key;
+    }
 
     public void setKey(long key) {
         this.key = key;
     }
 
-	/**
-	 * Indicates whether this item was previously saved.
-	 */
+    /**
+     * Indicates whether this item was previously saved.
+     */
     @Override
-	public boolean wasSaved() {
-		return getKey() > 0;
-	}
+    public boolean wasSaved() {
+        return getKey() > 0;
+    }
 
-	/**
-	 * Returns this item properly typed.
-	 * @return this item properly typed
-	 */
-	@Override
-	public ItemType asItem() {
-		return (ItemType) this;
+    /**
+     * Returns this item properly typed.
+     *
+     * @return this item properly typed
+     */
+    @Override
+    public ItemType asItem() {
+        return (ItemType) this;
     }
 
     @Override
     public ItemType saveItem() {
-        if (this.isComposite()) saveComponents();
+        if (this.isComposite()) {
+            saveComponents();
+        }
         return getStore().save(this.asItem());
     }
 
@@ -136,8 +138,7 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializab
             }
 
             saveComponents(this.asComposite().components());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             getLogger().error(e.getMessage(), e);
         }
     }
@@ -161,7 +162,9 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializab
     }
 
     private void saveComponents(SurrogatedItem[] components) {
-        if (components.length == 0) return;
+        if (components.length == 0) {
+            return;
+        }
         for (int index = 0; index < components.length; index++) {
             components[index] = components[index].saveItem();
         }
@@ -170,91 +173,99 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializab
 
     /**
      * Removes this item from its backing store.
+     *
      * @return whether this item was removed
      */
     public boolean removeItem() {
-        if (getKey() == 0) return false;
+        if (getKey() == 0) {
+            return false;
+        }
         getStore().delete(this.asItem());
         return true;
     }
 
     /**
      * Finds this item.
+     *
      * @return this item
      */
     public ItemType findItem() {
-        if (getKey() == 0) return this.asItem();
+        if (getKey() == 0) {
+            return this.asItem();
+        }
         return getStore().findOne(this.getKey());
     }
 
-	/**
-	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite
-	 * override this method if needed.
-	 * @return empty
-	 */
-	public Object[] componentMaps() {
-		Object[] results = { };
-		return results;
-	}
+    /**
+     * A default implementation for a SurrogatedComposite. Derived classes that implement SurrogatedComposite override
+     * this method if needed.
+     *
+     * @return empty
+     */
+    public Object[] componentMaps() {
+        Object[] results = {};
+        return results;
+    }
 
-	/**
-	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite
-	 * override this method if needed.
-	 * @return empty
-	 */
-	public Object[] componentSets() {
-		Object[] results = { };
-		return results;
-	}
+    /**
+     * A default implementation for a SurrogatedComposite. Derived classes that implement SurrogatedComposite override
+     * this method if needed.
+     *
+     * @return empty
+     */
+    public Object[] componentSets() {
+        Object[] results = {};
+        return results;
+    }
 
-	/**
-	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite
-	 * override this method if needed.
-	 * @return empty
-	 */
-	public SurrogatedItem[] components() {
-		SurrogatedItem[] results = { };
-		return results;
-	}
+    /**
+     * A default implementation for a SurrogatedComposite. Derived classes that implement SurrogatedComposite override
+     * this method if needed.
+     *
+     * @return empty
+     */
+    public SurrogatedItem[] components() {
+        SurrogatedItem[] results = {};
+        return results;
+    }
 
-	/**
-	 * A default implementation for a SurrogatedComposite.
-	 * Derived classes that implement SurrogatedComposite
-	 * override this method if needed.
-	 * @param components saved components
-	 */
-	public void components(SurrogatedItem[] components) {
-		// override this if needed
-	}
+    /**
+     * A default implementation for a SurrogatedComposite. Derived classes that implement SurrogatedComposite override
+     * this method if needed.
+     *
+     * @param components saved components
+     */
+    public void components(SurrogatedItem[] components) {
+        // override this if needed
+    }
 
-	/**
-	 * Describes this item in the log.
-	 */
+    /**
+     * Describes this item in the log.
+     */
     @Override
-	public void describe() {
-		getLogger().info("key = " + getKey());
-	}
+    public void describe() {
+        getLogger().info("key = " + getKey());
+    }
 
-	/**
-	 * Normalizes text with full capitalization, without punctuation, and without extraneous whitespace.
-	 * @param text some text
-	 * @return normalized text
-	 */
-	public static String normalizeWords(String text) {
-		return WordUtils.capitalizeFully(StringUtils.defaultString(text).trim())
-				.replaceAll(PunctuationFilter, Empty).replaceAll(MultipleSpaceFilter, Blank);
-	}
+    /**
+     * Normalizes text with full capitalization, without punctuation, and without extraneous whitespace.
+     *
+     * @param text some text
+     * @return normalized text
+     */
+    public static String normalizeWords(String text) {
+        return WordUtils.capitalizeFully(StringUtils.defaultString(text).trim())
+                .replaceAll(PunctuationFilter, Empty).replaceAll(MultipleSpaceFilter, Blank);
+    }
 
-	/**
-	 * Normalizes code as upper case.
-	 * @param codeText code text
-	 * @return a normalized code
-	 */
-	public static String normalizeCode(String codeText) {
-		return StringUtils.defaultString(codeText).trim().toUpperCase();
-	}
+    /**
+     * Normalizes code as upper case.
+     *
+     * @param codeText code text
+     * @return a normalized code
+     */
+    public static String normalizeCode(String codeText) {
+        return StringUtils.defaultString(codeText).trim().toUpperCase();
+    }
 
 } // Surrogated<ItemType>

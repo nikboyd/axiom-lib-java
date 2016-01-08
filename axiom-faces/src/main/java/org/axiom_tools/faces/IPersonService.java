@@ -1,17 +1,14 @@
 /**
  * Copyright 2015 Nikolas Boyd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 package org.axiom_tools.faces;
 
@@ -25,7 +22,6 @@ import org.axiom_tools.domain.Contact;
 
 /**
  * Maintains personal details for each registered Person.
- * @author nik
  */
 public interface IPersonService {
 
@@ -43,6 +39,7 @@ public interface IPersonService {
 
     /**
      * Lists the selected persons.
+     *
      * @param name a person full name or name pattern
      * @param city a city name or pattern
      * @param zip a zip code
@@ -55,12 +52,13 @@ public interface IPersonService {
     @StatusCodes({
         @ResponseCode(code = 200, condition = "selected persons")})
     public Response listPersons(
-        @QueryParam(Name) String name,
-        @QueryParam(City) String city,
-        @QueryParam(Zip) String zip);
+            @QueryParam(Name) String name,
+            @QueryParam(City) String city,
+            @QueryParam(Zip) String zip);
 
     /**
      * Creates and registers a new Person.
+     *
      * @param personJSON contains personal details
      * @return Contains the personal IDs usable for retrieval.
      */
@@ -72,10 +70,11 @@ public interface IPersonService {
     @StatusCodes({
         @ResponseCode(code = 201, condition = "created a person")})
     public Response createPerson(
-        @TypeHint(Person.class) String personJSON);
+            @TypeHint(Person.class) String personJSON);
 
     /**
      * Saves changes to an existing Person.
+     *
      * @param personID identifies a Person
      * @param personJSON contains personal details
      * @return Contains updated details for a Person.
@@ -87,13 +86,14 @@ public interface IPersonService {
     @Consumes({MediaType.APPLICATION_JSON})
     @StatusCodes({
         @ResponseCode(code = 200, condition = "saved a person"),
-        @ResponseCode(code = 410, condition = "missing person") })
+        @ResponseCode(code = 410, condition = "missing person")})
     public Response savePerson(
-        @PathParam(ValueMap.ID) long personID,
-        @TypeHint(Person.class) String personJSON);
+            @PathParam(ValueMap.ID) long personID,
+            @TypeHint(Person.class) String personJSON);
 
     /**
      * Gets a registered Person.
+     *
      * @param personID identifies a Person
      * @return Contains the details of a Person (if registered).
      */
@@ -103,12 +103,13 @@ public interface IPersonService {
     @Produces({MediaType.APPLICATION_JSON})
     @StatusCodes({
         @ResponseCode(code = 200, condition = "found a person"),
-        @ResponseCode(code = 410, condition = "missing person") })
+        @ResponseCode(code = 410, condition = "missing person")})
     public Response getPerson(
-        @PathParam(ValueMap.ID) long personID);
+            @PathParam(ValueMap.ID) long personID);
 
     /**
      * Gets a registered Person.
+     *
      * @param idType indicates a kind of ID
      * @param personID identifies a Person
      * @return Contains the details of a Person (if registered).
@@ -119,13 +120,14 @@ public interface IPersonService {
     @Produces({MediaType.APPLICATION_JSON})
     @StatusCodes({
         @ResponseCode(code = 200, condition = "found a person"),
-        @ResponseCode(code = 410, condition = "missing person") })
+        @ResponseCode(code = 410, condition = "missing person")})
     public Response getPersonWithHash(
-        @QueryParam(Type) Contact.Type idType,
-        @QueryParam(ValueMap.ID) String personID);
+            @QueryParam(Type) Contact.Type idType,
+            @QueryParam(ValueMap.ID) String personID);
 
     /**
      * Deletes a registered Person.
+     *
      * @param personID identifies a Person
      * @return Indicates whether a Person was deleted.
      */
@@ -134,12 +136,13 @@ public interface IPersonService {
     @TypeHint(List.class)
     @StatusCodes({
         @ResponseCode(code = 202, condition = "deleted a person"),
-        @ResponseCode(code = 410, condition = "missing person") })
+        @ResponseCode(code = 410, condition = "missing person")})
     public Response deletePerson(
-        @PathParam(ValueMap.ID) long personID);
+            @PathParam(ValueMap.ID) long personID);
 
     /**
      * Deletes a registered Person.
+     *
      * @param idType indicates a kind of ID
      * @param personID identifies a Person
      * @return Indicates whether a Person was deleted.
@@ -150,9 +153,9 @@ public interface IPersonService {
     @Produces({MediaType.APPLICATION_JSON})
     @StatusCodes({
         @ResponseCode(code = 200, condition = "deleted a person"),
-        @ResponseCode(code = 410, condition = "missing person") })
+        @ResponseCode(code = 410, condition = "missing person")})
     public Response deletePersonWithHash(
-        @QueryParam(Type) Contact.Type idType,
-        @QueryParam(ValueMap.ID) String personID);
+            @QueryParam(Type) Contact.Type idType,
+            @QueryParam(ValueMap.ID) String personID);
 
 } // IPersonService

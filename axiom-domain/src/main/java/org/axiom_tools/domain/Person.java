@@ -1,17 +1,14 @@
 /**
  * Copyright 2013,2015 Nikolas Boyd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 package org.axiom_tools.domain;
 
@@ -31,7 +28,7 @@ import org.axiom_tools.storage.StorageMechanism;
  */
 @Entity
 @Table(name = "person", indexes = {
-    @Index(name = "ix_party_hash", columnList = "hash_key") })
+    @Index(name = "ix_party_hash", columnList = "hash_key")})
 @XmlRootElement(name = "Person", namespace = "##default")
 @SuppressWarnings("unchecked")
 public class Person extends Party {
@@ -59,12 +56,16 @@ public class Person extends Party {
 
     public static int count() {
         return (int) SamplePerson.getStore().count();
-	}
+    }
 
     @Override
     public boolean equals(Object candidate) {
-        if (candidate == null) return false;
-        if (getClass() != candidate.getClass()) return false;
+        if (candidate == null) {
+            return false;
+        }
+        if (getClass() != candidate.getClass()) {
+            return false;
+        }
         return hashCode() == candidate.hashCode();
     }
 
@@ -81,6 +82,7 @@ public class Person extends Party {
 
     /**
      * Returns a new Person.
+     *
      * @param name a name
      * @return a new Person
      */
@@ -92,6 +94,7 @@ public class Person extends Party {
 
     /**
      * Returns a new Person (intended query).
+     *
      * @param text query text
      * @return a list of similar Persons
      */
@@ -103,6 +106,7 @@ public class Person extends Party {
 
     /**
      * Returns a new Person (intended query).
+     *
      * @param key identifies a person
      * @return a new Person
      */
@@ -130,11 +134,11 @@ public class Person extends Party {
     public List<Person> findSimilar() {
         return StorageMechanism.getStorage(PersonStorage.class).findLike(getName());
     }
-    
+
     public static List<Person> findSimilar(EmailAddress email) {
         return StorageMechanism.getStorage(PersonStorage.class).findEmail(email.hashKey());
     }
-    
+
     public static List<Person> findSimilar(PhoneNumber phone) {
         return StorageMechanism.getStorage(PersonStorage.class).findPhone(phone.hashKey());
     }

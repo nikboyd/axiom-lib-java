@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.*;
  * Contains mapped name + value pairs. 
  * A convenience for consuming and producing JSON without a predefined schema or class.
  * Also, compares such structures and reports their differences.
- * @author Nik Boyd <nik_boyd@gensler.com>
  */
 @XmlRootElement
 public class ValueMap {
@@ -35,7 +34,7 @@ public class ValueMap {
     private final Map<String, Object> namedValues = new HashMap();
     
     /**
-     * Returns a new ValueMape.
+     * Returns a new ValueMap.
      * @param payload a JSON payload
      * @return a new ValueMap, or null
      */
