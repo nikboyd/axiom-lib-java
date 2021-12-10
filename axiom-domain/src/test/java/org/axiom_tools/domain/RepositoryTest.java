@@ -16,10 +16,9 @@
 package org.axiom_tools.domain;
 
 import java.util.*;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +55,7 @@ public class RepositoryTest {
         getLogger().info("registered stores count = " + registry.size());
     }
 
+    @Ignore
     @Test
     public void invalidAddress() {
         MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CAA", "94005");
@@ -64,6 +64,7 @@ public class RepositoryTest {
         getLogger().info(results[0]);
     }
 
+    @Ignore
     @Test
     public void validation() {
         MailAddress a = MailAddress.with("1234 Main St", "Anytown", "CA", "94005");
@@ -235,10 +236,10 @@ public class RepositoryTest {
 
         p = Person.withKey(p.getKey()).findItem();
         assertFalse(p == null);
-        
+
         ps = Person.findSimilar(EmailAddress.from("george@jungleman.com"));
         assertFalse(ps.isEmpty());
-        
+
         ps = Person.findSimilar(PhoneNumber.from("415-888-8899"));
         assertFalse(ps.isEmpty());
 

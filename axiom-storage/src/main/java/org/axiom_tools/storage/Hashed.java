@@ -12,6 +12,7 @@
  */
 package org.axiom_tools.storage;
 
+import java.util.*;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import org.springframework.data.repository.CrudRepository;
@@ -78,7 +79,8 @@ public abstract class Hashed<ItemType>
         if (getKey() == 0) {
             return findWithHash();
         }
-        return getStore().findOne(this.getKey());
+        Optional<ItemType> result = getStore().findById(this.getKey());
+        return result.isPresent() ? result.get() : null;
     }
 
     /**

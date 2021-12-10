@@ -43,20 +43,27 @@
             <artifactId>axiom-faces</artifactId>
             <version>${version.axiom.libs}</version>
         </dependency>
+
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjtools</artifactId>
-            <version>${version.aspectj}</version>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.3.10</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${version.spring.boot}</version>
             <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>org.hibernate</groupId>
                     <artifactId>hibernate-validator</artifactId>
@@ -67,13 +74,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-            <version>${version.spring.boot}</version>
-        </dependency>
-        -->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -98,6 +99,12 @@
             <groupId>com.webcohesion.enunciate</groupId>
             <artifactId>enunciate-swagger</artifactId>
             <version>${version.enunciate}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

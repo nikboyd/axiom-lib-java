@@ -32,11 +32,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import org.axiom_tools.domain.Contact;
-import org.axiom_tools.domain.EmailAddress;
-import org.axiom_tools.domain.MailAddress;
-import org.axiom_tools.domain.Person;
-import org.axiom_tools.domain.PhoneNumber;
+import org.axiom_tools.domain.*;
 
 import static org.axiom_tools.storage.PersistenceContext.StoragePackage;
 
@@ -51,7 +47,7 @@ import static org.axiom_tools.storage.PersistenceContext.StoragePackage;
 public class PersistenceContext {
 
     public static final String StoragePackage = "org.axiom_tools.storage";
-    
+
     @Autowired(required = false)
     CloudDataSource cloudDataSource;
 
@@ -66,7 +62,7 @@ public class PersistenceContext {
         return em;
     }
 
-    
+
     @Autowired(required = false)
     DirectDataSource directDataSource;
 
@@ -94,32 +90,6 @@ public class PersistenceContext {
     }
 
     @Bean
-    public AddressStorage addressStorage(JpaRepositoryFactory rf) {
-        return rf.getRepository(AddressStorage.class);
-    }
-
-    @Bean
-    public EmailStorage emailStorage(JpaRepositoryFactory rf) {
-        return rf.getRepository(EmailStorage.class);
-    }
-
-    @Bean
-    public PhoneStorage phoneStorage(JpaRepositoryFactory rf) {
-        return rf.getRepository(PhoneStorage.class);
-    }
-
-    @Bean
-    public StorageMechanism.Registry storageRegistry(
-            StorageMechanism<Person, PersonStorage> personStorage,
-            StorageMechanism<Contact, ContactStorage> contactStorage,
-            StorageMechanism<PhoneNumber, PhoneStorage> phoneStorage,
-            StorageMechanism<EmailAddress, EmailStorage> emailStorage,
-            StorageMechanism<MailAddress, AddressStorage> addressStorage) {
-        return StorageMechanism.Registry.with(
-                phoneStorage, emailStorage, addressStorage, contactStorage, personStorage);
-    }
-
-    @Bean
     public StorageMechanism<Person, PersonStorage> personStorageMechanism(PersonStorage store) {
         return new StorageMechanism(store, PersonStorage.class, Person.class);
     }
@@ -142,6 +112,17 @@ public class PersistenceContext {
     @Bean
     public StorageMechanism<PhoneNumber, PhoneStorage> phoneStorageMechanism(PhoneStorage store) {
         return new StorageMechanism(store, PhoneStorage.class, PhoneNumber.class);
+    }
+
+    @Bean
+    public StorageMechanism.Registry storageRegistry(
+            StorageMechanism<Person, PersonStorage> personStorage,
+            StorageMechanism<Contact, ContactStorage> contactStorage,
+            StorageMechanism<PhoneNumber, PhoneStorage> phoneStorage,
+            StorageMechanism<EmailAddress, EmailStorage> emailStorage,
+            StorageMechanism<MailAddress, AddressStorage> addressStorage) {
+        return StorageMechanism.Registry.with(
+                phoneStorage, emailStorage, addressStorage, contactStorage, personStorage);
     }
 
 }

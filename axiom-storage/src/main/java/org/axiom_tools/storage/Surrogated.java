@@ -193,7 +193,8 @@ public abstract class Surrogated<ItemType> implements SurrogatedItem, Serializab
         if (getKey() == 0) {
             return this.asItem();
         }
-        return getStore().findOne(this.getKey());
+        Optional<ItemType> result = getStore().findById(this.getKey());
+        return result.isPresent() ? result.get() : null;
     }
 
     /**

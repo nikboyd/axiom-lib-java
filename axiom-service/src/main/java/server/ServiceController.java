@@ -21,10 +21,9 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -43,8 +42,7 @@ import static server.ServiceController.StoragePackage;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(
-    basePackages = { FacadePackage, StoragePackage })
+@ComponentScan(basePackages = { FacadePackage, StoragePackage })
 @ImportResource({ ConfigurationFile })
 public class ServiceController extends WebMvcConfigurerAdapter {
 
@@ -54,17 +52,15 @@ public class ServiceController extends WebMvcConfigurerAdapter {
     public static final String StoragePackage = "org.axiom_tools.storage";
     public static final String ConfigurationFile = "classpath:hosted-service.xml";
 
-    static final String StartMessage = "hosting service at %s:%d with profiles '%s'";
-
     @Autowired
     private ApplicationContext context;
-    
+
     @Value("${server.port:9001}")
     int serverPort;
-    
+
     @Value("${server.address:}")
     String serverAddress;
-    
+
     @Value("${spring.profiles.active:}")
     String springProfiles;
 
@@ -73,10 +69,10 @@ public class ServiceController extends WebMvcConfigurerAdapter {
         SpringApplication.run(ServiceController.class, args);
     }
 
-    @Bean
-    public EmbeddedServletContainerFactory containerFactory() {
+    static final String StartMessage = "hosting service at %s:%d with profiles '%s'";
+    @Bean public TomcatServletWebServerFactory containerFactory() {
         getLogger().info(String.format(StartMessage, serverAddress, serverPort, springProfiles));
-        return new TomcatEmbeddedServletContainerFactory(Empty, serverPort);
+        return new TomcatServletWebServerFactory(Empty, serverPort);
     }
 
     @Bean
