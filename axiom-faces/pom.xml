@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>${version.cxf}</version>
+            <version>${version.apache-cxf}</version>
         </dependency>
         <dependency>
             <groupId>com.webcohesion.enunciate</groupId>

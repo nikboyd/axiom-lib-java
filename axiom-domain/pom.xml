@@ -70,12 +70,12 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>${version.spring.data}</version>
+            <version>${version.spring-data}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${version.spring}</version>
+            <version>${version.spring-context}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

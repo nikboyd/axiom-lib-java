@@ -24,51 +24,186 @@
         <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
+        <run-headless>-Djava.awt.headless=true</run-headless>
+        <memory-args>-Xmx1024m -Xms1024m</memory-args>
+        <compiler-args></compiler-args> <!-- default = none, see profile for 21 below -->
+        <no-path-check>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</no-path-check>
+        <test-args>${memory-args} ${no-path-check} ${run-headless}</test-args>
+        <version.maven.compiler>3.11.0</version.maven.compiler>
+        <version.maven-resources>3.3.1</version.maven-resources>
+
         <version.axiom.libs>[1.0,1.1)</version.axiom.libs>
         
+        <version.jaxb-api>2.3.0</version.jaxb-api>
+        <version.jaxrs-json>2.9.8</version.jaxrs-json>
+        <!-- note coupling between lib versions -->
+
         <version.jackson>2.12.5</version.jackson>
         <version.commons-lang>2.6</version.commons-lang>
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-logging>1.1.1</version.commons-logging>
-        <version.slf4j>1.7.12</version.slf4j>
-        <version.log4j>2.15.0</version.log4j>
+        <version.slf4j>1.7.30</version.slf4j>
+        <version.log4j>2.20.0</version.log4j>
         <version.crypto>1.46</version.crypto>
         <version.aspectj>1.8.7</version.aspectj>
 
-        <version.cxf>3.4.5</version.cxf>
-        <version.h2>1.4.199</version.h2>
-        <version.enunciate>2.13.3</version.enunciate>
+        <version.apache-cxf>3.5.5</version.apache-cxf>
+        <version.h2>[2.1.210,]</version.h2>
+        <version.enunciate>2.14.0</version.enunciate>
         <version.postgres>9.3-1101-jdbc41</version.postgres>
-        <version.hibernate>5.5.7.Final</version.hibernate>
-        <version.validator>5.2.1.Final</version.validator>
-        <version.spring>5.3.11</version.spring>
-        <version.spring.data>2.5.6</version.spring.data>
-        <version.spring.boot>2.5.5</version.spring.boot>
+        <version.hibernate>5.6.5.Final</version.hibernate>
+        <version.validator>5.4.3.Final</version.validator>
+        <version.spring-boot>2.6.15</version.spring-boot>
+        <version.spring-data>2.5.10</version.spring-data>
+        <version.spring-cloud>3.1.7</version.spring-cloud>
+        <version.spring-context>5.3.27</version.spring-context>
         <version.validation-api>2.0.1.Final</version.validation-api>
 
-        <version.java>1.7</version.java>
-        <version.javax.el>2.2.4</version.javax.el>
+        <version.javax.el>2.2.5</version.javax.el>
         <version.joda>2.8.1</version.joda>
         <version.junit>4.12</version.junit>
-
-        <version.compiler.plugin>2.3.2</version.compiler.plugin>
     </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${version.spring-context}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${version.spring-data}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${version.spring-boot}</version>
+                <scope>import</scope>
+                <type>pom</type>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-bom</artifactId>
+                <version>${version.apache-cxf}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${version.jaxb-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${version.jaxb-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${version.jaxrs-json}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
   
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.maven.compiler}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${version.maven-resources}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.compiler.plugin}</version>
                 <configuration>
-                    <source>${version.java}</source>
-                    <target>${version.java}</target>
+                    <compilerArgs>${compiler-args}</compilerArgs>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
-            </plugin>
+           </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>java-1.8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>java-9-10-support-1.8</id>
+            <activation>
+                <jdk>[9,11)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.release>8</maven.compiler.release>
+            </properties>
+        </profile>
+        <profile>
+            <id>java-11-16-support-11</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>[11,17)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>11</maven.compiler.target>
+                <maven.compiler.release>11</maven.compiler.release>
+            </properties>
+        </profile>
+        <profile>
+            <id>java-17-plus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>[17,21)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>17</maven.compiler.target>
+                <maven.compiler.release>17</maven.compiler.release>
+                <version.enunciate>2.15.0</version.enunciate>
+            </properties>
+        </profile>
+        <profile>
+            <id>java-21-plus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>[21,)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>21</maven.compiler.target>
+                <maven.compiler.release>21</maven.compiler.release>
+                <version.enunciate>2.15.0</version.enunciate>
+                <version.spring-boot>3.1.4</version.spring-boot>
+                <compiler-args>-proc:full</compiler-args>
+            </properties>
+        </profile>
+    </profiles>
 </project>

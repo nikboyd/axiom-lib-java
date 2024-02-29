@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${version.spring.boot}</version>
+            <version>${version.spring-boot}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.hibernate</groupId>
@@ -88,12 +88,12 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
-            <version>${version.cxf}</version>
+            <version>${version.apache-cxf}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-service-description</artifactId>
-            <version>${version.cxf}</version>
+            <version>${version.apache-cxf}</version>
         </dependency>
         <dependency>
             <groupId>com.webcohesion.enunciate</groupId>
@@ -133,7 +133,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${version.spring.boot}</version>
+                <version>${version.spring-boot}</version>
                 <executions>
                     <execution>
                         <goals><goal>repackage</goal></goals>
